@@ -1,0 +1,176 @@
+:root {
+  margin: 0px;
+  background-color: #bbb;
+  font-family: monospace;
+}
+
+body {
+  margin: 0px;
+}
+
+.comment_wrapper {
+  box-shadow: 3px 3px 3px 3px #222;
+  margin: 10px auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 7px;
+  width: 80%;
+  transition: all 0.23s;
+}
+
+.comment_wrapper:hover {
+  transform: scale(1.02);
+  background-color: #ddd;
+}
+
+.comment_title {
+  font-size: 30px;
+  margin-top: 0px;
+}
+
+.comment_content {
+  font-size: 20px;
+  margin-bottom: 0px;
+}
+
+.add_comment_button {
+  background-color: rgb(0, 68, 9);
+}
+
+.comment_form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+}
+
+.add_comment_button, .clear_comments_button {
+  color: white;
+  border: none;
+  font-family: monospace;
+  font-size: 25px;
+  padding: 10px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  min-width: 220px;
+}
+
+
+.clear_comments_button {
+  background-color: rgb(158, 12, 12);
+  margin-left: 10px;
+}
+
+.buttons_wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.add_comment_button:hover, .clear_comments_button:hover {
+  cursor: pointer;
+}
+
+.content_input {
+  width: 45%;
+  min-width: 350px;
+  max-width: 600px;
+  margin: 0px auto;
+  height: 200px;
+  font-size: 20px;
+  resize: none;
+  padding: 5px;
+  border: none;
+  border-radius: 7px;
+  margin-bottom: 10px;
+}
+
+.title_input {
+  width: 45%;
+  min-width: 350px;
+  max-width: 600px;
+  font-family: monospace;
+  height: 40px;
+  font-size: 30px;
+  font-weight: bold;
+  padding: 5px;
+  margin: 5px auto;
+  border: none;
+  border-radius: 7px;
+}
+
+.comments_header {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-size: 30px;
+}
+
+.comments_container {
+  background-color: #ddd;
+  width: 70%;
+  margin: auto;
+  padding-bottom: 30px;
+  border-radius: 7px;
+  margin-bottom: 100px;
+}
+
+.bar_graph_bar {
+  height: 30px;
+  margin: 5px;
+  transition: width 0.7s;
+}
+
+.bar_graph_text {
+  margin-left: 5px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.bar_graph_wrapper {
+  width: 50%;
+  margin: 0px auto 15px;
+  padding: 10px;
+  padding-right: 15px;
+  background-color: #ddd;
+  border-radius: 7px;
+}
+
+.poll_wrapper {
+  background-color: #444;
+  padding: 15px;
+}
+
+.poll_title {
+  margin-left: 5px;
+  margin-top: 0px;
+}
+
+.poll_buttons_wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.poll_button {
+  color: white;
+  border: none;
+  font-family: monospace;
+  font-size: 25px;
+  padding: 10px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  width: 40px;
+  height: 40px;
+  line-height: 0px;
+  margin: 10px;
+  transition: all 0.1s;
+}
+
+.poll_button:hover {
+  cursor: pointer;
+  transform: scale(1.3);
+}
+
+.no_comments {
+  text-align: center;
+  color: #777;
+}

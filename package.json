@@ -1,0 +1,40 @@
+{
+  "name": "polling-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "This is my polling app made in React and Node.js",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src/static/react --fix",
+    "start": "webpack ./src",
+    "babel": "npx babel --watch src_dev --out-dir src --presets react-app/prod"
+  },
+  "keywords": [
+    "poll",
+    "polling",
+    "react"
+  ],
+  "author": "Adam Gunn",
+  "license": "ISC",
+  "devDependencies": {
+    "babelify": "^10.0.0",
+    "browserify": "^17.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "webpack": "^5.58.2",
+    "webpack-cli": "^4.9.0"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-react-app": "^3.1.2",
+    "css-loader": "^6.4.0",
+    "express": "^4.17.1",
+    "html-webpack-plugin": "^5.4.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "style-loader": "^3.3.0",
+    "yarn": "^1.22.17"
+  }
+}
