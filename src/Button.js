@@ -6,9 +6,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-import React from 'react';
-import propTypes from 'prop-types';
-
 var Button = function (_React$Component) {
     _inherits(Button, _React$Component);
 
@@ -23,30 +20,30 @@ var Button = function (_React$Component) {
     }
 
     _createClass(Button, [{
-        key: 'handleButtonClick',
+        key: "handleButtonClick",
         value: function handleButtonClick(e) {
             this.props.onButtonClick(e);
         }
     }, {
-        key: 'handleClearButtonClick',
+        key: "handleClearButtonClick",
         value: function handleClearButtonClick(e) {
             this.props.onClearButtonClick(e);
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             return React.createElement(
-                'div',
-                { className: 'buttons_wrapper' },
+                "div",
+                { className: "buttons_wrapper" },
                 React.createElement(
-                    'button',
-                    { className: 'add_comment_button', onClick: this.handleButtonClick },
-                    'Submit comment'
+                    "button",
+                    { className: "add_comment_button", onClick: this.handleButtonClick },
+                    "Submit comment"
                 ),
                 React.createElement(
-                    'button',
-                    { className: 'clear_comments_button', onClick: this.handleClearButtonClick },
-                    'Clear'
+                    "button",
+                    { className: "clear_comments_button", onClick: this.handleClearButtonClick },
+                    "Clear"
                 )
             );
         }

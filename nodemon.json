@@ -1,0 +1,3 @@
+{
+    "ignore": ["src/*.js", "src_dev/"]
+}

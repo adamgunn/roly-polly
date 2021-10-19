@@ -1,5 +1,3 @@
-import React from 'react';
-import propTypes from 'prop-types';
 
 class Button extends React.Component {
     constructor(props) {

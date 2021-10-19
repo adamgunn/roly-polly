@@ -5,9 +5,10 @@
   "description": "This is my polling app made in React and Node.js",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src/static/react --fix",
-    "start": "webpack ./src",
-    "babel": "npx babel --watch src_dev --out-dir src --presets react-app/prod"
+    "lint": "eslint dist",
+    "pack": "webpack ./src",
+    "babel": "npx babel --watch src_dev --out-dir src --presets react-app/prod",
+    "start": "nodemon server.js"
   },
   "keywords": [
     "poll",
@@ -31,10 +32,13 @@
     "css-loader": "^6.4.0",
     "express": "^4.17.1",
     "html-webpack-plugin": "^5.4.0",
+    "nodemon": "^2.0.13",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "socket.io": "^4.3.1",
+    "socket.io-client": "^4.3.2",
     "style-loader": "^3.3.0",
-    "yarn": "^1.22.17"
+    "websocket": "^1.0.34"
   }
 }

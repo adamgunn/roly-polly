@@ -1,0 +1,66 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\adam\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add -D @types/socket.io-client
+
+PATH: 
+  C:\Python310\Scripts\;C:\Python310\;C:\Users\adam\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\adam\AppData\Local\Programs\Python\Python39\;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Users\adam\AppData\Local\Microsoft\WindowsApps;C:\Users\adam\AppData\Local\GitHubDesktop\bin;C:\Users\adam\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\adam\AppData\Roaming\npm
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  14.18.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\users\adam\Documents\code\rolly-polly\node_modules\bufferutil\prebuilds\win32-x64\node.napi.node'
+
+npm manifest: 
+  {
+    "name": "polling-app",
+    "version": "1.0.0",
+    "private": true,
+    "description": "This is my polling app made in React and Node.js",
+    "main": "index.js",
+    "scripts": {
+      "lint": "eslint dist",
+      "pack": "webpack ./src",
+      "babel": "npx babel --watch src_dev --out-dir src --presets react-app/prod"
+    },
+    "keywords": [
+      "poll",
+      "polling",
+      "react"
+    ],
+    "author": "Adam Gunn",
+    "license": "ISC",
+    "devDependencies": {
+      "babelify": "^10.0.0",
+      "browserify": "^17.0.0",
+      "eslint": "^8.0.0",
+      "eslint-plugin-react": "^7.26.1",
+      "webpack": "^5.58.2",
+      "webpack-cli": "^4.9.0"
+    },
+    "dependencies": {
+      "babel-cli": "^6.26.0",
+      "babel-preset-react": "^6.24.1",
+      "babel-preset-react-app": "^3.1.2",
+      "css-loader": "^6.4.0",
+      "express": "^4.17.1",
+      "html-webpack-plugin": "^5.4.0",
+      "prop-types": "^15.7.2",
+      "react": "^17.0.2",
+      "react-dom": "^17.0.2",
+      "socket.io": "^4.3.1",
+      "style-loader": "^3.3.0",
+      "websocket": "^1.0.34"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
