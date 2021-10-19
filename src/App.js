@@ -2,6 +2,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 import { useState, useEffect } from 'react';
 import { io } from "socket.io-client";
+import { useParams } from "react-router-dom";
 import Comment from './Comment.js';
 import Form from './Form.js';
 import Button from './Button.js';
@@ -15,6 +16,9 @@ function App(props) {
       socket.disconnect();
     };
   }, []);
+
+  var pollId = window.location.pathname.slice(7);
+  console.log(pollId);
 
   var _useState = useState(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -50,6 +54,7 @@ function App(props) {
   for (var i = 0; i < 4; ++i) {
     counts_empty.push(0);
   }
+  console.log(counts_empty);
 
   var _useState13 = useState(counts_empty),
       _useState14 = _slicedToArray(_useState13, 2),
@@ -102,6 +107,7 @@ function App(props) {
     setNumVotes(num_votes + 1);
     if (socket == null) return;
     socket.emit("send-vote", counts);
+    socket.emit("save-poll", counts);
   };
 
   useEffect(function () {
@@ -118,24 +124,33 @@ function App(props) {
     };
   }, [socket]);
 
+  useEffect(function () {
+    if (socket == null) return;
+    socket.once('load-poll', function (poll) {
+      setCounts(poll);
+      setNumVotes(poll.reduce(reducer));
+    });
+    socket.emit('get-poll', pollId);
+  }, [socket, pollId]);
+
   return React.createElement(
-    'div',
-    { className: 'app_wrapper' },
-    React.createElement(Poll, { title: 'Which is the best letter?', num_options: '4', onVote: voteChange, counts: counts, num_votes: num_votes }),
+    "div",
+    { className: "app_wrapper" },
+    React.createElement(Poll, { title: "Which is the best letter?", key: 0, onVote: voteChange, counts: counts, num_votes: num_votes }),
     React.createElement(Form, { onTitleChange: handleTitleChange, onCommentChange: handleCommentChange }),
     React.createElement(Button, { onButtonClick: handleButtonClick, onClearButtonClick: handleClearButtonClick }),
     React.createElement(
-      'div',
-      { className: 'comments_container' },
+      "div",
+      { className: "comments_container" },
       React.createElement(
-        'h1',
-        { className: 'comments_header' },
-        'Comments'
+        "h1",
+        { className: "comments_header" },
+        "Comments"
       ),
       comments.length === 0 ? React.createElement(
-        'p',
-        { className: 'no_comments' },
-        'No comments? Be the change you want to see in the world...'
+        "p",
+        { className: "no_comments" },
+        "No comments? Be the change you want to see in the world..."
       ) : comments.map(function (comment, index) {
         return React.createElement(Comment, { key: index, title: comment.title, content: comment.content });
       })

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { io } from  "socket.io-client";
+import { useParams } from "react-router-dom";
 import Comment from './Comment.js';
 import Form from './Form.js';
 import Button from './Button.js';
@@ -14,6 +15,8 @@ function App(props) {
       }
   }, []);
   
+  const pollId = window.location.pathname.slice(7);
+  console.log(pollId);
   const [socket, setSocket] = useState();
   const [comments, setComments] = useState([]);
   const [title_input, setTitleInput] = useState(''); 
@@ -25,6 +28,7 @@ function App(props) {
     for (var i = 0; i < 4; ++i) {
         counts_empty.push(0);
   }
+  console.log(counts_empty);
   const [counts, setCounts] = useState(counts_empty);
   const [num_votes, setNumVotes] = useState(0);
 
@@ -76,6 +80,7 @@ function App(props) {
     setNumVotes(num_votes + 1);
     if (socket == null) return;
     socket.emit("send-vote", counts);
+    socket.emit("save-poll", counts);
   }
 
   useEffect(() => {
@@ -92,9 +97,19 @@ function App(props) {
     }
   }, [socket]);
 
+  useEffect(() => {
+    if (socket == null) return;
+    socket.once('load-poll', poll => {
+      setCounts(poll);
+      setNumVotes(poll.reduce(reducer));
+    });
+    socket.emit('get-poll', pollId);
+  }, [socket, pollId]);
+
+
   return (
       <div className="app_wrapper">
-          <Poll title="Which is the best letter?" num_options="4" onVote={voteChange} counts={counts} num_votes={num_votes}/>
+          <Poll title="Which is the best letter?" key={0} onVote={voteChange} counts={counts} num_votes={num_votes}/>
           <Form onTitleChange={handleTitleChange} onCommentChange={handleCommentChange} />
           <Button onButtonClick={handleButtonClick} onClearButtonClick={handleClearButtonClick} />
           <div className="comments_container">
