@@ -10,16 +10,7 @@ import App from './App.js';
 
 ReactDOM.render(
     <React.StrictMode>
-        {/* <Router>
-            <Switch>
-                <Route path="/" exact>
-                    <Redirect to={`/polls/${uuidV4()}`}></Redirect>
-                </Route>
-                <Route path="/polls/:id"> */}
-                    <App />
-                {/* </Route>
-            </Switch>
-        </Router> */}
+        <App />
     </React.StrictMode>,
     document.getElementById('root')
 );

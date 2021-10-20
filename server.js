@@ -1,18 +1,17 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(3001, {
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ['GET', 'POST'],
-    },
-});
+const PORT = process.env.PORT || 3000;
+const INDEX = '/index.html';
+
+const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+const io = require('socket.io')(server);
 const mongoose = require("mongoose");
 const PollData = require("./PollData");
 const uuid = require("uuid");
-
-mongoose.connect('mongodb://localhost/rolly-polly', {
+const uri = process.env.MONGODB_URI || "mongodb://localhost/rolly-polly";
+mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -20,7 +19,7 @@ mongoose.connect('mongodb://localhost/rolly-polly', {
 app.use('/static', express.static(path.join(__dirname, "dist")));
 
 app.get("/polls/:id", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(path.join(__dirname, INDEX));
 });
 
 app.get("/", (req, res) => {
@@ -55,12 +54,3 @@ async function findOrCreatePoll(id) {
         counts: [0,0,0,0]
     })
 }
-
-http.listen(3000, (error) => {
-    if (error) {
-        console.log("Error: " + error.toString());
-    }
-    else {
-        console.log("Server started at http://localhost:3000");
-    }
-});

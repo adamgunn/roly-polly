@@ -11,7 +11,7 @@ import Poll from './Poll.js';
 function App(props) {
 
   useEffect(function () {
-    setSocket(io("http://localhost:3001"));
+    setSocket(io(window.location.host));
     return function () {
       socket.disconnect();
     };
