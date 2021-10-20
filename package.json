@@ -8,7 +8,8 @@
     "lint": "eslint dist",
     "pack": "webpack ./src",
     "babel": "npx babel --watch src_dev --out-dir src --presets react-app/prod",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "startdev": "nodemon server.js"
   },
   "keywords": [
     "poll",
