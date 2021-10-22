@@ -1,7 +1,13 @@
+@font-face {
+  font-family: "PingFang SC";
+  src: url("fonts/PingFang-SC-Regular.woff");
+}
+
+
 :root {
   margin: 0px;
   background-color: #bbb;
-  font-family: monospace;
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, "PingFang SC", Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -46,8 +52,8 @@ body {
 .add_comment_button, .clear_comments_button {
   color: white;
   border: none;
-  font-family: monospace;
   font-size: 25px;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
   padding: 10px;
   border-radius: 10px;
   text-transform: uppercase;
@@ -76,6 +82,7 @@ body {
   margin: 0px auto;
   height: 200px;
   font-size: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
   resize: none;
   padding: 5px;
   border: none;
@@ -87,10 +94,10 @@ body {
   width: 45%;
   min-width: 350px;
   max-width: 600px;
-  font-family: monospace;
   height: 40px;
   font-size: 30px;
   font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
   padding: 5px;
   margin: 5px auto;
   border: none;
@@ -153,7 +160,6 @@ body {
 .poll_button {
   color: white;
   border: none;
-  font-family: monospace;
   font-size: 25px;
   padding: 10px;
   border-radius: 10px;
@@ -173,4 +179,20 @@ body {
 .no_comments {
   text-align: center;
   color: #777;
+}
+
+.connected, .not_connected {
+  position: absolute;
+  font-size: 20px;
+  left: 10px;
+  top: 10px;
+  margin-top: 0px;
+}
+
+.connected {
+  color: green;
+}
+
+.not_connected {
+  color: darkred;
 }

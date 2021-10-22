@@ -23,6 +23,7 @@ function App(props) {
   const [comment_input, setCommentInput] = useState('');
   const [last_title, setLastTitle] = useState('');
   const [last_comment, setLastComment] = useState('');
+  const [connected, setConnected] = useState(false);
 
   var counts_empty = [];
     for (var i = 0; i < 4; ++i) {
@@ -56,6 +57,10 @@ function App(props) {
       alert("Okay, now you're getting a little repetitive...")
     }
   }
+
+  setInterval(() => {
+    setConnected(socket.connected);
+  }, 1000)
 
   const handleTitleChange = (e) => {
     setTitleInput(e.target.value);
@@ -109,6 +114,9 @@ function App(props) {
 
   return (
       <div className="app_wrapper">
+          {connected ?
+            <p class="connected">Connected</p> :
+            <p class="not_connected">Not connected</p>}
           <Poll title="Which is the best letter?" key={0} onVote={voteChange} counts={counts} num_votes={num_votes}/>
           <Form onTitleChange={handleTitleChange} onCommentChange={handleCommentChange} />
           <Button onButtonClick={handleButtonClick} onClearButtonClick={handleClearButtonClick} />

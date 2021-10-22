@@ -50,21 +50,26 @@ function App(props) {
       last_comment = _useState12[0],
       setLastComment = _useState12[1];
 
+  var _useState13 = useState(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      connected = _useState14[0],
+      setConnected = _useState14[1];
+
   var counts_empty = [];
   for (var i = 0; i < 4; ++i) {
     counts_empty.push(0);
   }
   console.log(counts_empty);
 
-  var _useState13 = useState(counts_empty),
-      _useState14 = _slicedToArray(_useState13, 2),
-      counts = _useState14[0],
-      setCounts = _useState14[1];
-
-  var _useState15 = useState(0),
+  var _useState15 = useState(counts_empty),
       _useState16 = _slicedToArray(_useState15, 2),
-      num_votes = _useState16[0],
-      setNumVotes = _useState16[1];
+      counts = _useState16[0],
+      setCounts = _useState16[1];
+
+  var _useState17 = useState(0),
+      _useState18 = _slicedToArray(_useState17, 2),
+      num_votes = _useState18[0],
+      setNumVotes = _useState18[1];
 
   var handleButtonClick = function handleButtonClick(e) {
     e.preventDefault();
@@ -81,6 +86,10 @@ function App(props) {
       alert("Okay, now you're getting a little repetitive...");
     }
   };
+
+  setInterval(function () {
+    setConnected(socket.connected);
+  }, 1000);
 
   var handleTitleChange = function handleTitleChange(e) {
     setTitleInput(e.target.value);
@@ -136,6 +145,15 @@ function App(props) {
   return React.createElement(
     "div",
     { className: "app_wrapper" },
+    connected ? React.createElement(
+      "p",
+      { "class": "connected" },
+      "Connected"
+    ) : React.createElement(
+      "p",
+      { "class": "not_connected" },
+      "Not connected"
+    ),
     React.createElement(Poll, { title: "Which is the best letter?", key: 0, onVote: voteChange, counts: counts, num_votes: num_votes }),
     React.createElement(Form, { onTitleChange: handleTitleChange, onCommentChange: handleCommentChange }),
     React.createElement(Button, { onButtonClick: handleButtonClick, onClearButtonClick: handleClearButtonClick }),
