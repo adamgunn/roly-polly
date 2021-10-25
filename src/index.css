@@ -1,13 +1,7 @@
-@font-face {
-  font-family: "PingFang SC";
-  src: url("fonts/PingFang-SC-Regular.woff");
-}
-
-
 :root {
   margin: 0px;
   background-color: #bbb;
-  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, "PingFang SC", Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
 }
 
 body {
@@ -52,12 +46,15 @@ body {
 .add_comment_button, .clear_comments_button {
   color: white;
   border: none;
-  font-size: 25px;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-  padding: 10px;
-  border-radius: 10px;
-  text-transform: uppercase;
-  min-width: 220px;
+  font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
+  padding: 17px;
+  border-radius: 12px;
+  /* text-transform: uppercase; */
+  min-width: 50px;
+  -webkit-font-smoothing: antialiased;
+  line-height: 0px;
+  min-height: 36px;
 }
 
 
@@ -82,7 +79,7 @@ body {
   margin: 0px auto;
   height: 200px;
   font-size: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
   resize: none;
   padding: 5px;
   border: none;
@@ -97,7 +94,7 @@ body {
   height: 40px;
   font-size: 30px;
   font-weight: bold;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
   padding: 5px;
   margin: 5px auto;
   border: none;
@@ -159,6 +156,10 @@ body {
 
 .poll_button {
   color: white;
+  transition: all 0.1s;
+}
+
+.poll_button, .poll_button_disabled {
   border: none;
   font-size: 25px;
   padding: 10px;
@@ -168,7 +169,16 @@ body {
   height: 40px;
   line-height: 0px;
   margin: 10px;
-  transition: all 0.1s;
+}
+
+.poll_button_disabled {
+  color: darkslategray;
+  background-color: gray;
+}
+
+.poll_button_disabled:hover {
+  cursor: default;
+  transform: none;
 }
 
 .poll_button:hover {

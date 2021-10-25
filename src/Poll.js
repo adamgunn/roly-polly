@@ -42,10 +42,14 @@ function Poll(props) {
                 )
             )
         ));
-        buttons.push(React.createElement(
+        buttons.push(props.connected_to_server ? React.createElement(
             "button",
             { className: "poll_button", index: i, onClick: handleClick, key: i,
                 style: { backgroundColor: colors[i % colors.length] } },
+            String.fromCharCode(97 + i).toUpperCase()
+        ) : React.createElement(
+            "button",
+            { className: "poll_button_disabled", index: i, onClick: handleClick, key: i },
             String.fromCharCode(97 + i).toUpperCase()
         ));
     }

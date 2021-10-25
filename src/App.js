@@ -18,7 +18,6 @@ function App(props) {
   }, []);
 
   var pollId = window.location.pathname.slice(7);
-  console.log(pollId);
 
   var _useState = useState(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -59,7 +58,6 @@ function App(props) {
   for (var i = 0; i < 4; ++i) {
     counts_empty.push(0);
   }
-  console.log(counts_empty);
 
   var _useState15 = useState(counts_empty),
       _useState16 = _slicedToArray(_useState15, 2),
@@ -88,7 +86,15 @@ function App(props) {
   };
 
   setInterval(function () {
-    setConnected(socket.connected);
+    if (connected || !socket.connected) {
+      setConnected(socket.connected);
+    } else {
+      socket.once('load-poll', function (poll) {
+        setCounts(poll);
+        setNumVotes(poll.reduce(reducer));
+      });
+      setConnected(true);
+    }
   }, 1000);
 
   var handleTitleChange = function handleTitleChange(e) {
@@ -154,7 +160,7 @@ function App(props) {
       { "class": "not_connected" },
       "Not connected"
     ),
-    React.createElement(Poll, { title: "Which is the best letter?", key: 0, onVote: voteChange, counts: counts, num_votes: num_votes }),
+    React.createElement(Poll, { title: "Which is the best letter?", key: 0, onVote: voteChange, counts: counts, num_votes: num_votes, connected_to_server: connected }),
     React.createElement(Form, { onTitleChange: handleTitleChange, onCommentChange: handleCommentChange }),
     React.createElement(Button, { onButtonClick: handleButtonClick, onClearButtonClick: handleClearButtonClick }),
     React.createElement(

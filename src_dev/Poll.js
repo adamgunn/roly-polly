@@ -30,10 +30,14 @@ function Poll(props) {
             </div>
         );
         buttons.push(
+            props.connected_to_server ?
             <button className="poll_button" index={i} onClick={handleClick} key={i}
                     style={{ backgroundColor: colors[i % colors.length]}}>
                 {String.fromCharCode(97 + i).toUpperCase()}
-            </button>  
+            </button> :
+            <button className="poll_button_disabled" index={i} onClick={handleClick} key={i}>
+                {String.fromCharCode(97 + i).toUpperCase()}
+            </button>
         );
     }
     return (
