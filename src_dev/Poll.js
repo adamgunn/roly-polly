@@ -35,7 +35,7 @@ function Poll(props) {
                     style={{ backgroundColor: colors[i % colors.length]}}>
                 {String.fromCharCode(97 + i).toUpperCase()}
             </button> :
-            <button className="poll_button_disabled" index={i} onClick={handleClick} key={i}>
+            <button className="poll_button_disabled" index={i} key={i}>
                 {String.fromCharCode(97 + i).toUpperCase()}
             </button>
         );
