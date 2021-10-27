@@ -117,9 +117,10 @@ body {
 }
 
 .bar_graph_bar {
-  height: 30px;
+  height: 15px;
   margin: 5px;
   transition: width 0.7s;
+  border-radius: 5px;
 }
 
 .bar_graph_text {

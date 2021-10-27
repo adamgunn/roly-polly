@@ -56,18 +56,27 @@ function App(props) {
     }
   }
 
-  setInterval(() => {
-    if (connected || !socket.connected) {
-      setConnected(socket.connected);
-    }
-    else {
-      socket.once('load-poll', poll => {
-        setCounts(poll);
-        setNumVotes(poll.reduce(reducer));
-      });
-      setConnected(true);
-    }
-  }, 1000)
+
+  useEffect(() => {
+    if (socket == null) return;
+    const interval = setInterval(() => {
+      if (connected || !socket.connected) {
+        setConnected(socket.connected);
+      }
+      else {
+        console.log("reconnecting");
+        socket.once('load-poll', poll => {
+          setCounts(poll);
+          setNumVotes(poll.reduce(reducer));
+        });
+        socket.emit('get-poll', pollId);
+        setConnected(true);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+
+  }, [socket, connected]);
 
   const handleTitleChange = (e) => {
     setTitleInput(e.target.value);
