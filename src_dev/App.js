@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { io } from  "socket.io-client";
-import { useParams } from "react-router-dom";
 import Comment from './Comment.js';
 import Form from './Form.js';
 import Button from './Button.js';
@@ -42,6 +41,9 @@ function App(props) {
       setComments(joined);
       setLastTitle(title_input);
       setLastComment(comment_input);
+      if (socket == null) return;
+      socket.emit('send-comment', comments);
+      socket.emit('save-poll', counts, comments);
     }
     else if (!title_input && comment_input) {
       alert("Please include a title. Otherwise, what are we going to call your comment?");
@@ -56,6 +58,7 @@ function App(props) {
     }
   }
 
+  const reducer = (prev, curr) => prev + curr;
 
   useEffect(() => {
     if (socket == null) return;
@@ -66,8 +69,9 @@ function App(props) {
       else {
         console.log("reconnecting");
         socket.once('load-poll', poll => {
-          setCounts(poll);
-          setNumVotes(poll.reduce(reducer));
+          setCounts(poll.counts);
+          setNumVotes(poll.counts.reduce(reducer));
+          setComments(poll.comments);
         });
         socket.emit('get-poll', pollId);
         setConnected(true);
@@ -91,7 +95,11 @@ function App(props) {
     setComments([]);
     setLastTitle('');
     setLastComment('');
+    if (socket == null) return;
+    socket.emit('send-comment', comments);
+    socket.emit('save-poll', counts, comments);
   }
+
   const reducer = (prev, curr) => prev + curr;
 
   const voteChange = (index) => {
@@ -100,8 +108,8 @@ function App(props) {
     setCounts(counts_state);
     setNumVotes(num_votes + 1);
     if (socket == null) return;
-    socket.emit("send-vote", counts);
-    socket.emit("save-poll", counts);
+    socket.emit("send-vote", counts, comments);
+    socket.emit("save-poll", counts, comments);
   }
 
   useEffect(() => {
@@ -120,9 +128,23 @@ function App(props) {
 
   useEffect(() => {
     if (socket == null) return;
+    const addComment = (comments_input) => {
+      setComments(comments_input);
+    };
+
+    socket.on("receive-comment", addComment);
+
+    return () => {
+      socket.off("receive-comment", addComment);
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    if (socket == null) return;
     socket.once('load-poll', poll => {
-      setCounts(poll);
-      setNumVotes(poll.reduce(reducer));
+      setCounts(poll.counts);
+      setNumVotes(poll.counts.reduce(reducer));
+      setComments(poll.comments);
     });
     socket.emit('get-poll', pollId);
   }, [socket, pollId]);

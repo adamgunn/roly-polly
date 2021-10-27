@@ -1,13 +1,34 @@
 import { useState } from "react";
 
 
+
 function Poll(props) {
     
-    const [colors, setColors] = useState(["darkred", "gold", "darkgreen", "royalblue"]);
+    const [colors, setColors] = useState(["#8b0000", "#ffd700", "#006400", "#4169e1"]);
     const [title, setTitle] = useState(props.title);
 
     const handleClick = (e) => {
         props.onVote(e.target.getAttribute("index"));
+    }
+    
+    function hexToRgb(hex) {
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+      
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    function blackOrWhite(hex) {
+        const rgb = hexToRgb(hex);
+        return ((rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114) > 186) ?
+        "#000000" : "#ffffff";
     }
  
     var bars = [];
@@ -32,8 +53,11 @@ function Poll(props) {
         buttons.push(
             props.connected_to_server ?
             <button className="poll_button" index={i} onClick={handleClick} key={i}
-                    style={{ backgroundColor: colors[i % colors.length]}}>
-                {String.fromCharCode(97 + i).toUpperCase()}
+                    style={{ backgroundColor: colors[i % colors.length] }}>
+                <span class="poll_button_text"
+                      style={{ color: blackOrWhite(colors[i % colors.length]) }}>
+                          {String.fromCharCode(97 + i).toUpperCase()}
+                </span>
             </button> :
             <button className="poll_button_disabled" index={i} key={i}>
                 {String.fromCharCode(97 + i).toUpperCase()}

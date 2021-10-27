@@ -2,7 +2,6 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 import { useState, useEffect } from 'react';
 import { io } from "socket.io-client";
-import { useParams } from "react-router-dom";
 import Comment from './Comment.js';
 import Form from './Form.js';
 import Button from './Button.js';
@@ -76,6 +75,9 @@ function App(props) {
       setComments(joined);
       setLastTitle(title_input);
       setLastComment(comment_input);
+      if (socket == null) return;
+      socket.emit('send-comment', comments);
+      socket.emit('save-poll', counts, comments);
     } else if (!title_input && comment_input) {
       alert("Please include a title. Otherwise, what are we going to call your comment?");
     } else if (title_input && !comment_input) {
@@ -93,8 +95,9 @@ function App(props) {
       } else {
         console.log("reconnecting");
         socket.once('load-poll', function (poll) {
-          setCounts(poll);
-          setNumVotes(poll.reduce(reducer));
+          setCounts(poll.counts);
+          setNumVotes(poll.counts.reduce(reducer));
+          setComments(poll.comments);
         });
         socket.emit('get-poll', pollId);
         setConnected(true);
@@ -119,7 +122,11 @@ function App(props) {
     setComments([]);
     setLastTitle('');
     setLastComment('');
+    if (socket == null) return;
+    socket.emit('send-comment', comments);
+    socket.emit('save-poll', counts, comments);
   };
+
   var reducer = function reducer(prev, curr) {
     return prev + curr;
   };
@@ -130,8 +137,8 @@ function App(props) {
     setCounts(counts_state);
     setNumVotes(num_votes + 1);
     if (socket == null) return;
-    socket.emit("send-vote", counts);
-    socket.emit("save-poll", counts);
+    socket.emit("send-vote", counts, comments);
+    socket.emit("save-poll", counts, comments);
   };
 
   useEffect(function () {
@@ -150,40 +157,54 @@ function App(props) {
 
   useEffect(function () {
     if (socket == null) return;
+    var addComment = function addComment(comments_input) {
+      setComments(comments_input);
+    };
+
+    socket.on("receive-comment", addComment);
+
+    return function () {
+      socket.off("receive-comment", addComment);
+    };
+  }, [socket]);
+
+  useEffect(function () {
+    if (socket == null) return;
     socket.once('load-poll', function (poll) {
-      setCounts(poll);
-      setNumVotes(poll.reduce(reducer));
+      setCounts(poll.counts);
+      setNumVotes(poll.counts.reduce(reducer));
+      setComments(poll.comments);
     });
     socket.emit('get-poll', pollId);
   }, [socket, pollId]);
 
   return React.createElement(
-    "div",
-    { className: "app_wrapper" },
+    'div',
+    { className: 'app_wrapper' },
     connected ? React.createElement(
-      "p",
-      { "class": "connected" },
-      "Connected"
+      'p',
+      { 'class': 'connected' },
+      'Connected'
     ) : React.createElement(
-      "p",
-      { "class": "not_connected" },
-      "Not connected"
+      'p',
+      { 'class': 'not_connected' },
+      'Not connected'
     ),
-    React.createElement(Poll, { title: "Which is the best letter?", key: 0, onVote: voteChange, counts: counts, num_votes: num_votes, connected_to_server: connected }),
+    React.createElement(Poll, { title: 'Which is the best letter?', key: 0, onVote: voteChange, counts: counts, num_votes: num_votes, connected_to_server: connected }),
     React.createElement(Form, { onTitleChange: handleTitleChange, onCommentChange: handleCommentChange }),
     React.createElement(Button, { onButtonClick: handleButtonClick, onClearButtonClick: handleClearButtonClick }),
     React.createElement(
-      "div",
-      { className: "comments_container" },
+      'div',
+      { className: 'comments_container' },
       React.createElement(
-        "h1",
-        { className: "comments_header" },
-        "Comments"
+        'h1',
+        { className: 'comments_header' },
+        'Comments'
       ),
       comments.length === 0 ? React.createElement(
-        "p",
-        { className: "no_comments" },
-        "No comments? Be the change you want to see in the world..."
+        'p',
+        { className: 'no_comments' },
+        'No comments? Be the change you want to see in the world...'
       ) : comments.map(function (comment, index) {
         return React.createElement(Comment, { key: index, title: comment.title, content: comment.content });
       })

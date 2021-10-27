@@ -3,7 +3,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 import { useState } from "react";
 
 function Poll(props) {
-    var _useState = useState(["darkred", "gold", "darkgreen", "royalblue"]),
+    var _useState = useState(["#8b0000", "#ffd700", "#006400", "#4169e1"]),
         _useState2 = _slicedToArray(_useState, 2),
         colors = _useState2[0],
         setColors = _useState2[1];
@@ -16,6 +16,25 @@ function Poll(props) {
     var handleClick = function handleClick(e) {
         props.onVote(e.target.getAttribute("index"));
     };
+
+    function hexToRgb(hex) {
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    function blackOrWhite(hex) {
+        var rgb = hexToRgb(hex);
+        return rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114 > 186 ? "#000000" : "#ffffff";
+    }
 
     var bars = [];
     var buttons = [];
@@ -46,7 +65,12 @@ function Poll(props) {
             "button",
             { className: "poll_button", index: i, onClick: handleClick, key: i,
                 style: { backgroundColor: colors[i % colors.length] } },
-            String.fromCharCode(97 + i).toUpperCase()
+            React.createElement(
+                "span",
+                { "class": "poll_button_text",
+                    style: { color: blackOrWhite(colors[i % colors.length]) } },
+                String.fromCharCode(97 + i).toUpperCase()
+            )
         ) : React.createElement(
             "button",
             { className: "poll_button_disabled", index: i, key: i },

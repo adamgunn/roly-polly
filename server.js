@@ -32,12 +32,16 @@ io.on('connection', (socket) => {
         const poll = await findOrCreatePoll(pollId);
         console.log(poll)
         socket.join(pollId);
-        socket.emit('load-poll', poll.counts);
+        socket.emit('load-poll', poll);
         socket.on('send-vote', counts => {
             socket.broadcast.to(pollId).emit('receive-vote', counts);
         });
-        socket.on('save-poll', async counts => {
-            await PollData.findByIdAndUpdate(pollId, { counts })
+        socket.on('send-comment', comments => {
+            socket.broadcast.to(pollId).emit('receive-comment', comments);
+        });
+        socket.on('save-poll', async (counts, comments) => {
+            await PollData.findByIdAndUpdate(pollId, { counts });
+            await PollData.findByIdAndUpdate(pollId, { comments });
         })
     })
 })
@@ -51,6 +55,7 @@ async function findOrCreatePoll(id) {
     }
     return await PollData.create({
         _id: id,
-        counts: [0,0,0,0]
+        counts: [0,0,0,0],
+        comments: []
     })
 }
