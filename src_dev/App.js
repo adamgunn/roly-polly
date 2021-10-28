@@ -4,6 +4,7 @@ import Comment from './Comment.js';
 import Form from './Form.js';
 import Button from './Button.js';
 import Poll from './Poll.js';
+import CreatePoll from './CreatePoll.js';
 
 function App(props) {
   
@@ -22,6 +23,7 @@ function App(props) {
   const [last_title, setLastTitle] = useState('');
   const [last_comment, setLastComment] = useState('');
   const [connected, setConnected] = useState(false);
+  const [poll_created, setPollCreated] = useState(false);
 
   var counts_empty = [];
     for (var i = 0; i < 4; ++i) {
@@ -42,8 +44,12 @@ function App(props) {
       setLastTitle(title_input);
       setLastComment(comment_input);
       if (socket == null) return;
-      socket.emit('send-comment', comments);
-      socket.emit('save-poll', counts, comments);
+      socket.emit('send-comment', joined);
+      const data = {
+        counts_data: counts,
+        comments_data: joined
+      }
+      socket.emit('save-poll', data);
     }
     else if (!title_input && comment_input) {
       alert("Please include a title. Otherwise, what are we going to call your comment?");
@@ -58,8 +64,6 @@ function App(props) {
     }
   }
 
-  const reducer = (prev, curr) => prev + curr;
-
   useEffect(() => {
     if (socket == null) return;
     const interval = setInterval(() => {
@@ -68,10 +72,10 @@ function App(props) {
       }
       else {
         console.log("reconnecting");
-        socket.once('load-poll', poll => {
-          setCounts(poll.counts);
-          setNumVotes(poll.counts.reduce(reducer));
-          setComments(poll.comments);
+        socket.once('load-poll', poll => {;
+          setCounts(poll.counts_data);
+          setNumVotes(poll.counts_data.reduce(reducer));
+          setComments(poll.comments_data);
         });
         socket.emit('get-poll', pollId);
         setConnected(true);
@@ -97,7 +101,11 @@ function App(props) {
     setLastComment('');
     if (socket == null) return;
     socket.emit('send-comment', comments);
-    socket.emit('save-poll', counts, comments);
+    const data = {
+      counts_data: counts,
+      comments_data: comments
+    }
+    socket.emit('save-poll', data);
   }
 
   const reducer = (prev, curr) => prev + curr;
@@ -108,8 +116,12 @@ function App(props) {
     setCounts(counts_state);
     setNumVotes(num_votes + 1);
     if (socket == null) return;
-    socket.emit("send-vote", counts, comments);
-    socket.emit("save-poll", counts, comments);
+    socket.emit("send-vote", counts);
+    const data = {
+      counts_data: counts,
+      comments_data: comments
+    }
+    socket.emit('save-poll', data);
   }
 
   useEffect(() => {
@@ -142,22 +154,26 @@ function App(props) {
   useEffect(() => {
     if (socket == null) return;
     socket.once('load-poll', poll => {
-      setCounts(poll.counts);
-      setNumVotes(poll.counts.reduce(reducer));
-      setComments(poll.comments);
+      setCounts(poll.counts_data);
+      setNumVotes(poll.counts_data.reduce(reducer));
+      setComments(poll.comments_data);
     });
     socket.emit('get-poll', pollId);
   }, [socket, pollId]);
 
+  const createNewPoll = (data) => {
+    console.log(data);
+  }
 
   return (
+    poll_created ? 
       <div className="app_wrapper">
           {connected ?
-            <p class="connected">Connected</p> :
-            <p class="not_connected">Not connected</p>}
+            <p className="connected">Connected</p> :
+            <p className="not_connected">Not connected</p>}
           <Poll title="Which is the best letter?" key={0} onVote={voteChange} counts={counts} num_votes={num_votes} connected_to_server={connected}/>
-          <Form onTitleChange={handleTitleChange} onCommentChange={handleCommentChange} />
-          <Button onButtonClick={handleButtonClick} onClearButtonClick={handleClearButtonClick} />
+          <Form onTitleChange={handleTitleChange} onCommentChange={handleCommentChange}/>
+          <Button onButtonClick={handleButtonClick} onClearButtonClick={handleClearButtonClick} connected_to_server={connected}/>
           <div className="comments_container">
               <h1 className="comments_header">Comments</h1>
               {(comments.length === 0) ? <p className="no_comments">No comments? Be the change you want to see in the world...</p> :
@@ -165,7 +181,10 @@ function App(props) {
                       return <Comment key={index} title={comment.title} content={comment.content}/>;
                   }
               )}
-          </div>  
+          </div>
+      </div>
+      : <div className="app_wrapper">
+        <CreatePoll submitPoll={createNewPoll}/>
       </div>
   );
 }

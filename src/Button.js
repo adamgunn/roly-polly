@@ -32,7 +32,7 @@ var Button = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            return React.createElement(
+            return this.props.connected_to_server ? React.createElement(
                 "div",
                 { className: "buttons_wrapper" },
                 React.createElement(
@@ -45,6 +45,19 @@ var Button = function (_React$Component) {
                     { className: "clear_comments_button", onClick: this.handleClearButtonClick },
                     "Clear"
                 )
+            ) : React.createElement(
+                "div",
+                { className: "buttons_wrapper" },
+                React.createElement(
+                    "button",
+                    { className: "add_comment_button", onClick: this.handleButtonClick, disabled: true },
+                    "Submit comment"
+                ),
+                React.createElement(
+                    "button",
+                    { className: "clear_comments_button", onClick: this.handleClearButtonClick, disabled: true },
+                    "Clear"
+                )
             );
         }
     }]);
@@ -54,7 +67,8 @@ var Button = function (_React$Component) {
 
 Button.propTypes = {
     onButtonClick: propTypes.func,
-    onClearButtonClick: propTypes.func
+    onClearButtonClick: propTypes.func,
+    connected_to_server: propTypes.bool
 };
 
 export default Button;

@@ -6,6 +6,7 @@ import Comment from './Comment.js';
 import Form from './Form.js';
 import Button from './Button.js';
 import Poll from './Poll.js';
+import CreatePoll from './CreatePoll.js';
 
 function App(props) {
 
@@ -53,20 +54,25 @@ function App(props) {
       connected = _useState14[0],
       setConnected = _useState14[1];
 
+  var _useState15 = useState(false),
+      _useState16 = _slicedToArray(_useState15, 2),
+      poll_created = _useState16[0],
+      setPollCreated = _useState16[1];
+
   var counts_empty = [];
   for (var i = 0; i < 4; ++i) {
     counts_empty.push(0);
   }
 
-  var _useState15 = useState(counts_empty),
-      _useState16 = _slicedToArray(_useState15, 2),
-      counts = _useState16[0],
-      setCounts = _useState16[1];
-
-  var _useState17 = useState(0),
+  var _useState17 = useState(counts_empty),
       _useState18 = _slicedToArray(_useState17, 2),
-      num_votes = _useState18[0],
-      setNumVotes = _useState18[1];
+      counts = _useState18[0],
+      setCounts = _useState18[1];
+
+  var _useState19 = useState(0),
+      _useState20 = _slicedToArray(_useState19, 2),
+      num_votes = _useState20[0],
+      setNumVotes = _useState20[1];
 
   var handleButtonClick = function handleButtonClick(e) {
     e.preventDefault();
@@ -76,8 +82,12 @@ function App(props) {
       setLastTitle(title_input);
       setLastComment(comment_input);
       if (socket == null) return;
-      socket.emit('send-comment', comments);
-      socket.emit('save-poll', counts, comments);
+      socket.emit('send-comment', joined);
+      var data = {
+        counts_data: counts,
+        comments_data: joined
+      };
+      socket.emit('save-poll', data);
     } else if (!title_input && comment_input) {
       alert("Please include a title. Otherwise, what are we going to call your comment?");
     } else if (title_input && !comment_input) {
@@ -95,9 +105,10 @@ function App(props) {
       } else {
         console.log("reconnecting");
         socket.once('load-poll', function (poll) {
-          setCounts(poll.counts);
-          setNumVotes(poll.counts.reduce(reducer));
-          setComments(poll.comments);
+          ;
+          setCounts(poll.counts_data);
+          setNumVotes(poll.counts_data.reduce(reducer));
+          setComments(poll.comments_data);
         });
         socket.emit('get-poll', pollId);
         setConnected(true);
@@ -124,7 +135,11 @@ function App(props) {
     setLastComment('');
     if (socket == null) return;
     socket.emit('send-comment', comments);
-    socket.emit('save-poll', counts, comments);
+    var data = {
+      counts_data: counts,
+      comments_data: comments
+    };
+    socket.emit('save-poll', data);
   };
 
   var reducer = function reducer(prev, curr) {
@@ -137,8 +152,12 @@ function App(props) {
     setCounts(counts_state);
     setNumVotes(num_votes + 1);
     if (socket == null) return;
-    socket.emit("send-vote", counts, comments);
-    socket.emit("save-poll", counts, comments);
+    socket.emit("send-vote", counts);
+    var data = {
+      counts_data: counts,
+      comments_data: comments
+    };
+    socket.emit('save-poll', data);
   };
 
   useEffect(function () {
@@ -171,28 +190,32 @@ function App(props) {
   useEffect(function () {
     if (socket == null) return;
     socket.once('load-poll', function (poll) {
-      setCounts(poll.counts);
-      setNumVotes(poll.counts.reduce(reducer));
-      setComments(poll.comments);
+      setCounts(poll.counts_data);
+      setNumVotes(poll.counts_data.reduce(reducer));
+      setComments(poll.comments_data);
     });
     socket.emit('get-poll', pollId);
   }, [socket, pollId]);
 
-  return React.createElement(
+  var createNewPoll = function createNewPoll(data) {
+    console.log(data);
+  };
+
+  return poll_created ? React.createElement(
     'div',
     { className: 'app_wrapper' },
     connected ? React.createElement(
       'p',
-      { 'class': 'connected' },
+      { className: 'connected' },
       'Connected'
     ) : React.createElement(
       'p',
-      { 'class': 'not_connected' },
+      { className: 'not_connected' },
       'Not connected'
     ),
     React.createElement(Poll, { title: 'Which is the best letter?', key: 0, onVote: voteChange, counts: counts, num_votes: num_votes, connected_to_server: connected }),
     React.createElement(Form, { onTitleChange: handleTitleChange, onCommentChange: handleCommentChange }),
-    React.createElement(Button, { onButtonClick: handleButtonClick, onClearButtonClick: handleClearButtonClick }),
+    React.createElement(Button, { onButtonClick: handleButtonClick, onClearButtonClick: handleClearButtonClick, connected_to_server: connected }),
     React.createElement(
       'div',
       { className: 'comments_container' },
@@ -209,6 +232,10 @@ function App(props) {
         return React.createElement(Comment, { key: index, title: comment.title, content: comment.content });
       })
     )
+  ) : React.createElement(
+    'div',
+    { className: 'app_wrapper' },
+    React.createElement(CreatePoll, { submitPoll: createNewPoll })
   );
 }
 

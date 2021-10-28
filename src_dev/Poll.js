@@ -7,7 +7,7 @@ function Poll(props) {
     const [colors, setColors] = useState(["#8b0000", "#ffd700", "#006400", "#4169e1"]);
     const [title, setTitle] = useState(props.title);
 
-    const handleClick = (e) => {
+    const handleClick = function(e)  {
         props.onVote(e.target.getAttribute("index"));
     }
     
@@ -35,7 +35,7 @@ function Poll(props) {
     var buttons = [];
     for (var i = 0; i < props.counts.length; i++) {
         bars.push(
-            <div className="bar_graph_bar_wrapper">
+            <div className="bar_graph_bar_wrapper ">
                 <div style={{ backgroundColor: colors[i % colors.length],
                                 width: ((props.counts[i] === 0) ? 0.5 : props.counts[i] / props.num_votes * 100).toString() + "%" }}
                     className="bar_graph_bar"
@@ -45,7 +45,7 @@ function Poll(props) {
                     <div className="choice_letter">{String.fromCharCode(97 + i).toUpperCase()}</div>
                     <div className="vote_count">
                     {((props.num_votes === 0) ? "0.0" : (props.counts[i] / props.num_votes * 100).toFixed(1).toString()) + "% (" + 
-                        (props.counts[i]).toString() + ((props.counts[i] === 1) ? " vote)" :" votes)")}
+                        (props.counts[i]).toString() + ((props.counts[i] === 1) ? " vote)" : " votes)")}
                     </div>
                 </div>
             </div>
@@ -54,12 +54,12 @@ function Poll(props) {
             props.connected_to_server ?
             <button className="poll_button" index={i} onClick={handleClick} key={i}
                     style={{ backgroundColor: colors[i % colors.length] }}>
-                <span class="poll_button_text"
+                <span className="poll_button_text" index={i} key={i}
                       style={{ color: blackOrWhite(colors[i % colors.length]) }}>
                           {String.fromCharCode(97 + i).toUpperCase()}
                 </span>
             </button> :
-            <button className="poll_button_disabled" index={i} key={i}>
+            <button className="poll_button" index={i} key={i} disabled>
                 {String.fromCharCode(97 + i).toUpperCase()}
             </button>
         );

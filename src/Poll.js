@@ -41,7 +41,7 @@ function Poll(props) {
     for (var i = 0; i < props.counts.length; i++) {
         bars.push(React.createElement(
             "div",
-            { className: "bar_graph_bar_wrapper" },
+            { className: "bar_graph_bar_wrapper " },
             React.createElement("div", { style: { backgroundColor: colors[i % colors.length],
                     width: (props.counts[i] === 0 ? 0.5 : props.counts[i] / props.num_votes * 100).toString() + "%" },
                 className: "bar_graph_bar",
@@ -67,13 +67,13 @@ function Poll(props) {
                 style: { backgroundColor: colors[i % colors.length] } },
             React.createElement(
                 "span",
-                { "class": "poll_button_text",
+                { className: "poll_button_text", index: i, key: i,
                     style: { color: blackOrWhite(colors[i % colors.length]) } },
                 String.fromCharCode(97 + i).toUpperCase()
             )
         ) : React.createElement(
             "button",
-            { className: "poll_button_disabled", index: i, key: i },
+            { className: "poll_button", index: i, key: i, disabled: true },
             String.fromCharCode(97 + i).toUpperCase()
         ));
     }
