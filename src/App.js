@@ -123,10 +123,15 @@ function App(props) {
       } else {
         console.log("reconnecting");
         socket.once('load-poll', function (poll) {
-          ;
-          setCounts(poll.counts_data);
-          setNumVotes(poll.counts_data.reduce(reducer));
-          setComments(poll.comments_data);
+          setPollCreated(poll.poll_created_data);
+          if (poll.poll_created_data) {
+            setPollTitle(poll.title_data);
+            setOptions(poll.options_data);
+            setCounts(poll.counts_data);
+            setColors(poll.colors_data);
+            setNumVotes(poll.counts_data.reduce(reducer));
+            setComments(poll.comments_data);
+          }
         });
         socket.emit('get-poll', pollId);
         setConnected(true);
@@ -207,15 +212,37 @@ function App(props) {
 
   useEffect(function () {
     if (socket == null) return;
+    socket.once('poll-created', function (poll) {
+      setPollCreated(poll.poll_created_data);
+      if (poll.poll_created_data) {
+        setPollTitle(poll.title_data);
+        setOptions(poll.options_data);
+        setCounts(poll.counts_data);
+        setColors(poll.colors_data);
+        setNumVotes(poll.counts_data.reduce(reducer));
+        setComments(poll.comments_data);
+      }
+    });
+  }, [socket]);
+
+  useEffect(function () {
+    if (socket == null) return;
     socket.once('load-poll', function (poll) {
-      setCounts(poll.counts_data);
-      setNumVotes(poll.counts_data.reduce(reducer));
-      setComments(poll.comments_data);
+      setPollCreated(poll.poll_created_data);
+      if (poll.poll_created_data) {
+        setPollTitle(poll.title_data);
+        setOptions(poll.options_data);
+        setCounts(poll.counts_data);
+        setColors(poll.colors_data);
+        setNumVotes(poll.counts_data.reduce(reducer));
+        setComments(poll.comments_data);
+      }
     });
     socket.emit('get-poll', pollId);
   }, [socket, pollId]);
 
   var createNewPoll = function createNewPoll(data) {
+    if (socket == null || !connected) return;
     setPollTitle(data.title);
     setOptions(data.options);
     setColors(data.colors);
@@ -225,6 +252,15 @@ function App(props) {
     }
     setCounts(counts_empty);
     setPollCreated(true);
+    var poll_data = {
+      counts_data: counts_empty,
+      comments_data: comments,
+      options_data: data.options,
+      colors_data: data.colors,
+      title_data: data.title,
+      poll_created_data: true
+    };
+    socket.emit('create-poll', poll_data);
   };
 
   return poll_created ? React.createElement(

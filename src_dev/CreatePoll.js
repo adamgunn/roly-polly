@@ -59,6 +59,10 @@ function CreatePoll(props) {
     }
 
     const verifyEntries = () => {
+        if (options.length < 2 || options.length > 26) {
+            setValid(false);
+            return;
+        }
         for (var i = 0; i < options.length; i++) {
             if (!options[i] || options[i] == "" || options[i] == null) {
                 setValid(false);

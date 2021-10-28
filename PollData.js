@@ -6,7 +6,8 @@ const PollData = new Schema({
     comments: Array,
     options: Array,
     colors: Array,
-    new_poll: Boolean
+    title: String,
+    poll_created: Boolean
 })
 
 module.exports = model("PollData", PollData)

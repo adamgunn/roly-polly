@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint dist",
-    "pack": "webpack ./src",
+    "pack": "webpack ./src --mode=development",
+    "packprod": "webpack ./src --mode=production",
     "babel": "npx babel --watch src_dev --out-dir src --presets react-app/prod",
     "start": "node server.js",
     "startdev": "nodemon server.js"

@@ -10,7 +10,7 @@ const io = require('socket.io')(server);
 const mongoose = require("mongoose");
 const PollData = require("./PollData");
 const uuid = require("uuid");
-const uri = process.env.MONGODB_URI || "mongodb://localhost/rolly-polly";
+const uri = process.env.MONGODB_URI || "mongodb://localhost/roly-polly";
 mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -30,13 +30,15 @@ io.on('connection', (socket) => {
     console.log("connected");
     socket.on("get-poll", async pollId => {
         const poll = await findOrCreatePoll(pollId);
-        console.log(poll)
         socket.join(pollId);
         const data = {
             counts_data: poll.counts,
-            comments_data: poll.comments
+            comments_data: poll.comments,
+            options_data: poll.options,
+            colors_data: poll.colors,
+            title_data: poll.title,
+            poll_created_data: poll.poll_created
         }
-        console.log(data);
         socket.emit('load-poll', data);
         socket.on('send-vote', counts => {
             socket.broadcast.to(pollId).emit('receive-vote', counts);
@@ -48,12 +50,23 @@ io.on('connection', (socket) => {
         socket.on('save-poll', async data => {
             await PollData.findByIdAndUpdate(pollId, { counts: data.counts_data, 
                                                        comments: data.comments_data });
-        })
-    })
-})
+        });
+        socket.on('create-poll', async data => {
+            console.log(data);
+            await PollData.findByIdAndUpdate(pollId, {
+                counts: data.counts_data,
+                comments: data.comments_data,
+                options: data.options_data,
+                colors: data.colors_data,
+                title: data.title_data,
+                poll_created: data.poll_created_data
+            });
+            socket.broadcast.to(pollId).emit('poll-created', data);
+        });
+    });
+});
 
 async function findOrCreatePoll(id) {
-    console.log(id);
     if (id == null) return;
     const poll = await PollData.findById(id);
     if (poll) {
@@ -61,8 +74,11 @@ async function findOrCreatePoll(id) {
     }
     return await PollData.create({
         _id: id,
-        counts: [0,0,0,0],
+        counts: [],
         comments: [],
-        new_poll: true
+        options: [],
+        colors: [],
+        title: "",
+        poll_created: false
     })
 }
