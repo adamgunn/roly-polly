@@ -4,8 +4,7 @@ import { useState } from "react";
 
 function Poll(props) {
     
-    const [colors, setColors] = useState(["#8b0000", "#ffd700", "#006400", "#4169e1"]);
-    const [title, setTitle] = useState(props.title);
+    const colors = props.colors;
 
     const handleClick = function(e)  {
         props.onVote(e.target.getAttribute("index"));
@@ -42,7 +41,7 @@ function Poll(props) {
                     key={i}>
                 </div>
                 <div className="bar_graph_text">
-                    <div className="choice_letter">{String.fromCharCode(97 + i).toUpperCase()}</div>
+                    <div className="choice_text">{String.fromCharCode(97 + i).toUpperCase() + " - " + props.options[i]}</div>
                     <div className="vote_count">
                     {((props.num_votes === 0) ? "0.0" : (props.counts[i] / props.num_votes * 100).toFixed(1).toString()) + "% (" + 
                         (props.counts[i]).toString() + ((props.counts[i] === 1) ? " vote)" : " votes)")}
@@ -67,7 +66,7 @@ function Poll(props) {
     return (
         <div className="poll_wrapper">
             <div className="bar_graph_wrapper">
-                <h1 className="poll_title">{title}</h1>
+                <h1 className="poll_title">{props.title}</h1>
                 {bars}
             </div>
             <div className="poll_buttons_wrapper">

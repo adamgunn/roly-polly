@@ -1,5 +1,7 @@
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 import { useState, useEffect } from 'react';
 import { io } from "socket.io-client";
 import Comment from './Comment.js';
@@ -9,6 +11,7 @@ import Poll from './Poll.js';
 import CreatePoll from './CreatePoll.js';
 
 function App(props) {
+  var _React$createElement;
 
   useEffect(function () {
     setSocket(io(window.location.host));
@@ -59,20 +62,35 @@ function App(props) {
       poll_created = _useState16[0],
       setPollCreated = _useState16[1];
 
+  var _useState17 = useState(""),
+      _useState18 = _slicedToArray(_useState17, 2),
+      poll_title = _useState18[0],
+      setPollTitle = _useState18[1];
+
+  var _useState19 = useState([]),
+      _useState20 = _slicedToArray(_useState19, 2),
+      colors = _useState20[0],
+      setColors = _useState20[1];
+
+  var _useState21 = useState([]),
+      _useState22 = _slicedToArray(_useState21, 2),
+      options = _useState22[0],
+      setOptions = _useState22[1];
+
   var counts_empty = [];
   for (var i = 0; i < 4; ++i) {
     counts_empty.push(0);
   }
 
-  var _useState17 = useState(counts_empty),
-      _useState18 = _slicedToArray(_useState17, 2),
-      counts = _useState18[0],
-      setCounts = _useState18[1];
+  var _useState23 = useState(counts_empty),
+      _useState24 = _slicedToArray(_useState23, 2),
+      counts = _useState24[0],
+      setCounts = _useState24[1];
 
-  var _useState19 = useState(0),
-      _useState20 = _slicedToArray(_useState19, 2),
-      num_votes = _useState20[0],
-      setNumVotes = _useState20[1];
+  var _useState25 = useState(0),
+      _useState26 = _slicedToArray(_useState25, 2),
+      num_votes = _useState26[0],
+      setNumVotes = _useState26[1];
 
   var handleButtonClick = function handleButtonClick(e) {
     e.preventDefault();
@@ -198,7 +216,15 @@ function App(props) {
   }, [socket, pollId]);
 
   var createNewPoll = function createNewPoll(data) {
-    console.log(data);
+    setPollTitle(data.title);
+    setOptions(data.options);
+    setColors(data.colors);
+    counts_empty = [];
+    for (var i = 0; i < data.options.length; i++) {
+      counts_empty.push(0);
+    }
+    setCounts(counts_empty);
+    setPollCreated(true);
   };
 
   return poll_created ? React.createElement(
@@ -213,7 +239,7 @@ function App(props) {
       { className: 'not_connected' },
       'Not connected'
     ),
-    React.createElement(Poll, { title: 'Which is the best letter?', key: 0, onVote: voteChange, counts: counts, num_votes: num_votes, connected_to_server: connected }),
+    React.createElement(Poll, (_React$createElement = { title: 'Which is the best letter?', key: 0, onVote: voteChange }, _defineProperty(_React$createElement, 'title', poll_title), _defineProperty(_React$createElement, 'counts', counts), _defineProperty(_React$createElement, 'num_votes', num_votes), _defineProperty(_React$createElement, 'options', options), _defineProperty(_React$createElement, 'colors', colors), _defineProperty(_React$createElement, 'connected_to_server', connected), _React$createElement)),
     React.createElement(Form, { onTitleChange: handleTitleChange, onCommentChange: handleCommentChange }),
     React.createElement(Button, { onButtonClick: handleButtonClick, onClearButtonClick: handleClearButtonClick, connected_to_server: connected }),
     React.createElement(

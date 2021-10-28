@@ -24,6 +24,9 @@ function App(props) {
   const [last_comment, setLastComment] = useState('');
   const [connected, setConnected] = useState(false);
   const [poll_created, setPollCreated] = useState(false);
+  const [poll_title, setPollTitle] = useState("");
+  const [colors, setColors] = useState([]);
+  const [options, setOptions] = useState([]);
 
   var counts_empty = [];
     for (var i = 0; i < 4; ++i) {
@@ -162,7 +165,15 @@ function App(props) {
   }, [socket, pollId]);
 
   const createNewPoll = (data) => {
-    console.log(data);
+    setPollTitle(data.title);
+    setOptions(data.options);
+    setColors(data.colors);
+    counts_empty = [];
+    for (var i = 0; i < data.options.length; i++) {
+      counts_empty.push(0);
+    }
+    setCounts(counts_empty);
+    setPollCreated(true);
   }
 
   return (
@@ -171,7 +182,7 @@ function App(props) {
           {connected ?
             <p className="connected">Connected</p> :
             <p className="not_connected">Not connected</p>}
-          <Poll title="Which is the best letter?" key={0} onVote={voteChange} counts={counts} num_votes={num_votes} connected_to_server={connected}/>
+          <Poll title="Which is the best letter?" key={0} onVote={voteChange} title={poll_title} counts={counts} num_votes={num_votes} options={options} colors={colors} connected_to_server={connected}/>
           <Form onTitleChange={handleTitleChange} onCommentChange={handleCommentChange}/>
           <Button onButtonClick={handleButtonClick} onClearButtonClick={handleClearButtonClick} connected_to_server={connected}/>
           <div className="comments_container">

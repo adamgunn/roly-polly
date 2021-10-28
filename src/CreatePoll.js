@@ -96,7 +96,7 @@ function CreatePoll(props) {
             null,
             React.createElement(
                 "h1",
-                { "class": "create_poll_title" },
+                { className: "create_poll_title" },
                 "Create your poll"
             )
         ),
@@ -105,8 +105,8 @@ function CreatePoll(props) {
             { className: "create_poll_input" },
             React.createElement(
                 "label",
-                { className: "create_poll_header", "for": "title" },
-                "Poll title"
+                { className: "create_poll_header", htmlFor: "title" },
+                "Title"
             ),
             React.createElement("br", null),
             React.createElement("input", { type: "text", name: "title", id: "title", placeholder: DEFAULT_POLL_TITLE, onChange: titleChange })
@@ -116,7 +116,7 @@ function CreatePoll(props) {
             { className: "create_poll_input" },
             React.createElement(
                 "label",
-                { className: "create_poll_header", "for": "num_options" },
+                { className: "create_poll_header", htmlFor: "num_options" },
                 "Number of options"
             ),
             React.createElement("br", null),
@@ -128,7 +128,7 @@ function CreatePoll(props) {
                 { className: "option_input_wrapper" },
                 React.createElement(
                     "label",
-                    { className: "create_poll_header", "for": "option_" + index, key: "label_" + index },
+                    { className: "create_poll_header", htmlFor: "option_" + index, key: "label_" + index },
                     "Option " + String.fromCharCode(97 + index).toUpperCase() + " - required"
                 ),
                 React.createElement("br", null),
@@ -141,15 +141,15 @@ function CreatePoll(props) {
             { className: "create_poll_input" },
             React.createElement(
                 "label",
-                { className: "create_poll_header", "for": "colors_input" },
-                "Poll colors (please enter as a list of whitespace-separated RGB codes)"
+                { className: "create_poll_header", htmlFor: "colors_input" },
+                "Poll colors"
             ),
             React.createElement("br", null),
-            React.createElement("textarea", { className: "colors_input", name: "colors_input", id: "colors_input", onChange: colorChange, placeholder: "#8b0000 #ffd700 #006400 #4169e1" })
+            React.createElement("textarea", { className: "colors_input", name: "colors_input", id: "colors_input", onChange: colorChange, placeholder: "#8b0000\nrgb(255, 215, 0)\nhsl(120, 100%, 20%)\n#4169E1" })
         ),
         React.createElement(
             "h3",
-            { className: "create_poll_header" },
+            { className: "your_colors" },
             "Your colors"
         ),
         React.createElement(

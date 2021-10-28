@@ -71,15 +71,15 @@ function CreatePoll(props) {
     return (
         <ul className="create_poll_wrapper">
             <li>
-                <h1 class="create_poll_title">Create your poll</h1>
+                <h1 className="create_poll_title">Create your poll</h1>
             </li>
             <li className="create_poll_input">
-                <label className="create_poll_header" for="title">Poll title</label>
+                <label className="create_poll_header" htmlFor="title">Title</label>
                 <br />
                 <input type="text" name="title" id="title" placeholder={DEFAULT_POLL_TITLE} onChange={titleChange} />
             </li>
             <li className="create_poll_input">
-                <label className="create_poll_header" for="num_options">Number of options</label>
+                <label className="create_poll_header" htmlFor="num_options">Number of options</label>
                 <br />
                 <input type="number" name="num_options" id="num_options" min={2} max={MAX_OPTIONS} onChange={numOptionsChange} />
             </li>
@@ -87,7 +87,7 @@ function CreatePoll(props) {
                 options.map((option, index) => {
                     return (
                         <li className="option_input_wrapper">
-                            <label className="create_poll_header" for={"option_" + index} key={"label_" + index}>
+                            <label className="create_poll_header" htmlFor={"option_" + index} key={"label_" + index}>
                                 {"Option " + String.fromCharCode(97 + index).toUpperCase() + " - required"}
                             </label>
                             <br />
@@ -98,11 +98,11 @@ function CreatePoll(props) {
                 })
             }
             <li className="create_poll_input">
-                <label className="create_poll_header" for="colors_input">Poll colors (please enter as a list of whitespace-separated RGB codes)</label>
+                <label className="create_poll_header" htmlFor="colors_input">Poll colors</label>
                 <br />
-                <textarea className="colors_input" name="colors_input" id="colors_input" onChange={colorChange} placeholder="#8b0000 #ffd700 #006400 #4169e1"></textarea>
+                <textarea className="colors_input" name="colors_input" id="colors_input" onChange={colorChange} placeholder={`#8b0000\nrgb(255, 215, 0)\nhsl(120, 100%, 20%)\n#4169E1`}></textarea>
             </li>
-            <h3 className="create_poll_header">Your colors</h3>
+            <h3 className="your_colors">Your colors</h3>
             <div className="color_samples_grid">
                 {
                     colors.map((color) => {

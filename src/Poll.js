@@ -1,17 +1,8 @@
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 import { useState } from "react";
 
 function Poll(props) {
-    var _useState = useState(["#8b0000", "#ffd700", "#006400", "#4169e1"]),
-        _useState2 = _slicedToArray(_useState, 2),
-        colors = _useState2[0],
-        setColors = _useState2[1];
 
-    var _useState3 = useState(props.title),
-        _useState4 = _slicedToArray(_useState3, 2),
-        title = _useState4[0],
-        setTitle = _useState4[1];
+    var colors = props.colors;
 
     var handleClick = function handleClick(e) {
         props.onVote(e.target.getAttribute("index"));
@@ -51,8 +42,8 @@ function Poll(props) {
                 { className: "bar_graph_text" },
                 React.createElement(
                     "div",
-                    { className: "choice_letter" },
-                    String.fromCharCode(97 + i).toUpperCase()
+                    { className: "choice_text" },
+                    String.fromCharCode(97 + i).toUpperCase() + " - " + props.options[i]
                 ),
                 React.createElement(
                     "div",
@@ -86,7 +77,7 @@ function Poll(props) {
             React.createElement(
                 "h1",
                 { className: "poll_title" },
-                title
+                props.title
             ),
             bars
         ),
