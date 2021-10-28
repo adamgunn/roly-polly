@@ -221,7 +221,7 @@ function App(props) {
             <p className="not_connected">Not connected</p>}
           <Poll title="Which is the best letter?" key={0} onVote={voteChange} title={poll_title} counts={counts} num_votes={num_votes} options={options} colors={colors} connected_to_server={connected}/>
           <Form onTitleChange={handleTitleChange} onCommentChange={handleCommentChange}/>
-          <Button onButtonClick={handleButtonClick} onClearButtonClick={handleClearButtonClick} connected_to_server={connected}/>
+          <Button onButtonClick={handleButtonClick} connected_to_server={connected}/>
           <div className="comments_container">
               <h1 className="comments_header">Comments</h1>
               {(comments.length === 0) ? <p className="no_comments">No comments? Be the change you want to see in the world...</p> :

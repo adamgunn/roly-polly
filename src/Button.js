@@ -15,7 +15,6 @@ var Button = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).call(this, props));
 
         _this.handleButtonClick = _this.handleButtonClick.bind(_this);
-        _this.handleClearButtonClick = _this.handleClearButtonClick.bind(_this);
         return _this;
     }
 
@@ -23,11 +22,6 @@ var Button = function (_React$Component) {
         key: "handleButtonClick",
         value: function handleButtonClick(e) {
             this.props.onButtonClick(e);
-        }
-    }, {
-        key: "handleClearButtonClick",
-        value: function handleClearButtonClick(e) {
-            this.props.onClearButtonClick(e);
         }
     }, {
         key: "render",
@@ -39,11 +33,6 @@ var Button = function (_React$Component) {
                     "button",
                     { className: "add_comment_button", onClick: this.handleButtonClick },
                     "Submit comment"
-                ),
-                React.createElement(
-                    "button",
-                    { className: "clear_comments_button", onClick: this.handleClearButtonClick },
-                    "Clear"
                 )
             ) : React.createElement(
                 "div",
@@ -52,11 +41,6 @@ var Button = function (_React$Component) {
                     "button",
                     { className: "add_comment_button", onClick: this.handleButtonClick, disabled: true },
                     "Submit comment"
-                ),
-                React.createElement(
-                    "button",
-                    { className: "clear_comments_button", onClick: this.handleClearButtonClick, disabled: true },
-                    "Clear"
                 )
             );
         }
@@ -67,7 +51,6 @@ var Button = function (_React$Component) {
 
 Button.propTypes = {
     onButtonClick: propTypes.func,
-    onClearButtonClick: propTypes.func,
     connected_to_server: propTypes.bool
 };
 

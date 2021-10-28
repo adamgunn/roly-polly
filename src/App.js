@@ -277,7 +277,7 @@ function App(props) {
     ),
     React.createElement(Poll, (_React$createElement = { title: 'Which is the best letter?', key: 0, onVote: voteChange }, _defineProperty(_React$createElement, 'title', poll_title), _defineProperty(_React$createElement, 'counts', counts), _defineProperty(_React$createElement, 'num_votes', num_votes), _defineProperty(_React$createElement, 'options', options), _defineProperty(_React$createElement, 'colors', colors), _defineProperty(_React$createElement, 'connected_to_server', connected), _React$createElement)),
     React.createElement(Form, { onTitleChange: handleTitleChange, onCommentChange: handleCommentChange }),
-    React.createElement(Button, { onButtonClick: handleButtonClick, onClearButtonClick: handleClearButtonClick, connected_to_server: connected }),
+    React.createElement(Button, { onButtonClick: handleButtonClick, connected_to_server: connected }),
     React.createElement(
       'div',
       { className: 'comments_container' },
