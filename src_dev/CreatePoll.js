@@ -80,7 +80,7 @@ function CreatePoll(props) {
         <form method="post" action="/submit-new-poll">
             <ul className="create_poll_wrapper">
                 <li>
-                    <h1 className="create_poll_title">Create your poll</h1>
+                    <h3 className="rolypolly_subtitle">Create your poll</h3>
                 </li>
                 <li className="create_poll_input">
                     <label className="create_poll_header" htmlFor="title">
@@ -170,12 +170,10 @@ function CreatePoll(props) {
                     id="submission_data"
                     name="submission_data"
                     value={{ title: title, colors: colors, options: options }}
-                ></input>
+                />
                 {valid ? (
                     <li>
-                        <input type="submit" className="create_poll_button">
-                            Create!
-                        </input>
+                        <input value="Create!" type="submit" className="create_poll_button" />
                     </li>
                 ) : (
                     <li>

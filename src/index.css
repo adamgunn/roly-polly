@@ -15,6 +15,7 @@
 
 body {
   margin: 0px;
+  background-color: #bbb;
 }
 
 .comment_wrapper {
@@ -264,6 +265,7 @@ ul.create_poll_wrapper li {
 .create_poll_wrapper {
   padding: 0px;
   margin: 20px;
+  padding-bottom: 20px;
 }
 
 .create_poll_header, .your_colors {
@@ -276,12 +278,7 @@ ul.create_poll_wrapper li {
   margin: 0px 0px 10px;
 }
 
-.create_poll_title {
-  font-size: 40px;
-  font-weight: 800;
-}
-
-.home_wrapper {
+.home_wrapper, .about_wrapper {
   margin: 20px;
 }
 
@@ -292,7 +289,46 @@ ul.create_poll_wrapper li {
 
 .rolypolly_subtitle {
   font-weight: 700;
+  margin-bottom: 15px;
   font-size: 50px;
+}
+
+.navbar_wrapper {
+  background-color: #ddd;
+  position: fixed;
+  height: 40px;
+  width: 100vw;
+  display: block flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 20px;
+  margin: 0px;
+  top: 0px;
+  z-index: 1;
+}
+
+li.navbar_link, .navbar_link a {
+  list-style: none;
+  list-style-type: none;
+  text-decoration: none;
+  color: black;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 0px;
+}
+
+.navbar_link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.create_poll_wrapper, .about_wrapper, .app_wrapper, 
+.home_wrapper, .not_found_wrapper {
+  position: absolute;
+  width: 100vw;
+  top: 40px;
+  z-index: 0;
 }
 
 @media screen and (max-width: 540px) {

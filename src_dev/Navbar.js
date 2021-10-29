@@ -1,14 +1,14 @@
 function Navbar(props) {
     return (
         <ul className="navbar_wrapper">
-            <li>
-                <a className="navbar_link" href="../">Home</a>
+            <li className="navbar_link">
+                <a href="../">Home</a>
             </li>
-            <li>
-                <a className="navbar_link" href="../about">About</a>
+            <li className="navbar_link">
+                <a href="../about">About</a>
             </li>
-            <li>
-                <a className="navbar_link" href="../new-poll">New poll</a>
+            <li className="navbar_link">
+                <a href="../new-poll">New Poll</a>
             </li>
         </ul>
     );

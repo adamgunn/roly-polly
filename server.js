@@ -10,7 +10,7 @@ const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 const PollData = require('./PollData');
 const uuid = require('uuid');
-const { syncIndexes } = require('./PollData');
+const { syncIndexes, findById } = require('./PollData');
 const uri = process.env.MONGODB_URI || 'mongodb://localhost/roly-polly';
 mongoose.connect(uri, {
     useNewUrlParser: true,
@@ -19,10 +19,23 @@ mongoose.connect(uri, {
 
 app.use('/static', express.static(path.join(__dirname, 'dist')));
 
-crash here please
-app.post('/new-poll/submit-new-poll', (req, res) => {
+app.post('/submit-new-poll', async (req, res) => {
     const new_uuid = uuid.v4();
     const form_data = req.body.submission_data;
+    var counts_empty = [];
+    for (var i = 0; i < form_data.options.length; i++) {
+        counts_empty.push(0);
+    }
+    await PollData.create({
+        _id: new_uuid,
+        counts: counts_empty,
+        comments: [],
+        options: form_data.options,
+        colors: form_data.colors,
+        title: form_data.title,
+        poll_created: true
+    });
+    res.redirect(`/polls/${new_uuid}`);
 })
 
 app.get('/', (req, res) => {
@@ -49,8 +62,9 @@ app.get('/:page', (req, res) => {
 io.on('connection', (socket) => {
     console.log('connected');
     socket.on('get-poll', async (pollId) => {
-        const poll = await findOrCreatePoll(pollId);
+        const poll = await findById(pollId);
         socket.join(pollId);
+        if (!poll) socket.broadcast.to(pollId).emit('not-found');
         const data = {
             counts_data: poll.counts,
             comments_data: poll.comments,
@@ -59,7 +73,7 @@ io.on('connection', (socket) => {
             title_data: poll.title,
             poll_created_data: poll.poll_created,
         };
-        socket.emit('load-poll', data);
+        socket.broadcat.to(pollId).emit('load-poll', data);
         socket.on('send-vote', (counts) => {
             socket.broadcast.to(pollId).emit('receive-vote', counts);
         });
@@ -73,39 +87,5 @@ io.on('connection', (socket) => {
                 comments: data.comments_data,
             });
         });
-        socket.on('create-poll', async (data) => {
-            console.log(data);
-            await PollData.findByIdAndUpdate(pollId, {
-                counts: data.counts_data,
-                comments: data.comments_data,
-                options: data.options_data,
-                colors: data.colors_data,
-                title: data.title_data,
-                poll_created: data.poll_created_data,
-            });
-            socket.broadcast.to(pollId).emit('poll-created', data);
-        });
-        socket.on('delete-never-created-poll', async (pollId) => {
-            if (!PollData.findByIdAndDelete(pollId)) {
-                console.log("failed to delete never-created poll on window/tab close");
-            }
-        });
     });
 });
-
-async function findOrCreatePoll(id) {
-    if (id == null) return;
-    const poll = await PollData.findById(id);
-    if (poll) {
-        return poll;
-    }
-    return await PollData.create({
-        _id: id,
-        counts: [],
-        comments: [],
-        options: [],
-        colors: [],
-        title: '',
-        poll_created: false,
-    });
-}

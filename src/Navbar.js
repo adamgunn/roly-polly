@@ -4,29 +4,29 @@ function Navbar(props) {
         { className: "navbar_wrapper" },
         React.createElement(
             "li",
-            null,
+            { className: "navbar_link" },
             React.createElement(
                 "a",
-                { className: "navbar_link", href: "../" },
+                { href: "../" },
                 "Home"
             )
         ),
         React.createElement(
             "li",
-            null,
+            { className: "navbar_link" },
             React.createElement(
                 "a",
-                { className: "navbar_link", href: "../about" },
+                { href: "../about" },
                 "About"
             )
         ),
         React.createElement(
             "li",
-            null,
+            { className: "navbar_link" },
             React.createElement(
                 "a",
-                { className: "navbar_link", href: "../new-poll" },
-                "New poll"
+                { href: "../new-poll" },
+                "New Poll"
             )
         )
     );

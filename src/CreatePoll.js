@@ -8,14 +8,14 @@ function CreatePoll(props) {
     var DEFAULT_COLORS = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
     var MAX_OPTIONS = 26;
 
-    var submitClicked = function submitClicked() {
-        var poll_data = {
-            title: title,
-            colors: colors,
-            options: options
-        };
-        props.submitPoll(poll_data);
-    };
+    // const submitClicked = () => {
+    //     const poll_data = {
+    //         title: title,
+    //         colors: colors,
+    //         options: options,
+    //     };
+    //     props.submitPoll(poll_data);
+    // };
 
     var _useState = useState(DEFAULT_NUM_OPTIONS),
         _useState2 = _slicedToArray(_useState, 2),
@@ -93,126 +93,132 @@ function CreatePoll(props) {
     };
 
     return React.createElement(
-        'ul',
-        { className: 'create_poll_wrapper' },
+        'form',
+        { method: 'post', action: '/submit-new-poll' },
         React.createElement(
-            'li',
-            null,
+            'ul',
+            { className: 'create_poll_wrapper' },
             React.createElement(
-                'h1',
-                { className: 'create_poll_title' },
-                'Create your poll'
-            )
-        ),
-        React.createElement(
-            'li',
-            { className: 'create_poll_input' },
-            React.createElement(
-                'label',
-                { className: 'create_poll_header', htmlFor: 'title' },
-                'Title'
-            ),
-            React.createElement('br', null),
-            React.createElement('input', {
-                type: 'text',
-                name: 'title',
-                id: 'title',
-                placeholder: DEFAULT_POLL_TITLE,
-                onChange: titleChange
-            })
-        ),
-        React.createElement(
-            'li',
-            { className: 'create_poll_input' },
-            React.createElement(
-                'label',
-                { className: 'create_poll_header', htmlFor: 'num_options' },
-                'Number of options'
-            ),
-            React.createElement('br', null),
-            React.createElement('input', {
-                type: 'number',
-                name: 'num_options',
-                id: 'num_options',
-                min: 2,
-                max: MAX_OPTIONS,
-                onChange: numOptionsChange
-            })
-        ),
-        options.map(function (option, index) {
-            return React.createElement(
                 'li',
-                { className: 'option_input_wrapper' },
+                null,
+                React.createElement(
+                    'h3',
+                    { className: 'rolypolly_subtitle' },
+                    'Create your poll'
+                )
+            ),
+            React.createElement(
+                'li',
+                { className: 'create_poll_input' },
                 React.createElement(
                     'label',
-                    {
-                        className: 'create_poll_header',
-                        htmlFor: 'option_' + index,
-                        key: 'label_' + index
-                    },
-                    'Option ' + String.fromCharCode(97 + index).toUpperCase() + ' - required'
+                    { className: 'create_poll_header', htmlFor: 'title' },
+                    'Title'
                 ),
                 React.createElement('br', null),
                 React.createElement('input', {
                     type: 'text',
-                    name: 'option_' + index,
-                    id: 'option_' + index,
-                    index: index,
-                    key: index,
-                    onChange: optionChange
+                    name: 'title',
+                    id: 'title',
+                    placeholder: DEFAULT_POLL_TITLE,
+                    onChange: titleChange
                 })
-            );
-        }),
-        React.createElement(
-            'li',
-            { className: 'create_poll_input' },
-            React.createElement(
-                'label',
-                { className: 'create_poll_header', htmlFor: 'colors_input' },
-                'Poll colors'
             ),
-            React.createElement('br', null),
-            React.createElement('textarea', {
-                className: 'colors_input',
-                name: 'colors_input',
-                id: 'colors_input',
-                onChange: colorChange,
-                placeholder: '#8b0000\r rgb(255, 215, 0)\r hsl(120, 100%, 20%)\r #4169E1'
-            })
-        ),
-        React.createElement(
-            'h3',
-            { className: 'your_colors' },
-            'Your colors'
-        ),
-        React.createElement(
-            'div',
-            { className: 'color_samples_grid' },
-            colors.map(function (color) {
-                return React.createElement('div', {
-                    className: 'color_sample',
-                    style: { backgroundColor: color }
-                });
-            })
-        ),
-        valid ? React.createElement(
-            'li',
-            null,
             React.createElement(
-                'button',
-                {
-                    className: 'create_poll_button',
-                    onClick: submitClicked
-                },
-                'Create!'
-            )
-        ) : React.createElement(
-            'li',
-            null,
+                'li',
+                { className: 'create_poll_input' },
+                React.createElement(
+                    'label',
+                    { className: 'create_poll_header', htmlFor: 'num_options' },
+                    'Number of options'
+                ),
+                React.createElement('br', null),
+                React.createElement('input', {
+                    type: 'number',
+                    name: 'num_options',
+                    id: 'num_options',
+                    min: 2,
+                    max: MAX_OPTIONS,
+                    onChange: numOptionsChange
+                })
+            ),
+            options.map(function (option, index) {
+                return React.createElement(
+                    'li',
+                    { className: 'option_input_wrapper' },
+                    React.createElement(
+                        'label',
+                        {
+                            className: 'create_poll_header',
+                            htmlFor: 'option_' + index,
+                            key: 'label_' + index
+                        },
+                        'Option ' + String.fromCharCode(97 + index).toUpperCase() + ' - required'
+                    ),
+                    React.createElement('br', null),
+                    React.createElement('input', {
+                        type: 'text',
+                        name: 'option_' + index,
+                        id: 'option_' + index,
+                        index: index,
+                        key: index,
+                        onChange: optionChange
+                    })
+                );
+            }),
             React.createElement(
-                'button',
-                { className: 'create_poll_button', disabled: true },
-                'Create!'
+                'li',
+                { className: 'create_poll_input' },
+                React.createElement(
+                    'label',
+                    {
+                        className: 'create_poll_header',
+                        htmlFor: 'colors_input'
+                    },
+                    'Poll colors'
+                ),
+                React.createElement('br', null),
+                React.createElement('textarea', {
+                    className: 'colors_input',
+                    name: 'colors_input',
+                    id: 'colors_input',
+                    onChange: colorChange,
+                    placeholder: '#8b0000 rgb(255, 215, 0) hsl(120, 100%, 20%) #4169E1'
+                })
+            ),
+            React.createElement(
+                'h3',
+                { className: 'your_colors' },
+                'Your colors'
+            ),
+            React.createElement(
+                'div',
+                { className: 'color_samples_grid' },
+                colors.map(function (color) {
+                    return React.createElement('div', {
+                        className: 'color_sample',
+                        style: { backgroundColor: color }
+                    });
+                })
+            ),
+            React.createElement('input', {
+                type: 'hidden',
+                id: 'submission_data',
+                name: 'submission_data',
+                value: { title: title, colors: colors, options: options }
+            }),
+            valid ? React.createElement(
+                'li',
+                null,
+                React.createElement('input', { value: 'Create!', type: 'submit', className: 'create_poll_button' })
+            ) : React.createElement(
+                'li',
+                null,
+                React.createElement(
+                    'button',
+                    { className: 'create_poll_button', disabled: true },
+                    'Create!'
+                )
             )
         )
     );

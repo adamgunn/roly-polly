@@ -16,7 +16,7 @@ function App(props) {
         };
     }, []);
 
-    var pollId = window.location.pathname.slice(1);
+    var pollId = window.location.pathname.slice(7);
 
     var _useState = useState(),
         _useState2 = _slicedToArray(_useState, 2),
@@ -194,21 +194,6 @@ function App(props) {
         return function () {
             socket.off('receive-comment', addComment);
         };
-    }, [socket]);
-
-    useEffect(function () {
-        if (socket == null) return;
-        socket.once('poll-created', function (poll) {
-            setPollCreated(poll.poll_created_data);
-            if (poll.poll_created_data) {
-                setPollTitle(poll.title_data);
-                setOptions(poll.options_data);
-                setCounts(poll.counts_data);
-                setColors(poll.colors_data);
-                setNumVotes(poll.counts_data.reduce(reducer));
-                setComments(poll.comments_data);
-            }
-        });
     }, [socket]);
 
     useEffect(function () {
