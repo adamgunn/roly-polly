@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const PollData = new Schema({
     _id: String,
@@ -7,7 +7,7 @@ const PollData = new Schema({
     options: Array,
     colors: Array,
     title: String,
-    poll_created: Boolean
+    poll_created: Boolean,
 })
 
-module.exports = model("PollData", PollData)
+module.exports = model('PollData', PollData)

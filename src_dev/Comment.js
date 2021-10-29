@@ -1,5 +1,3 @@
-
-
 class Comment extends React.Component {
     render() {
         return (
@@ -13,7 +11,7 @@ class Comment extends React.Component {
 
 Comment.propTypes = {
     title: propTypes.string,
-    content: propTypes.string
-}
+    content: propTypes.string,
+};
 
 export default Comment;

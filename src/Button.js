@@ -31,7 +31,10 @@ var Button = function (_React$Component) {
                 { className: "buttons_wrapper" },
                 React.createElement(
                     "button",
-                    { className: "add_comment_button", onClick: this.handleButtonClick },
+                    {
+                        className: "add_comment_button",
+                        onClick: this.handleButtonClick
+                    },
                     "Submit comment"
                 )
             ) : React.createElement(
@@ -39,7 +42,11 @@ var Button = function (_React$Component) {
                 { className: "buttons_wrapper" },
                 React.createElement(
                     "button",
-                    { className: "add_comment_button", onClick: this.handleButtonClick, disabled: true },
+                    {
+                        className: "add_comment_button",
+                        onClick: this.handleButtonClick,
+                        disabled: true
+                    },
                     "Submit comment"
                 )
             );

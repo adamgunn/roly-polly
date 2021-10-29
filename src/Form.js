@@ -35,13 +35,18 @@ var Form = function (_React$Component) {
             return React.createElement(
                 "div",
                 { className: "comment_form" },
-                React.createElement("input", { className: "title_input", type: "text",
+                React.createElement("input", {
+                    className: "title_input",
+                    type: "text",
                     placeholder: "Put your title here",
-                    onChange: this.title_change }),
+                    onChange: this.title_change
+                }),
                 React.createElement("br", null),
-                React.createElement("textarea", { className: "content_input",
+                React.createElement("textarea", {
+                    className: "content_input",
                     placeholder: "Put your comment here",
-                    onChange: this.comment_change })
+                    onChange: this.comment_change
+                })
             );
         }
     }]);

@@ -3,9 +3,9 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 import { useState } from 'react';
 
 function CreatePoll(props) {
-    var DEFAULT_POLL_TITLE = "My awesome poll";
+    var DEFAULT_POLL_TITLE = 'My awesome poll';
     var DEFAULT_NUM_OPTIONS = 2;
-    var DEFAULT_COLORS = ["#8b0000", "#ffd700", "#006400", "#4169e1"];
+    var DEFAULT_COLORS = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
     var MAX_OPTIONS = 26;
 
     var submitClicked = function submitClicked() {
@@ -22,7 +22,7 @@ function CreatePoll(props) {
         num_options = _useState2[0],
         setNumOptions = _useState2[1];
 
-    var _useState3 = useState(new Array(DEFAULT_NUM_OPTIONS).fill("")),
+    var _useState3 = useState(new Array(DEFAULT_NUM_OPTIONS).fill('')),
         _useState4 = _slicedToArray(_useState3, 2),
         options = _useState4[0],
         setOptions = _useState4[1];
@@ -52,7 +52,7 @@ function CreatePoll(props) {
             new_options.length = new_num_options;
         } else {
             while (delta++ < 0) {
-                new_options.push("");
+                new_options.push('');
             }
         }
         setOptions(new_options);
@@ -65,13 +65,13 @@ function CreatePoll(props) {
 
     var optionChange = function optionChange(e) {
         var options_state = options;
-        options_state[e.target.getAttribute("index")] = e.target.value;
+        options_state[e.target.getAttribute('index')] = e.target.value;
         setOptions(options_state);
         verifyEntries();
     };
 
     var colorChange = function colorChange(e) {
-        var new_colors = e.target.value.match(/(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/ig);
+        var new_colors = e.target.value.match(/(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi);
         if (!new_colors || new_colors.length === 0) {
             new_colors = DEFAULT_COLORS;
         }
@@ -84,7 +84,7 @@ function CreatePoll(props) {
             return;
         }
         for (var i = 0; i < options.length; i++) {
-            if (!options[i] || options[i] == "" || options[i] == null) {
+            if (!options[i] || options[i] == '' || options[i] == null) {
                 setValid(false);
                 return;
             }
@@ -93,91 +93,126 @@ function CreatePoll(props) {
     };
 
     return React.createElement(
-        "ul",
-        { className: "create_poll_wrapper" },
+        'ul',
+        { className: 'create_poll_wrapper' },
         React.createElement(
-            "li",
+            'li',
             null,
             React.createElement(
-                "h1",
-                { className: "create_poll_title" },
-                "Create your poll"
+                'h1',
+                { className: 'create_poll_title' },
+                'Create your poll'
             )
         ),
         React.createElement(
-            "li",
-            { className: "create_poll_input" },
+            'li',
+            { className: 'create_poll_input' },
             React.createElement(
-                "label",
-                { className: "create_poll_header", htmlFor: "title" },
-                "Title"
+                'label',
+                { className: 'create_poll_header', htmlFor: 'title' },
+                'Title'
             ),
-            React.createElement("br", null),
-            React.createElement("input", { type: "text", name: "title", id: "title", placeholder: DEFAULT_POLL_TITLE, onChange: titleChange })
+            React.createElement('br', null),
+            React.createElement('input', {
+                type: 'text',
+                name: 'title',
+                id: 'title',
+                placeholder: DEFAULT_POLL_TITLE,
+                onChange: titleChange
+            })
         ),
         React.createElement(
-            "li",
-            { className: "create_poll_input" },
+            'li',
+            { className: 'create_poll_input' },
             React.createElement(
-                "label",
-                { className: "create_poll_header", htmlFor: "num_options" },
-                "Number of options"
+                'label',
+                { className: 'create_poll_header', htmlFor: 'num_options' },
+                'Number of options'
             ),
-            React.createElement("br", null),
-            React.createElement("input", { type: "number", name: "num_options", id: "num_options", min: 2, max: MAX_OPTIONS, onChange: numOptionsChange })
+            React.createElement('br', null),
+            React.createElement('input', {
+                type: 'number',
+                name: 'num_options',
+                id: 'num_options',
+                min: 2,
+                max: MAX_OPTIONS,
+                onChange: numOptionsChange
+            })
         ),
         options.map(function (option, index) {
             return React.createElement(
-                "li",
-                { className: "option_input_wrapper" },
+                'li',
+                { className: 'option_input_wrapper' },
                 React.createElement(
-                    "label",
-                    { className: "create_poll_header", htmlFor: "option_" + index, key: "label_" + index },
-                    "Option " + String.fromCharCode(97 + index).toUpperCase() + " - required"
+                    'label',
+                    {
+                        className: 'create_poll_header',
+                        htmlFor: 'option_' + index,
+                        key: 'label_' + index
+                    },
+                    'Option ' + String.fromCharCode(97 + index).toUpperCase() + ' - required'
                 ),
-                React.createElement("br", null),
-                React.createElement("input", { type: "text", name: "option_" + index, id: "option_" + index,
-                    index: index, key: index, onChange: optionChange })
+                React.createElement('br', null),
+                React.createElement('input', {
+                    type: 'text',
+                    name: 'option_' + index,
+                    id: 'option_' + index,
+                    index: index,
+                    key: index,
+                    onChange: optionChange
+                })
             );
         }),
         React.createElement(
-            "li",
-            { className: "create_poll_input" },
+            'li',
+            { className: 'create_poll_input' },
             React.createElement(
-                "label",
-                { className: "create_poll_header", htmlFor: "colors_input" },
-                "Poll colors"
+                'label',
+                { className: 'create_poll_header', htmlFor: 'colors_input' },
+                'Poll colors'
             ),
-            React.createElement("br", null),
-            React.createElement("textarea", { className: "colors_input", name: "colors_input", id: "colors_input", onChange: colorChange, placeholder: "#8b0000\nrgb(255, 215, 0)\nhsl(120, 100%, 20%)\n#4169E1" })
+            React.createElement('br', null),
+            React.createElement('textarea', {
+                className: 'colors_input',
+                name: 'colors_input',
+                id: 'colors_input',
+                onChange: colorChange,
+                placeholder: '#8b0000\r rgb(255, 215, 0)\r hsl(120, 100%, 20%)\r #4169E1'
+            })
         ),
         React.createElement(
-            "h3",
-            { className: "your_colors" },
-            "Your colors"
+            'h3',
+            { className: 'your_colors' },
+            'Your colors'
         ),
         React.createElement(
-            "div",
-            { className: "color_samples_grid" },
+            'div',
+            { className: 'color_samples_grid' },
             colors.map(function (color) {
-                return React.createElement("div", { className: "color_sample", style: { backgroundColor: color } });
+                return React.createElement('div', {
+                    className: 'color_sample',
+                    style: { backgroundColor: color }
+                });
             })
         ),
         valid ? React.createElement(
-            "li",
+            'li',
             null,
             React.createElement(
-                "button",
-                { className: "create_poll_button", onClick: submitClicked },
-                "Create!"
+                'button',
+                {
+                    className: 'create_poll_button',
+                    onClick: submitClicked
+                },
+                'Create!'
             )
         ) : React.createElement(
-            "li",
+            'li',
             null,
             React.createElement(
-                "button",
-                { className: "create_poll_button", disabled: true },
-                "Create!"
+                'button',
+                { className: 'create_poll_button', disabled: true },
+                'Create!'
             )
         )
     );
