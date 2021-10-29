@@ -6,14 +6,14 @@ function CreatePoll(props) {
     const DEFAULT_COLORS = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
     const MAX_OPTIONS = 26;
 
-    const submitClicked = () => {
-        const poll_data = {
-            title: title,
-            colors: colors,
-            options: options,
-        };
-        props.submitPoll(poll_data);
-    };
+    // const submitClicked = () => {
+    //     const poll_data = {
+    //         title: title,
+    //         colors: colors,
+    //         options: options,
+    //     };
+    //     props.submitPoll(poll_data);
+    // };
 
     const [num_options, setNumOptions] = useState(DEFAULT_NUM_OPTIONS);
     const [options, setOptions] = useState(
@@ -77,105 +77,115 @@ function CreatePoll(props) {
     };
 
     return (
-        <ul className="create_poll_wrapper">
-            <li>
-                <h1 className="create_poll_title">Create your poll</h1>
-            </li>
-            <li className="create_poll_input">
-                <label className="create_poll_header" htmlFor="title">
-                    Title
-                </label>
-                <br />
-                <input
-                    type="text"
-                    name="title"
-                    id="title"
-                    placeholder={DEFAULT_POLL_TITLE}
-                    onChange={titleChange}
-                />
-            </li>
-            <li className="create_poll_input">
-                <label className="create_poll_header" htmlFor="num_options">
-                    Number of options
-                </label>
-                <br />
-                <input
-                    type="number"
-                    name="num_options"
-                    id="num_options"
-                    min={2}
-                    max={MAX_OPTIONS}
-                    onChange={numOptionsChange}
-                />
-            </li>
-            {options.map((option, index) => {
-                return (
-                    <li className="option_input_wrapper">
-                        <label
-                            className="create_poll_header"
-                            htmlFor={'option_' + index}
-                            key={'label_' + index}
-                        >
-                            {'Option ' +
-                                String.fromCharCode(97 + index).toUpperCase() +
-                                ' - required'}
-                        </label>
-                        <br />
-                        <input
-                            type="text"
-                            name={'option_' + index}
-                            id={'option_' + index}
-                            index={index}
-                            key={index}
-                            onChange={optionChange}
-                        />
-                    </li>
-                );
-            })}
-            <li className="create_poll_input">
-                <label className="create_poll_header" htmlFor="colors_input">
-                    Poll colors
-                </label>
-                <br />
-                <textarea
-                    className="colors_input"
-                    name="colors_input"
-                    id="colors_input"
-                    onChange={colorChange}
-                    placeholder="#8b0000
-                                 rgb(255, 215, 0)
-                                 hsl(120, 100%, 20%)
-                                 #4169E1"
-                ></textarea>
-            </li>
-            <h3 className="your_colors">Your colors</h3>
-            <div className="color_samples_grid">
-                {colors.map((color) => {
+        <form method="post" action="/submit-new-poll">
+            <ul className="create_poll_wrapper">
+                <li>
+                    <h1 className="create_poll_title">Create your poll</h1>
+                </li>
+                <li className="create_poll_input">
+                    <label className="create_poll_header" htmlFor="title">
+                        Title
+                    </label>
+                    <br />
+                    <input
+                        type="text"
+                        name="title"
+                        id="title"
+                        placeholder={DEFAULT_POLL_TITLE}
+                        onChange={titleChange}
+                    />
+                </li>
+                <li className="create_poll_input">
+                    <label className="create_poll_header" htmlFor="num_options">
+                        Number of options
+                    </label>
+                    <br />
+                    <input
+                        type="number"
+                        name="num_options"
+                        id="num_options"
+                        min={2}
+                        max={MAX_OPTIONS}
+                        onChange={numOptionsChange}
+                    />
+                </li>
+                {options.map((option, index) => {
                     return (
-                        <div
-                            className="color_sample"
-                            style={{ backgroundColor: color }}
-                        ></div>
+                        <li className="option_input_wrapper">
+                            <label
+                                className="create_poll_header"
+                                htmlFor={'option_' + index}
+                                key={'label_' + index}
+                            >
+                                {'Option ' +
+                                    String.fromCharCode(
+                                        97 + index
+                                    ).toUpperCase() +
+                                    ' - required'}
+                            </label>
+                            <br />
+                            <input
+                                type="text"
+                                name={'option_' + index}
+                                id={'option_' + index}
+                                index={index}
+                                key={index}
+                                onChange={optionChange}
+                            />
+                        </li>
                     );
                 })}
-            </div>
-            {valid ? (
-                <li>
-                    <button
-                        className="create_poll_button"
-                        onClick={submitClicked}
+                <li className="create_poll_input">
+                    <label
+                        className="create_poll_header"
+                        htmlFor="colors_input"
                     >
-                        Create!
-                    </button>
+                        Poll colors
+                    </label>
+                    <br />
+                    <textarea
+                        className="colors_input"
+                        name="colors_input"
+                        id="colors_input"
+                        onChange={colorChange}
+                        placeholder="#8b0000
+                                    rgb(255, 215, 0)
+                                    hsl(120, 100%, 20%)
+                                    #4169E1"
+                    ></textarea>
                 </li>
-            ) : (
-                <li>
-                    <button className="create_poll_button" disabled>
-                        Create!
-                    </button>
-                </li>
-            )}
-        </ul>
+                <h3 className="your_colors">Your colors</h3>
+                <div className="color_samples_grid">
+                    {colors.map((color) => {
+                        return (
+                            <div
+                                className="color_sample"
+                                style={{ backgroundColor: color }}
+                            ></div>
+                        );
+                    })}
+                </div>
+                <input
+                    type="hidden"
+                    id="submission_data"
+                    name="submission_data"
+                    value={{ title: title, colors: colors, options: options }}
+                ></input>
+                {valid ? (
+                    <li>
+                        <input type="submit" className="create_poll_button">
+                            Create!
+                        </input>
+                    </li>
+                ) : (
+                    <li>
+                        <button className="create_poll_button" disabled>
+                            Create!
+                        </button>
+                    </li>
+                )}
+            </ul>
+        </form>
     );
 }
 

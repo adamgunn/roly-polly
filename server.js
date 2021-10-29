@@ -19,18 +19,32 @@ mongoose.connect(uri, {
 
 app.use('/static', express.static(path.join(__dirname, 'dist')));
 
+crash here please
+app.post('/new-poll/submit-new-poll', (req, res) => {
+    const new_uuid = uuid.v4();
+    const form_data = req.body.submission_data;
+})
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, INDEX));
 });
 
 app.get('/new-poll', (req, res) => {
-    console.log("redirecting");
-    res.redirect(`../${uuid.v4()}`);
-});
-
-app.get('/:id', (req, res) => {
     res.sendFile(path.join(__dirname, INDEX));
 });
+
+app.get('/about', (req, res) => {
+    res.sendFile(path.join(__dirname, INDEX));
+});
+
+app.get('/polls/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, INDEX));
+});
+
+app.get('/:page', (req, res) => {
+    res.sendFile(path.join(__dirname, INDEX));
+})
+
 
 io.on('connection', (socket) => {
     console.log('connected');

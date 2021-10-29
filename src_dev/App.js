@@ -14,7 +14,7 @@ function App(props) {
         };
     }, []);
 
-    const pollId = window.location.pathname.slice(1);
+    const pollId = window.location.pathname.slice(7);
     const [socket, setSocket] = useState();
     const [comments, setComments] = useState([]);
     const [title_input, setTitleInput] = useState('');
