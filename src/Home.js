@@ -13,8 +13,8 @@ function Home(props) {
             "Create and share polls in real time"
         ),
         React.createElement(
-            "button",
-            { className: "create_poll_button", href: "/new-poll" },
+            "a",
+            { className: "create_poll_button create_poll_link", href: "/new-poll" },
             "Create a new Poll"
         )
     );
