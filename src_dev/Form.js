@@ -3,6 +3,7 @@ class Form extends React.Component {
         super(props);
         this.title_change = this.title_change.bind(this);
         this.comment_change = this.comment_change.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     title_change(e) {
@@ -11,6 +12,11 @@ class Form extends React.Component {
 
     comment_change(e) {
         this.props.onCommentChange(e);
+    }
+
+    handleKeyDown(e) {
+        e.target.style.height = 'inherit';
+        e.target.style.height = `${e.target.scrollHeight}px`;
     }
 
     render() {
@@ -22,11 +28,11 @@ class Form extends React.Component {
                     placeholder="Put your title here"
                     onChange={this.title_change}
                 ></input>
-                <br />
                 <textarea
                     className="content_input"
                     placeholder="Put your comment here"
                     onChange={this.comment_change}
+                    onKeyDown={this.handleKeyDown}
                 ></textarea>
             </div>
         );

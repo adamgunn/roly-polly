@@ -16,6 +16,7 @@ var Form = function (_React$Component) {
 
         _this.title_change = _this.title_change.bind(_this);
         _this.comment_change = _this.comment_change.bind(_this);
+        _this.handleKeyDown = _this.handleKeyDown.bind(_this);
         return _this;
     }
 
@@ -30,6 +31,12 @@ var Form = function (_React$Component) {
             this.props.onCommentChange(e);
         }
     }, {
+        key: "handleKeyDown",
+        value: function handleKeyDown(e) {
+            e.target.style.height = 'inherit';
+            e.target.style.height = e.target.scrollHeight + "px";
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
@@ -41,11 +48,11 @@ var Form = function (_React$Component) {
                     placeholder: "Put your title here",
                     onChange: this.title_change
                 }),
-                React.createElement("br", null),
                 React.createElement("textarea", {
                     className: "content_input",
                     placeholder: "Put your comment here",
-                    onChange: this.comment_change
+                    onChange: this.comment_change,
+                    onKeyDown: this.handleKeyDown
                 })
             );
         }

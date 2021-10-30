@@ -143,7 +143,6 @@ function App(props) {
         };
     }, [socket]);
 
-
     useEffect(() => {
         if (socket == null) return;
         socket.once('load-poll', (poll) => {
@@ -174,31 +173,36 @@ function App(props) {
                 colors={colors}
                 connected_to_server={connected}
             />
-            <Form
-                onTitleChange={handleTitleChange}
-                onCommentChange={handleCommentChange}
-            />
-            <Button
-                onButtonClick={handleButtonClick}
-                connected_to_server={connected}
-            />
             <div className="comments_container">
-                <h1 className="comments_header">Comments</h1>
+                <h1 className="rolypolly_subtitle comments_header">Comments</h1>
+                <div className="button_and_form_wrapper">
+                    <Form
+                        onTitleChange={handleTitleChange}
+                        onCommentChange={handleCommentChange}
+                    />
+                    <Button
+                        onButtonClick={handleButtonClick}
+                        connected_to_server={connected}
+                    />
+                </div>
                 {comments.length === 0 ? (
                     <p className="no_comments">
                         No comments? Be the change you want to see in the
                         world...
                     </p>
                 ) : (
-                    comments.map((comment, index) => {
-                        return (
-                            <Comment
-                                key={index}
-                                title={comment.title}
-                                content={comment.content}
-                            />
-                        );
-                    })
+                    comments
+                        .slice(0)
+                        .reverse()
+                        .map((comment, index) => {
+                            return (
+                                <Comment
+                                    key={index}
+                                    title={comment.title}
+                                    content={comment.content}
+                                />
+                            );
+                        })
                 )}
             </div>
         </div>

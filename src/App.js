@@ -221,27 +221,31 @@ function App(props) {
             colors: colors,
             connected_to_server: connected
         }),
-        React.createElement(Form, {
-            onTitleChange: handleTitleChange,
-            onCommentChange: handleCommentChange
-        }),
-        React.createElement(Button, {
-            onButtonClick: handleButtonClick,
-            connected_to_server: connected
-        }),
         React.createElement(
             'div',
             { className: 'comments_container' },
             React.createElement(
                 'h1',
-                { className: 'comments_header' },
+                { className: 'rolypolly_subtitle comments_header' },
                 'Comments'
+            ),
+            React.createElement(
+                'div',
+                { className: 'button_and_form_wrapper' },
+                React.createElement(Form, {
+                    onTitleChange: handleTitleChange,
+                    onCommentChange: handleCommentChange
+                }),
+                React.createElement(Button, {
+                    onButtonClick: handleButtonClick,
+                    connected_to_server: connected
+                })
             ),
             comments.length === 0 ? React.createElement(
                 'p',
                 { className: 'no_comments' },
                 'No comments? Be the change you want to see in the world...'
-            ) : comments.map(function (comment, index) {
+            ) : comments.slice(0).reverse().map(function (comment, index) {
                 return React.createElement(Comment, {
                     key: index,
                     title: comment.title,
