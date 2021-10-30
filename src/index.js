@@ -6,9 +6,11 @@ import Navbar from './Navbar.js';
 import CreatePoll from './CreatePoll';
 import NotFound from './NotFound';
 
+var uuidRegex = new RegExp(/^\/polls\/[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\/?$/, 'i');
+var path = window.location.pathname;
 ReactDOM.render(React.createElement(
     React.StrictMode,
     null,
     React.createElement(Navbar, null),
-    window.location.pathname == '/' ? React.createElement(Home, null) : window.location.pathname == '/about' ? React.createElement(About, null) : window.location.pathname == '/new-poll' ? React.createElement(CreatePoll, null) : window.location.pathname.slice(7).match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i) ? React.createElement(App, null) : React.createElement(NotFound, null)
+    path == '/' || path == '/home' || path == '/home/' ? React.createElement(Home, null) : path == '/about' || path == '/about/' ? React.createElement(About, null) : path == '/new-poll' || path == '/new-poll/' ? React.createElement(CreatePoll, null) : uuidRegex.test(path) ? React.createElement(App, null) : React.createElement(NotFound, null)
 ), document.getElementById('root'));

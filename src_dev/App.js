@@ -4,7 +4,6 @@ import Comment from './Comment.js';
 import Form from './Form.js';
 import Button from './Button.js';
 import Poll from './Poll.js';
-import CreatePoll from './CreatePoll.js';
 
 function App(props) {
     useEffect(() => {
@@ -22,7 +21,6 @@ function App(props) {
     const [last_title, setLastTitle] = useState('');
     const [last_comment, setLastComment] = useState('');
     const [connected, setConnected] = useState(false);
-    const [poll_created, setPollCreated] = useState(false);
     const [poll_title, setPollTitle] = useState('');
     const [colors, setColors] = useState([]);
     const [options, setOptions] = useState([]);
@@ -79,18 +77,14 @@ function App(props) {
             } else {
                 console.log('reconnecting');
                 socket.once('load-poll', (poll) => {
-                    setPollCreated(poll.poll_created_data);
-                    if (poll.poll_created_data) {
-                        setPollTitle(poll.title_data);
-                        setOptions(poll.options_data);
-                        setCounts(poll.counts_data);
-                        setColors(poll.colors_data);
-                        setNumVotes(poll.counts_data.reduce(reducer));
-                        setComments(poll.comments_data);
-                    }
+                    setPollTitle(poll.title_data);
+                    setOptions(poll.options_data);
+                    setCounts(poll.counts_data);
+                    setColors(poll.colors_data);
+                    setNumVotes(poll.counts_data.reduce(reducer));
+                    setComments(poll.comments_data);
                 });
                 socket.emit('get-poll', pollId);
-                console.log(pollId);
                 setConnected(true);
             }
         }, 1000);
@@ -153,42 +147,17 @@ function App(props) {
     useEffect(() => {
         if (socket == null) return;
         socket.once('load-poll', (poll) => {
-            setPollCreated(poll.poll_created_data);
-            if (poll.poll_created_data) {
-                setPollTitle(poll.title_data);
-                setOptions(poll.options_data);
-                setCounts(poll.counts_data);
-                setColors(poll.colors_data);
-                setNumVotes(poll.counts_data.reduce(reducer));
-                setComments(poll.comments_data);
-            }
+            setPollTitle(poll.title_data);
+            setOptions(poll.options_data);
+            setCounts(poll.counts_data);
+            setColors(poll.colors_data);
+            setNumVotes(poll.counts_data.reduce(reducer));
+            setComments(poll.comments_data);
         });
         socket.emit('get-poll', pollId);
     }, [socket, pollId]);
 
-    const createNewPoll = (data) => {
-        if (socket == null || !connected) return;
-        setPollTitle(data.title);
-        setOptions(data.options);
-        setColors(data.colors);
-        counts_empty = [];
-        for (var i = 0; i < data.options.length; i++) {
-            counts_empty.push(0);
-        }
-        setCounts(counts_empty);
-        setPollCreated(true);
-        const poll_data = {
-            counts_data: counts_empty,
-            comments_data: comments,
-            options_data: data.options,
-            colors_data: data.colors,
-            title_data: data.title,
-            poll_created_data: true,
-        };
-        socket.emit('create-poll', poll_data);
-    };
-
-    return poll_created ? (
+    return (
         <div className="app_wrapper">
             {connected ? (
                 <p className="connected">Connected</p>
@@ -232,10 +201,6 @@ function App(props) {
                     })
                 )}
             </div>
-        </div>
-    ) : (
-        <div className="app_wrapper">
-            <CreatePoll submitPoll={createNewPoll} />
         </div>
     );
 }

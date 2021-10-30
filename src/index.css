@@ -54,7 +54,7 @@ body {
   margin-top: 30px;
 }
 
-.add_comment_button, .clear_comments_button, .create_poll_button {
+.add_comment_button, .clear_comments_button, ul li input.create_poll_button, .create_poll_button {
   color: white;
   border: none;
   font-size: 18px;
@@ -80,7 +80,7 @@ body {
   margin-left: 10px;
 }
 
-.create_poll_button {
+ul li input.create_poll_button, .create_poll_button {
   background-color: darkslateblue;
 }
 
@@ -112,7 +112,7 @@ body {
   font-weight: 400;
 }
 
-.title_input, ul.create_poll_wrapper li input {
+.title_input, ul.create_poll_wrapper li input:not(.create_poll_button) {
   width: 45%;
   min-width: 350px;
   max-width: 600px;
@@ -263,9 +263,7 @@ ul.create_poll_wrapper li {
 }
 
 .create_poll_wrapper {
-  padding: 0px;
-  margin: 20px;
-  padding-bottom: 20px;
+  padding: 0px 20px 20px;
 }
 
 .create_poll_header, .your_colors {
@@ -278,8 +276,8 @@ ul.create_poll_wrapper li {
   margin: 0px 0px 10px;
 }
 
-.home_wrapper, .about_wrapper {
-  margin: 20px;
+.home_wrapper, .about_wrapper, .not_found_wrapper {
+  padding: 20px;
 }
 
 .rolypolly_title {
@@ -298,7 +296,7 @@ ul.create_poll_wrapper li {
   position: fixed;
   height: 40px;
   width: 100vw;
-  display: block flex;
+  display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
@@ -329,6 +327,10 @@ li.navbar_link, .navbar_link a {
   width: 100vw;
   top: 40px;
   z-index: 0;
+}
+
+.app_wrapper {
+  top: 80px;
 }
 
 @media screen and (max-width: 540px) {

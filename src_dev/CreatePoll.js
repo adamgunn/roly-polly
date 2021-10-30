@@ -63,7 +63,7 @@ function CreatePoll(props) {
     };
 
     const verifyEntries = () => {
-        if (options.length < 2 || options.length > 26) {
+        if (options.length < 2 || options.length > 26 || !num_options) {
             setValid(false);
             return;
         }
@@ -167,9 +167,9 @@ function CreatePoll(props) {
                 </div>
                 <input
                     type="hidden"
-                    id="submission_data"
+                    id="title_data"
                     name="submission_data"
-                    value={{ title: title, colors: colors, options: options }}
+                    value={JSON.stringify({ title: title, colors: colors, options: options })}
                 />
                 {valid ? (
                     <li>
@@ -177,9 +177,7 @@ function CreatePoll(props) {
                     </li>
                 ) : (
                     <li>
-                        <button className="create_poll_button" disabled>
-                            Create!
-                        </button>
+                        <input value="Create!" type="submit" className="create_poll_button" disabled/>
                     </li>
                 )}
             </ul>

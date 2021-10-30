@@ -6,3 +6,5 @@ function NotFound(props) {
         </div>
     );
 }
+
+export default NotFound;

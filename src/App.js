@@ -6,7 +6,6 @@ import Comment from './Comment.js';
 import Form from './Form.js';
 import Button from './Button.js';
 import Poll from './Poll.js';
-import CreatePoll from './CreatePoll.js';
 
 function App(props) {
     useEffect(function () {
@@ -53,40 +52,35 @@ function App(props) {
         connected = _useState14[0],
         setConnected = _useState14[1];
 
-    var _useState15 = useState(false),
+    var _useState15 = useState(''),
         _useState16 = _slicedToArray(_useState15, 2),
-        poll_created = _useState16[0],
-        setPollCreated = _useState16[1];
+        poll_title = _useState16[0],
+        setPollTitle = _useState16[1];
 
-    var _useState17 = useState(''),
+    var _useState17 = useState([]),
         _useState18 = _slicedToArray(_useState17, 2),
-        poll_title = _useState18[0],
-        setPollTitle = _useState18[1];
+        colors = _useState18[0],
+        setColors = _useState18[1];
 
     var _useState19 = useState([]),
         _useState20 = _slicedToArray(_useState19, 2),
-        colors = _useState20[0],
-        setColors = _useState20[1];
-
-    var _useState21 = useState([]),
-        _useState22 = _slicedToArray(_useState21, 2),
-        options = _useState22[0],
-        setOptions = _useState22[1];
+        options = _useState20[0],
+        setOptions = _useState20[1];
 
     var counts_empty = [];
     for (var i = 0; i < 4; ++i) {
         counts_empty.push(0);
     }
 
-    var _useState23 = useState(counts_empty),
-        _useState24 = _slicedToArray(_useState23, 2),
-        counts = _useState24[0],
-        setCounts = _useState24[1];
+    var _useState21 = useState(counts_empty),
+        _useState22 = _slicedToArray(_useState21, 2),
+        counts = _useState22[0],
+        setCounts = _useState22[1];
 
-    var _useState25 = useState(0),
-        _useState26 = _slicedToArray(_useState25, 2),
-        num_votes = _useState26[0],
-        setNumVotes = _useState26[1];
+    var _useState23 = useState(0),
+        _useState24 = _slicedToArray(_useState23, 2),
+        num_votes = _useState24[0],
+        setNumVotes = _useState24[1];
 
     var handleButtonClick = function handleButtonClick(e) {
         e.preventDefault();
@@ -122,18 +116,14 @@ function App(props) {
             } else {
                 console.log('reconnecting');
                 socket.once('load-poll', function (poll) {
-                    setPollCreated(poll.poll_created_data);
-                    if (poll.poll_created_data) {
-                        setPollTitle(poll.title_data);
-                        setOptions(poll.options_data);
-                        setCounts(poll.counts_data);
-                        setColors(poll.colors_data);
-                        setNumVotes(poll.counts_data.reduce(reducer));
-                        setComments(poll.comments_data);
-                    }
+                    setPollTitle(poll.title_data);
+                    setOptions(poll.options_data);
+                    setCounts(poll.counts_data);
+                    setColors(poll.colors_data);
+                    setNumVotes(poll.counts_data.reduce(reducer));
+                    setComments(poll.comments_data);
                 });
                 socket.emit('get-poll', pollId);
-                console.log(pollId);
                 setConnected(true);
             }
         }, 1000);
@@ -199,42 +189,17 @@ function App(props) {
     useEffect(function () {
         if (socket == null) return;
         socket.once('load-poll', function (poll) {
-            setPollCreated(poll.poll_created_data);
-            if (poll.poll_created_data) {
-                setPollTitle(poll.title_data);
-                setOptions(poll.options_data);
-                setCounts(poll.counts_data);
-                setColors(poll.colors_data);
-                setNumVotes(poll.counts_data.reduce(reducer));
-                setComments(poll.comments_data);
-            }
+            setPollTitle(poll.title_data);
+            setOptions(poll.options_data);
+            setCounts(poll.counts_data);
+            setColors(poll.colors_data);
+            setNumVotes(poll.counts_data.reduce(reducer));
+            setComments(poll.comments_data);
         });
         socket.emit('get-poll', pollId);
     }, [socket, pollId]);
 
-    var createNewPoll = function createNewPoll(data) {
-        if (socket == null || !connected) return;
-        setPollTitle(data.title);
-        setOptions(data.options);
-        setColors(data.colors);
-        counts_empty = [];
-        for (var i = 0; i < data.options.length; i++) {
-            counts_empty.push(0);
-        }
-        setCounts(counts_empty);
-        setPollCreated(true);
-        var poll_data = {
-            counts_data: counts_empty,
-            comments_data: comments,
-            options_data: data.options,
-            colors_data: data.colors,
-            title_data: data.title,
-            poll_created_data: true
-        };
-        socket.emit('create-poll', poll_data);
-    };
-
-    return poll_created ? React.createElement(
+    return React.createElement(
         'div',
         { className: 'app_wrapper' },
         connected ? React.createElement(
@@ -284,10 +249,6 @@ function App(props) {
                 });
             })
         )
-    ) : React.createElement(
-        'div',
-        { className: 'app_wrapper' },
-        React.createElement(CreatePoll, { submitPoll: createNewPoll })
     );
 }
 

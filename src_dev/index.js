@@ -6,18 +6,25 @@ import Navbar from './Navbar.js';
 import CreatePoll from './CreatePoll';
 import NotFound from './NotFound';
 
+const uuidRegex = new RegExp(
+    /^\/polls\/[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\/?$/,
+    'i'
+);
+const path = window.location.pathname;
 ReactDOM.render(
     <React.StrictMode>
         <Navbar />
-        {window.location.pathname == '/' ? (
+        {path == '/' || path == '/home' || path == '/home/' ? (
             <Home />
-        ) : window.location.pathname == '/about' ? (
+        ) : path == '/about' || path == '/about/' ? (
             <About />
-        ) : window.location.pathname == '/new-poll' ? (
+        ) : path == '/new-poll' || path == '/new-poll/' ? (
             <CreatePoll />
-        ) : window.location.pathname.slice(7).match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i) ? (
+        ) : uuidRegex.test(path) ? (
             <App />
-        ) : <NotFound />}
+        ) : (
+            <NotFound />
+        )}
     </React.StrictMode>,
     document.getElementById('root')
 );

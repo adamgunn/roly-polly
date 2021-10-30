@@ -14,3 +14,5 @@ function NotFound(props) {
         )
     );
 }
+
+export default NotFound;

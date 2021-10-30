@@ -79,7 +79,7 @@ function CreatePoll(props) {
     };
 
     var verifyEntries = function verifyEntries() {
-        if (options.length < 2 || options.length > 26) {
+        if (options.length < 2 || options.length > 26 || !num_options) {
             setValid(false);
             return;
         }
@@ -183,7 +183,7 @@ function CreatePoll(props) {
                     name: 'colors_input',
                     id: 'colors_input',
                     onChange: colorChange,
-                    placeholder: '#8b0000 rgb(255, 215, 0) hsl(120, 100%, 20%) #4169E1'
+                    placeholder: '#8b0000\r rgb(255, 215, 0)\r hsl(120, 100%, 20%)\r #4169E1'
                 })
             ),
             React.createElement(
@@ -203,9 +203,9 @@ function CreatePoll(props) {
             ),
             React.createElement('input', {
                 type: 'hidden',
-                id: 'submission_data',
+                id: 'title_data',
                 name: 'submission_data',
-                value: { title: title, colors: colors, options: options }
+                value: JSON.stringify({ title: title, colors: colors, options: options })
             }),
             valid ? React.createElement(
                 'li',
@@ -214,11 +214,7 @@ function CreatePoll(props) {
             ) : React.createElement(
                 'li',
                 null,
-                React.createElement(
-                    'button',
-                    { className: 'create_poll_button', disabled: true },
-                    'Create!'
-                )
+                React.createElement('input', { value: 'Create!', type: 'submit', className: 'create_poll_button', disabled: true })
             )
         )
     );

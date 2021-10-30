@@ -10,7 +10,6 @@ const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 const PollData = require('./PollData');
 const uuid = require('uuid');
-const { syncIndexes, findById } = require('./PollData');
 const uri = process.env.MONGODB_URI || 'mongodb://localhost/roly-polly';
 mongoose.connect(uri, {
     useNewUrlParser: true,
@@ -18,10 +17,13 @@ mongoose.connect(uri, {
 });
 
 app.use('/static', express.static(path.join(__dirname, 'dist')));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.post('/submit-new-poll', async (req, res) => {
     const new_uuid = uuid.v4();
-    const form_data = req.body.submission_data;
+    var form_data = req.body;
+    form_data = JSON.parse(form_data.submission_data);
     var counts_empty = [];
     for (var i = 0; i < form_data.options.length; i++) {
         counts_empty.push(0);
@@ -33,10 +35,9 @@ app.post('/submit-new-poll', async (req, res) => {
         options: form_data.options,
         colors: form_data.colors,
         title: form_data.title,
-        poll_created: true
     });
     res.redirect(`/polls/${new_uuid}`);
-})
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, INDEX));
@@ -56,13 +57,12 @@ app.get('/polls/:id', (req, res) => {
 
 app.get('/:page', (req, res) => {
     res.sendFile(path.join(__dirname, INDEX));
-})
-
+});
 
 io.on('connection', (socket) => {
     console.log('connected');
     socket.on('get-poll', async (pollId) => {
-        const poll = await findById(pollId);
+        const poll = await PollData.findById(pollId);
         socket.join(pollId);
         if (!poll) socket.broadcast.to(pollId).emit('not-found');
         const data = {
@@ -71,14 +71,12 @@ io.on('connection', (socket) => {
             options_data: poll.options,
             colors_data: poll.colors,
             title_data: poll.title,
-            poll_created_data: poll.poll_created,
         };
-        socket.broadcat.to(pollId).emit('load-poll', data);
+        socket.emit('load-poll', data);
         socket.on('send-vote', (counts) => {
             socket.broadcast.to(pollId).emit('receive-vote', counts);
         });
         socket.on('send-comment', (comments) => {
-            console.log(comments);
             socket.broadcast.to(pollId).emit('receive-comment', comments);
         });
         socket.on('save-poll', async (data) => {
