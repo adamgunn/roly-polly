@@ -17,6 +17,11 @@ var Form = function (_React$Component) {
         _this.title_change = _this.title_change.bind(_this);
         _this.comment_change = _this.comment_change.bind(_this);
         _this.handleKeyDown = _this.handleKeyDown.bind(_this);
+        _this.handleButtonClick = _this.handleButtonClick.bind(_this);
+        _this.state = {
+            title: "",
+            comment: ""
+        };
         return _this;
     }
 
@@ -24,11 +29,13 @@ var Form = function (_React$Component) {
         key: "title_change",
         value: function title_change(e) {
             this.props.onTitleChange(e);
+            this.setState({ title: e.target.value });
         }
     }, {
         key: "comment_change",
         value: function comment_change(e) {
             this.props.onCommentChange(e);
+            this.setState({ comment: e.target.value });
         }
     }, {
         key: "handleKeyDown",
@@ -37,23 +44,62 @@ var Form = function (_React$Component) {
             e.target.style.height = e.target.scrollHeight + "px";
         }
     }, {
+        key: "handleButtonClick",
+        value: function handleButtonClick(e) {
+            this.props.onButtonClick(e);
+            if (this.state.title != "" && this.state.comment != "") {
+                this.setState({ title: "" });
+                this.setState({ comment: "" });
+            }
+            var textarea = document.getElementById("content_input");
+            textarea.style.height = 'inherit';
+            textarea.style.height = e.target.scrollHeight + "px";
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
-                { className: "comment_form" },
-                React.createElement("input", {
-                    className: "title_input",
-                    type: "text",
-                    placeholder: "Put your title here",
-                    onChange: this.title_change
-                }),
-                React.createElement("textarea", {
-                    className: "content_input",
-                    placeholder: "Put your comment here",
-                    onChange: this.comment_change,
-                    onKeyDown: this.handleKeyDown
-                })
+                { className: "button_and_form_wrapper" },
+                React.createElement(
+                    "div",
+                    { className: "comment_form" },
+                    React.createElement("input", {
+                        className: "title_input",
+                        type: "text",
+                        placeholder: "Put your title here",
+                        onChange: this.title_change,
+                        value: this.state.title
+                    }),
+                    React.createElement("textarea", {
+                        className: "content_input",
+                        id: "content_input",
+                        placeholder: "Put your comment here",
+                        onChange: this.comment_change,
+                        onKeyDown: this.handleKeyDown,
+                        value: this.state.comment
+                    })
+                ),
+                React.createElement(
+                    "div",
+                    { className: "buttons_wrapper" },
+                    this.props.connected_to_server ? React.createElement(
+                        "button",
+                        {
+                            className: "add_comment_button",
+                            onClick: this.handleButtonClick
+                        },
+                        "Submit comment"
+                    ) : React.createElement(
+                        "button",
+                        {
+                            className: "add_comment_button",
+                            onClick: this.handleButtonClick,
+                            disabled: true
+                        },
+                        "Submit comment"
+                    )
+                )
             );
         }
     }]);
@@ -63,7 +109,9 @@ var Form = function (_React$Component) {
 
 Form.propTypes = {
     onTitleChange: propTypes.func,
-    onCommentChange: propTypes.func
+    onCommentChange: propTypes.func,
+    onButtonClick: propTypes.func,
+    connected_to_server: propTypes.bool
 };
 
 export default Form;

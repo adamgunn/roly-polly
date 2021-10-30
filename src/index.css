@@ -404,6 +404,10 @@ li.navbar_link,
     z-index: 0;
 }
 
+.app_wrapper {
+    background-color: #ddd;
+}
+
 .poll_wrapper {
     padding-top: 100px;
 }

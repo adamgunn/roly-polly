@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Comment from './Comment.js';
 import Form from './Form.js';
-import Button from './Button.js';
 import Poll from './Poll.js';
 
 function App(props) {
@@ -229,18 +228,12 @@ function App(props) {
                 { className: 'rolypolly_subtitle comments_header' },
                 'Comments'
             ),
-            React.createElement(
-                'div',
-                { className: 'button_and_form_wrapper' },
-                React.createElement(Form, {
-                    onTitleChange: handleTitleChange,
-                    onCommentChange: handleCommentChange
-                }),
-                React.createElement(Button, {
-                    onButtonClick: handleButtonClick,
-                    connected_to_server: connected
-                })
-            ),
+            React.createElement(Form, {
+                onTitleChange: handleTitleChange,
+                onCommentChange: handleCommentChange,
+                onButtonClick: handleButtonClick,
+                connected_to_server: connected
+            }),
             comments.length === 0 ? React.createElement(
                 'p',
                 { className: 'no_comments' },

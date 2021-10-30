@@ -1,46 +1,33 @@
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function CreatePoll(props) {
     var DEFAULT_POLL_TITLE = 'My awesome poll';
     var DEFAULT_NUM_OPTIONS = 2;
     var DEFAULT_COLORS = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
     var MAX_OPTIONS = 26;
-
-    // const submitClicked = () => {
-    //     const poll_data = {
-    //         title: title,
-    //         colors: colors,
-    //         options: options,
-    //     };
-    //     props.submitPoll(poll_data);
-    // };
+    var EMPTY_OPTIONS = Array(DEFAULT_NUM_OPTIONS).fill('');
 
     var _useState = useState(DEFAULT_NUM_OPTIONS),
         _useState2 = _slicedToArray(_useState, 2),
         num_options = _useState2[0],
         setNumOptions = _useState2[1];
 
-    var _useState3 = useState(new Array(DEFAULT_NUM_OPTIONS).fill('')),
+    var _useState3 = useState(EMPTY_OPTIONS),
         _useState4 = _slicedToArray(_useState3, 2),
         options = _useState4[0],
         setOptions = _useState4[1];
 
-    var _useState5 = useState(DEFAULT_POLL_TITLE),
+    var _useState5 = useState(DEFAULT_COLORS),
         _useState6 = _slicedToArray(_useState5, 2),
-        title = _useState6[0],
-        setTitle = _useState6[1];
+        colors = _useState6[0],
+        setColors = _useState6[1];
 
-    var _useState7 = useState(DEFAULT_COLORS),
+    var _useState7 = useState(false),
         _useState8 = _slicedToArray(_useState7, 2),
-        colors = _useState8[0],
-        setColors = _useState8[1];
-
-    var _useState9 = useState(false),
-        _useState10 = _slicedToArray(_useState9, 2),
-        valid = _useState10[0],
-        setValid = _useState10[1];
+        valid = _useState8[0],
+        setValid = _useState8[1];
 
     var numOptionsChange = function numOptionsChange(e) {
         var old_num_options = num_options;
@@ -59,17 +46,6 @@ function CreatePoll(props) {
         verifyEntries();
     };
 
-    var titleChange = function titleChange(e) {
-        setTitle(e.target.value);
-    };
-
-    var optionChange = function optionChange(e) {
-        var options_state = options;
-        options_state[e.target.getAttribute('index')] = e.target.value;
-        setOptions(options_state);
-        verifyEntries();
-    };
-
     var colorChange = function colorChange(e) {
         var new_colors = e.target.value.match(/(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi);
         if (!new_colors || new_colors.length === 0) {
@@ -79,12 +55,13 @@ function CreatePoll(props) {
     };
 
     var verifyEntries = function verifyEntries() {
-        if (options.length < 2 || options.length > 26 || !num_options) {
+        if (options.length < 2 || options.length > MAX_OPTIONS || !num_options) {
             setValid(false);
             return;
         }
         for (var i = 0; i < options.length; i++) {
-            if (!options[i] || options[i] == '' || options[i] == null) {
+            var option = document.getElementById("option_" + i).value;
+            if (!option || option == '' || option == null) {
                 setValid(false);
                 return;
             }
@@ -120,8 +97,7 @@ function CreatePoll(props) {
                     type: 'text',
                     name: 'title',
                     id: 'title',
-                    placeholder: DEFAULT_POLL_TITLE,
-                    onChange: titleChange
+                    placeholder: DEFAULT_POLL_TITLE
                 })
             ),
             React.createElement(
@@ -137,7 +113,7 @@ function CreatePoll(props) {
                     type: 'number',
                     name: 'num_options',
                     id: 'num_options',
-                    min: 2,
+                    min: DEFAULT_NUM_OPTIONS,
                     max: MAX_OPTIONS,
                     onChange: numOptionsChange
                 })
@@ -162,7 +138,7 @@ function CreatePoll(props) {
                         id: 'option_' + index,
                         index: index,
                         key: index,
-                        onChange: optionChange
+                        onChange: verifyEntries
                     })
                 );
             }),
@@ -201,12 +177,6 @@ function CreatePoll(props) {
                     });
                 })
             ),
-            React.createElement('input', {
-                type: 'hidden',
-                id: 'title_data',
-                name: 'submission_data',
-                value: JSON.stringify({ title: title, colors: colors, options: options })
-            }),
             valid ? React.createElement(
                 'li',
                 null,

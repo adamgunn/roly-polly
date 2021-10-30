@@ -23,19 +23,49 @@ app.use(express.json());
 app.post('/submit-new-poll', async (req, res) => {
     const new_uuid = uuid.v4();
     var form_data = req.body;
-    form_data = JSON.parse(form_data.submission_data);
+    if (
+        !form_data.title ||
+        form_data.title == '' ||
+        form_data.title == null
+    ) {
+        form_data.title = 'My awesome poll';
+    }
+    var title = form_data.title;
+    if (
+        !form_data.colors_input ||
+        form_data.colors_input == '' ||
+        form_data.colors_input == null
+    ) {
+        form_data.colors_input = '#8b0000 #ffd700 #006400 #4169e1';
+    }
+    var colors = form_data.colors_input.match(
+        /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi
+    );
+    var options = [];
+    if (
+        !form_data.num_options ||
+        form_data.num_options == '' ||
+        form_data.num_options == null
+    ) {
+        form_data.num_options = 2;
+    }
+    for (var i = 0; i < form_data.num_options; i++) {
+        options.push(form_data['option_' + i]);
+    }
     var counts_empty = [];
-    for (var i = 0; i < form_data.options.length; i++) {
+    for (var i = 0; i < options.length; i++) {
         counts_empty.push(0);
     }
-    await PollData.create({
+    const new_poll = {
         _id: new_uuid,
         counts: counts_empty,
         comments: [],
-        options: form_data.options,
-        colors: form_data.colors,
-        title: form_data.title,
-    });
+        options: options,
+        colors: colors,
+        title: title,
+    };
+    console.log(new_poll);
+    await PollData.create(new_poll);
     res.redirect(`/polls/${new_uuid}`);
 });
 

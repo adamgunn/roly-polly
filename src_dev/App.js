@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Comment from './Comment.js';
 import Form from './Form.js';
-import Button from './Button.js';
 import Poll from './Poll.js';
 
 function App(props) {
@@ -175,16 +174,12 @@ function App(props) {
             />
             <div className="comments_container">
                 <h1 className="rolypolly_subtitle comments_header">Comments</h1>
-                <div className="button_and_form_wrapper">
-                    <Form
-                        onTitleChange={handleTitleChange}
-                        onCommentChange={handleCommentChange}
-                    />
-                    <Button
-                        onButtonClick={handleButtonClick}
-                        connected_to_server={connected}
-                    />
-                </div>
+                <Form
+                    onTitleChange={handleTitleChange}
+                    onCommentChange={handleCommentChange}
+                    onButtonClick={handleButtonClick}
+                    connected_to_server={connected}
+                />
                 {comments.length === 0 ? (
                     <p className="no_comments">
                         No comments? Be the change you want to see in the
