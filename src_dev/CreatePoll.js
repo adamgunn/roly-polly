@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { ColorPicker } from '@mantine/core';
+import blackOrWhite from './blackOrWhite.js';
 
 function CreatePoll(props) {
     const DEFAULT_POLL_TITLE = 'My awesome poll';
@@ -9,8 +11,9 @@ function CreatePoll(props) {
 
     const [num_options, setNumOptions] = useState(DEFAULT_NUM_OPTIONS);
     const [options, setOptions] = useState(EMPTY_OPTIONS);
-    const [colors, setColors] = useState(DEFAULT_COLORS);
+    const [colors, setColors] = useState([]);
     const [valid, setValid] = useState(false);
+    const [picker_color, setPickerColor] = useState(DEFAULT_COLORS[0]);
 
     const numOptionsChange = (e) => {
         const old_num_options = num_options;
@@ -18,42 +21,80 @@ function CreatePoll(props) {
             e.target.value > MAX_OPTIONS ? MAX_OPTIONS : e.target.value;
         setNumOptions(new_num_options);
         var delta = old_num_options - new_num_options;
-        var new_options = options;
+        var new_options = [...options];
+        var new_colors = [...colors];
         if (delta > 0) {
             new_options.length = new_num_options;
+            new_colors.length = new_num_options;
         } else {
             while (delta++ < 0) {
                 new_options.push('');
             }
+            setValid(false);
+            setOptions(new_options);
+            return;
         }
         setOptions(new_options);
+        setColors(new_colors);
         verifyEntries();
     };
 
-    const colorChange = (e) => {
-        var new_colors = e.target.value.match(
-            /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi
-        );
-        if (!new_colors || new_colors.length === 0) {
-            new_colors = DEFAULT_COLORS;
+    const addColor = () => {
+        console.log('adding color');
+        var colors_state = [...colors];
+        if (colors.length < num_options) {
+            colors_state.push(picker_color);
         }
-        setColors(new_colors);
+        setColors(colors_state);
     };
 
+    // const colorChange = (e) => {
+    //     var new_colors = e.target.value.match(
+    //         /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi
+    //     );
+    //     if (!new_colors || new_colors.length === 0) {
+    //         new_colors = DEFAULT_COLORS;
+    //     }
+    //     setColors(new_colors);
+    // };
+
     const verifyEntries = () => {
-        if (options.length < 2 || options.length > MAX_OPTIONS || !num_options) {
+        if (
+            options.length < 2 ||
+            options.length > MAX_OPTIONS ||
+            !num_options
+        ) {
             setValid(false);
             return;
         }
+        console.log(options.length);
         for (var i = 0; i < options.length; i++) {
-            var option = document.getElementById("option_" + i).value;
+            var option = document.getElementById('option_' + i).value;
             if (!option || option == '' || option == null) {
                 setValid(false);
                 return;
             }
         }
+        verifyColors();
+    };
+
+    const verifyColors = () => {
+        if (colors.length > num_options || colors.length < 1) {
+            setValid(false);
+            return;
+        }
         setValid(true);
     };
+
+    useEffect(() => {
+        verifyColors();
+    }, [colors]);
+
+    const deleteColor = (e) => {
+        var new_colors = [...colors];
+        new_colors.splice(e.target.getAttribute('index'), 1);
+        setColors(new_colors);
+    }
 
     return (
         <form method="post" action="/submit-new-poll">
@@ -114,14 +155,11 @@ function CreatePoll(props) {
                     );
                 })}
                 <li className="create_poll_input">
-                    <label
-                        className="create_poll_header"
-                        htmlFor="colors_input"
-                    >
-                        Poll colors
-                    </label>
+                    <p className="create_poll_header">
+                        Poll colors (choose 1-{num_options})
+                    </p>
                     <br />
-                    <textarea
+                    {/* <textarea
                         className="colors_input"
                         name="colors_input"
                         id="colors_input"
@@ -130,26 +168,101 @@ function CreatePoll(props) {
                                     rgb(255, 215, 0)
                                     hsl(120, 100%, 20%)
                                     #4169E1"
-                    ></textarea>
+                    ></textarea> */}
+                    <ColorPicker
+                        size="lg"
+                        value={picker_color}
+                        onChange={setPickerColor}
+                    />
+                    <div
+                        class="color_picker_sample"
+                        style={{ backgroundColor: picker_color }}
+                    ></div>
+                    {colors.length < num_options ? (
+                        <button
+                            className="add_color_button"
+                            type="button"
+                            onClick={addColor}
+                            style={{
+                                backgroundColor: picker_color,
+                                color: blackOrWhite(picker_color),
+                            }}
+                        >
+                            Add color
+                        </button>
+                    ) : (
+                        <button
+                            className="add_color_button"
+                            type="button"
+                            disabled
+                        >
+                            Add color
+                        </button>
+                    )}
                 </li>
                 <h3 className="your_colors">Your colors</h3>
                 <div className="color_samples_grid">
-                    {colors.map((color) => {
-                        return (
-                            <div
-                                className="color_sample"
-                                style={{ backgroundColor: color }}
-                            ></div>
-                        );
-                    })}
+                    {colors.length > 0 ? (
+                        colors.map((color, index) => {
+                            return (
+                                <div
+                                    className="color_sample"
+                                    style={{ backgroundColor: color }}
+                                >
+                                    <svg
+                                        class="x-button"
+                                        width={25}
+                                        height={25}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 91.61 91.61"
+                                        key={index}
+                                        index={index}
+                                        onClick={deleteColor}
+                                    >
+                                        <line
+                                            class="cls-1"
+                                            x1="5.3"
+                                            y1="5.3"
+                                            x2="86.3"
+                                            y2="86.3"
+                                        />
+                                        <line
+                                            class="cls-1"
+                                            x1="86.3"
+                                            y1="5.3"
+                                            x2="5.3"
+                                            y2="86.3"
+                                        />
+                                    </svg>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <p className="no_colors">None so far... :(</p>
+                    )}
                 </div>
+                <input
+                    type="hidden"
+                    name="colors"
+                    id="colors"
+                    value={JSON.stringify(colors)}
+                />
                 {valid ? (
                     <li>
-                        <input value="Create!" type="submit" className="create_poll_button" />
+                        <input
+                            value="Create!"
+                            type="submit"
+                            className="create_poll_button"
+                        />
                     </li>
                 ) : (
                     <li>
-                        <input value="Create!" type="submit" className="create_poll_button" disabled/>
+                        <input
+                            value="Create!"
+                            type="submit"
+                            className="create_poll_button"
+                            disabled
+                        />
                     </li>
                 )}
             </ul>

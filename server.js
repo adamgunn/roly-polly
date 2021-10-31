@@ -31,16 +31,12 @@ app.post('/submit-new-poll', async (req, res) => {
         form_data.title = 'My awesome poll';
     }
     var title = form_data.title;
+    form_data.colors = JSON.parse(form_data.colors);
     if (
-        !form_data.colors_input ||
-        form_data.colors_input == '' ||
-        form_data.colors_input == null
+        form_data.colors.empty
     ) {
-        form_data.colors_input = '#8b0000 #ffd700 #006400 #4169e1';
+        form_data.colors = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
     }
-    var colors = form_data.colors_input.match(
-        /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi
-    );
     var options = [];
     if (
         !form_data.num_options ||
@@ -61,7 +57,7 @@ app.post('/submit-new-poll', async (req, res) => {
         counts: counts_empty,
         comments: [],
         options: options,
-        colors: colors,
+        colors: form_data.colors,
         title: title,
     };
     console.log(new_poll);

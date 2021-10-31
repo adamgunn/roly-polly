@@ -1,6 +1,10 @@
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 import { useState, useEffect } from 'react';
+import { ColorPicker } from '@mantine/core';
+import blackOrWhite from './blackOrWhite.js';
 
 function CreatePoll(props) {
     var DEFAULT_POLL_TITLE = 'My awesome poll';
@@ -19,7 +23,7 @@ function CreatePoll(props) {
         options = _useState4[0],
         setOptions = _useState4[1];
 
-    var _useState5 = useState(DEFAULT_COLORS),
+    var _useState5 = useState([]),
         _useState6 = _slicedToArray(_useState5, 2),
         colors = _useState6[0],
         setColors = _useState6[1];
@@ -29,44 +33,85 @@ function CreatePoll(props) {
         valid = _useState8[0],
         setValid = _useState8[1];
 
+    var _useState9 = useState(DEFAULT_COLORS[0]),
+        _useState10 = _slicedToArray(_useState9, 2),
+        picker_color = _useState10[0],
+        setPickerColor = _useState10[1];
+
     var numOptionsChange = function numOptionsChange(e) {
         var old_num_options = num_options;
         var new_num_options = e.target.value > MAX_OPTIONS ? MAX_OPTIONS : e.target.value;
         setNumOptions(new_num_options);
         var delta = old_num_options - new_num_options;
-        var new_options = options;
+        var new_options = [].concat(_toConsumableArray(options));
+        var new_colors = [].concat(_toConsumableArray(colors));
         if (delta > 0) {
             new_options.length = new_num_options;
+            new_colors.length = new_num_options;
         } else {
             while (delta++ < 0) {
                 new_options.push('');
             }
+            setValid(false);
+            setOptions(new_options);
+            return;
         }
         setOptions(new_options);
+        setColors(new_colors);
         verifyEntries();
     };
 
-    var colorChange = function colorChange(e) {
-        var new_colors = e.target.value.match(/(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi);
-        if (!new_colors || new_colors.length === 0) {
-            new_colors = DEFAULT_COLORS;
+    var addColor = function addColor() {
+        console.log('adding color');
+        var colors_state = [].concat(_toConsumableArray(colors));
+        if (colors.length < num_options) {
+            colors_state.push(picker_color);
         }
-        setColors(new_colors);
+        setColors(colors_state);
     };
+
+    // const colorChange = (e) => {
+    //     var new_colors = e.target.value.match(
+    //         /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi
+    //     );
+    //     if (!new_colors || new_colors.length === 0) {
+    //         new_colors = DEFAULT_COLORS;
+    //     }
+    //     setColors(new_colors);
+    // };
 
     var verifyEntries = function verifyEntries() {
         if (options.length < 2 || options.length > MAX_OPTIONS || !num_options) {
             setValid(false);
             return;
         }
+        console.log(options.length);
         for (var i = 0; i < options.length; i++) {
-            var option = document.getElementById("option_" + i).value;
+            var option = document.getElementById('option_' + i).value;
             if (!option || option == '' || option == null) {
                 setValid(false);
                 return;
             }
         }
+        verifyColors();
+    };
+
+    var verifyColors = function verifyColors() {
+        if (colors.length > num_options || colors.length < 1) {
+            setValid(false);
+            return;
+        }
         setValid(true);
+    };
+
+    useEffect(function () {
+        verifyColors();
+    }, [colors]);
+
+    var deleteColor = function deleteColor(e) {
+        var new_colors = [].concat(_toConsumableArray(colors));
+        new_colors.splice(e.target.getAttribute('index'), 1);
+        setColors(new_colors);
     };
 
     return React.createElement(
@@ -146,21 +191,43 @@ function CreatePoll(props) {
                 'li',
                 { className: 'create_poll_input' },
                 React.createElement(
-                    'label',
-                    {
-                        className: 'create_poll_header',
-                        htmlFor: 'colors_input'
-                    },
-                    'Poll colors'
+                    'p',
+                    { className: 'create_poll_header' },
+                    'Poll colors (choose 1-',
+                    num_options,
+                    ')'
                 ),
                 React.createElement('br', null),
-                React.createElement('textarea', {
-                    className: 'colors_input',
-                    name: 'colors_input',
-                    id: 'colors_input',
-                    onChange: colorChange,
-                    placeholder: '#8b0000\r rgb(255, 215, 0)\r hsl(120, 100%, 20%)\r #4169E1'
-                })
+                React.createElement(ColorPicker, {
+                    size: 'lg',
+                    value: picker_color,
+                    onChange: setPickerColor
+                }),
+                React.createElement('div', {
+                    'class': 'color_picker_sample',
+                    style: { backgroundColor: picker_color }
+                }),
+                colors.length < num_options ? React.createElement(
+                    'button',
+                    {
+                        className: 'add_color_button',
+                        type: 'button',
+                        onClick: addColor,
+                        style: {
+                            backgroundColor: picker_color,
+                            color: blackOrWhite(picker_color)
+                        }
+                    },
+                    'Add color'
+                ) : React.createElement(
+                    'button',
+                    {
+                        className: 'add_color_button',
+                        type: 'button',
+                        disabled: true
+                    },
+                    'Add color'
+                )
             ),
             React.createElement(
                 'h3',
@@ -170,21 +237,70 @@ function CreatePoll(props) {
             React.createElement(
                 'div',
                 { className: 'color_samples_grid' },
-                colors.map(function (color) {
-                    return React.createElement('div', {
-                        className: 'color_sample',
-                        style: { backgroundColor: color }
-                    });
-                })
+                colors.length > 0 ? colors.map(function (color, index) {
+                    return React.createElement(
+                        'div',
+                        {
+                            className: 'color_sample',
+                            style: { backgroundColor: color }
+                        },
+                        React.createElement(
+                            'svg',
+                            {
+                                'class': 'x-button',
+                                width: 25,
+                                height: 25,
+                                xmlns: 'http://www.w3.org/2000/svg',
+                                viewBox: '0 0 91.61 91.61',
+                                key: index,
+                                index: index,
+                                onClick: deleteColor
+                            },
+                            React.createElement('line', {
+                                'class': 'cls-1',
+                                x1: '5.3',
+                                y1: '5.3',
+                                x2: '86.3',
+                                y2: '86.3'
+                            }),
+                            React.createElement('line', {
+                                'class': 'cls-1',
+                                x1: '86.3',
+                                y1: '5.3',
+                                x2: '5.3',
+                                y2: '86.3'
+                            })
+                        )
+                    );
+                }) : React.createElement(
+                    'p',
+                    { className: 'no_colors' },
+                    'None so far... :('
+                )
             ),
+            React.createElement('input', {
+                type: 'hidden',
+                name: 'colors',
+                id: 'colors',
+                value: JSON.stringify(colors)
+            }),
             valid ? React.createElement(
                 'li',
                 null,
-                React.createElement('input', { value: 'Create!', type: 'submit', className: 'create_poll_button' })
+                React.createElement('input', {
+                    value: 'Create!',
+                    type: 'submit',
+                    className: 'create_poll_button'
+                })
             ) : React.createElement(
                 'li',
                 null,
-                React.createElement('input', { value: 'Create!', type: 'submit', className: 'create_poll_button', disabled: true })
+                React.createElement('input', {
+                    value: 'Create!',
+                    type: 'submit',
+                    className: 'create_poll_button',
+                    disabled: true
+                })
             )
         )
     );
