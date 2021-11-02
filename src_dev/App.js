@@ -23,6 +23,7 @@ function App(props) {
     const [poll_title, setPollTitle] = useState('');
     const [colors, setColors] = useState([]);
     const [options, setOptions] = useState([]);
+    const [voted, setVoted] = useState(false);
 
     var counts_empty = [];
     for (var i = 0; i < 4; ++i) {
@@ -102,6 +103,7 @@ function App(props) {
     const reducer = (prev, curr) => prev + curr;
 
     const voteChange = (index) => {
+        setVoted(true);
         var counts_state = counts;
         counts_state[index]++;
         setCounts(counts_state);
@@ -166,6 +168,7 @@ function App(props) {
                 options={options}
                 colors={colors}
                 connected_to_server={connected}
+                already_voted={voted}
             />
             <div className="comments_container">
                 <h1 className="rolypolly_subtitle comments_header">Comments</h1>

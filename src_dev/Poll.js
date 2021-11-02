@@ -1,76 +1,68 @@
 import { useState } from 'react';
-import blackOrWhite from './blackOrWhite.js'
+import blackOrWhite from './blackOrWhite.js';
 
 function Poll(props) {
     const colors = props.colors;
+    const [selection, setSelection] = useState(null);
 
     const handleClick = function (e) {
-        props.onVote(e.target.getAttribute('index'));
+        if (selection != null) props.onVote(selection);
+    };
+
+    const handleChoice = function (e) {
+        setSelection(e.target.getAttribute('index'));
     };
 
     var bars = [];
-    var buttons = [];
     for (var i = 0; i < props.counts.length; i++) {
         bars.push(
-            <div className="bar_graph_bar_wrapper ">
-                <div
-                    style={{
-                        backgroundColor: colors[i % colors.length],
-                        width:
-                            (props.counts[i] === 0
-                                ? 0.5
-                                : (props.counts[i] / props.num_votes) * 100
-                            ).toString() + '%',
-                    }}
-                    className="bar_graph_bar"
-                    key={i}
-                ></div>
-                <div className="bar_graph_text">
-                    <div className="choice_text">
-                        {String.fromCharCode(97 + i).toUpperCase() +
-                            ' - ' +
-                            props.options[i]}
-                    </div>
-                    <div className="vote_count">
-                        {(props.num_votes === 0
-                            ? '0.0'
-                            : ((props.counts[i] / props.num_votes) * 100)
-                                  .toFixed(1)
-                                  .toString()) +
-                            '% (' +
-                            props.counts[i].toString() +
-                            (props.counts[i] === 1 ? ' vote)' : ' votes)')}
+            !props.already_voted ? (
+                <div className="no_vote_option">
+                    <input
+                        type="radio"
+                        name="option"
+                        id={'option_' + i}
+                        index={i}
+                        onClick={handleChoice}
+                        className="vote_radio"
+                    />
+                    <label className="radio_label" htmlFor={'option_' + i}>
+                        {props.options[i]}
+                    </label>
+                    <div className="radio_inner"></div>
+                </div>
+            ) : (
+                <div className="bar_graph_bar_wrapper ">
+                    <div
+                        style={{
+                            backgroundColor: colors[i % colors.length],
+                            width:
+                                (props.counts[i] === 0
+                                    ? 0.5
+                                    : (props.counts[i] / props.num_votes) * 100
+                                ).toString() + '%',
+                        }}
+                        className="bar_graph_bar"
+                        key={i}
+                    ></div>
+                    <div className="bar_graph_text">
+                        <div className="choice_text">{props.options[i]}</div>
+                        <div className="vote_count">
+                            {(props.num_votes === 0
+                                ? '0.0'
+                                : ((props.counts[i] / props.num_votes) * 100)
+                                      .toFixed(1)
+                                      .toString()) +
+                                '% (' +
+                                props.counts[i].toString() +
+                                (props.counts[i] === 1 ? ' vote)' : ' votes)')}
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
-        buttons.push(
-            props.connected_to_server ? (
-                <button
-                    className="poll_button"
-                    index={i}
-                    onClick={handleClick}
-                    key={i}
-                    style={{ backgroundColor: colors[i % colors.length] }}
-                >
-                    <span
-                        className="poll_button_text"
-                        index={i}
-                        key={i}
-                        style={{
-                            color: blackOrWhite(colors[i % colors.length]),
-                        }}
-                    >
-                        {String.fromCharCode(97 + i).toUpperCase()}
-                    </span>
-                </button>
-            ) : (
-                <button className="poll_button" index={i} key={i} disabled>
-                    {String.fromCharCode(97 + i).toUpperCase()}
-                </button>
             )
         );
     }
+
     return (
         <div className="poll_wrapper">
             {props.connected_to_server ? (
@@ -82,7 +74,19 @@ function Poll(props) {
                 <h1 className="poll_title">{props.title}</h1>
                 {bars}
             </div>
-            <div className="poll_buttons_wrapper">{buttons}</div>
+            <div className="poll_buttons_wrapper">
+                {props.connected_to_server && !props.already_voted && selection != null ? (
+                    <button className="vote_button" onClick={handleClick}
+                    style={{ backgroundColor: colors[selection % colors.length],
+                             color: blackOrWhite(colors[selection % colors.length])}}>
+                        Vote!
+                    </button>
+                ) : !props.already_voted ? (
+                    <button className="vote_button" disabled>
+                        Vote!
+                    </button>
+                ) : <div></div>}
+            </div>
         </div>
     );
 }

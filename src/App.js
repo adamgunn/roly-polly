@@ -66,20 +66,25 @@ function App(props) {
         options = _useState20[0],
         setOptions = _useState20[1];
 
+    var _useState21 = useState(false),
+        _useState22 = _slicedToArray(_useState21, 2),
+        voted = _useState22[0],
+        setVoted = _useState22[1];
+
     var counts_empty = [];
     for (var i = 0; i < 4; ++i) {
         counts_empty.push(0);
     }
 
-    var _useState21 = useState(counts_empty),
-        _useState22 = _slicedToArray(_useState21, 2),
-        counts = _useState22[0],
-        setCounts = _useState22[1];
-
-    var _useState23 = useState(0),
+    var _useState23 = useState(counts_empty),
         _useState24 = _slicedToArray(_useState23, 2),
-        num_votes = _useState24[0],
-        setNumVotes = _useState24[1];
+        counts = _useState24[0],
+        setCounts = _useState24[1];
+
+    var _useState25 = useState(0),
+        _useState26 = _slicedToArray(_useState25, 2),
+        num_votes = _useState26[0],
+        setNumVotes = _useState26[1];
 
     var handleButtonClick = function handleButtonClick(e) {
         e.preventDefault();
@@ -145,6 +150,7 @@ function App(props) {
     };
 
     var voteChange = function voteChange(index) {
+        setVoted(true);
         var counts_state = counts;
         counts_state[index]++;
         setCounts(counts_state);
@@ -209,7 +215,8 @@ function App(props) {
             num_votes: num_votes,
             options: options,
             colors: colors,
-            connected_to_server: connected
+            connected_to_server: connected,
+            already_voted: voted
         }),
         React.createElement(
             'div',

@@ -53,7 +53,8 @@ body {
 }
 
 .add_comment_button,
-.add_color_button {
+.add_color_button,
+.vote_button {
     background-color: rgb(0, 68, 9);
 }
 
@@ -71,7 +72,8 @@ body {
 .clear_comments_button,
 ul li input.create_poll_button,
 .create_poll_button,
-.add_color_button {
+.add_color_button,
+.vote_button {
     color: white;
     border: none;
     font-size: 18px;
@@ -101,7 +103,6 @@ ul li input.create_poll_button,
 .comment_wrapper,
 .poll_wrapper,
 .color_sample,
-.poll_button,
 .content_input,
 .colors_input,
 .title_input,
@@ -141,7 +142,8 @@ ul li input.create_poll_button,
 
 .add_comment_button:hover,
 .clear_comments_button:hover,
-.add_color_button:hover {
+.add_color_button:hover,
+.vote_button:hover {
     cursor: pointer;
     box-shadow: none;
 }
@@ -216,6 +218,11 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     margin: 25px 5px 5px;
     transition: width 0.7s;
     border-radius: 5px;
+}
+
+.bar_graph_bar,
+.vote_button,
+input[type="radio"]:checked.vote_radio + .radio_label {
     box-shadow: 6px 6px 8px 0 rgba(0, 0, 0, 0.25);
 }
 
@@ -253,25 +260,6 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     flex-wrap: wrap;
 }
 
-.poll_button {
-    color: white;
-    transition: all 0.1s;
-}
-
-.poll_button {
-    border: none;
-    font-size: 25px;
-    padding: 10px;
-    border-radius: 10px;
-    text-transform: uppercase;
-    width: 40px;
-    height: 40px;
-    line-height: 0px;
-    margin: 10px;
-}
-
-.poll_button:disabled,
-.poll_button[disabled],
 .add_comment_button:disabled,
 .clear_comments_button:disabled,
 .add_comment_button[disabled],
@@ -279,14 +267,14 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
 .create_poll_button:disabled,
 .create_poll_button[disabled],
 .add_color_button:disabled,
-.add_color_button[disabled] {
+.add_color_button[disabled],
+.vote_button:disabled,
+.vote_button[disable] {
     box-shadow: none;
     color: darkslategray;
     background-color: gray;
 }
 
-.poll_button:disabled:hover,
-.poll_button[disabled]:hover,
 .add_comment_button:disabled:hover,
 .clear_comments_button:disabled:hover,
 .add_comment_button[disabled]:hover,
@@ -294,15 +282,13 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
 .create_poll_button:disabled:hover,
 .create_poll_button[disabled]:hover,
 .add_color_button:disabled:hover,
-.add_color_button[disabled]:hover {
+.add_color_button[disabled]:hover
+.vote_button:disabled:hover,
+.vote_button[disabled]:hover {
     cursor: default; 
     transform: none;
 }
 
-.poll_button:hover {
-    cursor: pointer;
-    transform: scale(1.3);
-}
 
 .no_comments {
     text-align: center;
@@ -472,6 +458,61 @@ li.navbar_link,
 
 .color_picker_wrapper {
     margin: 5px;
+}
+
+input[type="radio"].vote_radio {
+    display: none;
+}
+
+input[type="radio"]:checked.vote_radio + .radio_label {
+    background-color: white;
+}
+
+
+input[type="radio"]:checked.vote_radio ~ .radio_inner {
+    background-color: black;
+    display: block;
+}
+
+.radio_inner {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    border-radius: 50%;
+    display: none;
+    left: 28px;
+    transition: all 0.2s;
+}
+
+.radio_label:before {
+    display: inline-block;
+    position: relative;
+    content: "";
+    width: 30px;
+    height: 30px;
+    border: 3px solid black;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.radio_label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: left;
+    padding: 20px;
+    width: 100%;
+    border-radius: 7px;
+    transition: all 0.2s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.no_vote_option {
+    display: flex;
+    position: relative;
+    align-items: center;
 }
 
 @media screen and (max-width: 540px) {

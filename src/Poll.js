@@ -1,17 +1,44 @@
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 import { useState } from 'react';
 import blackOrWhite from './blackOrWhite.js';
 
 function Poll(props) {
     var colors = props.colors;
 
+    var _useState = useState(null),
+        _useState2 = _slicedToArray(_useState, 2),
+        selection = _useState2[0],
+        setSelection = _useState2[1];
+
     var handleClick = function handleClick(e) {
-        props.onVote(e.target.getAttribute('index'));
+        if (selection != null) props.onVote(selection);
+    };
+
+    var handleChoice = function handleChoice(e) {
+        setSelection(e.target.getAttribute('index'));
     };
 
     var bars = [];
-    var buttons = [];
     for (var i = 0; i < props.counts.length; i++) {
-        bars.push(React.createElement(
+        bars.push(!props.already_voted ? React.createElement(
+            'div',
+            { className: 'no_vote_option' },
+            React.createElement('input', {
+                type: 'radio',
+                name: 'option',
+                id: 'option_' + i,
+                index: i,
+                onClick: handleChoice,
+                className: 'vote_radio'
+            }),
+            React.createElement(
+                'label',
+                { className: 'radio_label', htmlFor: 'option_' + i },
+                props.options[i]
+            ),
+            React.createElement('div', { className: 'radio_inner' })
+        ) : React.createElement(
             'div',
             { className: 'bar_graph_bar_wrapper ' },
             React.createElement('div', {
@@ -28,7 +55,7 @@ function Poll(props) {
                 React.createElement(
                     'div',
                     { className: 'choice_text' },
-                    String.fromCharCode(97 + i).toUpperCase() + ' - ' + props.options[i]
+                    props.options[i]
                 ),
                 React.createElement(
                     'div',
@@ -37,33 +64,8 @@ function Poll(props) {
                 )
             )
         ));
-        buttons.push(props.connected_to_server ? React.createElement(
-            'button',
-            {
-                className: 'poll_button',
-                index: i,
-                onClick: handleClick,
-                key: i,
-                style: { backgroundColor: colors[i % colors.length] }
-            },
-            React.createElement(
-                'span',
-                {
-                    className: 'poll_button_text',
-                    index: i,
-                    key: i,
-                    style: {
-                        color: blackOrWhite(colors[i % colors.length])
-                    }
-                },
-                String.fromCharCode(97 + i).toUpperCase()
-            )
-        ) : React.createElement(
-            'button',
-            { className: 'poll_button', index: i, key: i, disabled: true },
-            String.fromCharCode(97 + i).toUpperCase()
-        ));
     }
+
     return React.createElement(
         'div',
         { className: 'poll_wrapper' },
@@ -89,7 +91,17 @@ function Poll(props) {
         React.createElement(
             'div',
             { className: 'poll_buttons_wrapper' },
-            buttons
+            props.connected_to_server && !props.already_voted && selection != null ? React.createElement(
+                'button',
+                { className: 'vote_button', onClick: handleClick,
+                    style: { backgroundColor: colors[selection % colors.length],
+                        color: blackOrWhite(colors[selection % colors.length]) } },
+                'Vote!'
+            ) : !props.already_voted ? React.createElement(
+                'button',
+                { className: 'vote_button', disabled: true },
+                'Vote!'
+            ) : React.createElement('div', null)
         )
     );
 }
