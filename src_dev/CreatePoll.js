@@ -25,14 +25,17 @@ function CreatePoll(props) {
         var new_colors = [...colors];
         if (delta > 0) {
             new_options.length = new_num_options;
-            new_colors.length = new_num_options;
+            if (new_colors.length > new_num_options)
+                new_colors.length = new_num_options;
         } else {
             while (delta++ < 0) {
                 new_options.push('');
             }
-            setValid(false);
-            setOptions(new_options);
-            return;
+            if (new_num_options != DEFAULT_NUM_OPTIONS) {
+                setValid(false);
+                setOptions(new_options);
+                return;
+            }
         }
         setOptions(new_options);
         setColors(new_colors);
@@ -47,16 +50,6 @@ function CreatePoll(props) {
         }
         setColors(colors_state);
     };
-
-    // const colorChange = (e) => {
-    //     var new_colors = e.target.value.match(
-    //         /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi
-    //     );
-    //     if (!new_colors || new_colors.length === 0) {
-    //         new_colors = DEFAULT_COLORS;
-    //     }
-    //     setColors(new_colors);
-    // };
 
     const verifyEntries = () => {
         if (
@@ -75,7 +68,7 @@ function CreatePoll(props) {
                 return;
             }
         }
-        verifyColors();
+        setValid(true);
     };
 
     const verifyColors = () => {
@@ -83,7 +76,7 @@ function CreatePoll(props) {
             setValid(false);
             return;
         }
-        setValid(true);
+        verifyEntries();
     };
 
     useEffect(() => {
@@ -94,7 +87,13 @@ function CreatePoll(props) {
         var new_colors = [...colors];
         new_colors.splice(e.target.getAttribute('index'), 1);
         setColors(new_colors);
-    }
+        verifyColors();
+    };
+
+    const verify = () => {
+        verifyEntries();
+        verifyColors();
+    };
 
     return (
         <form method="post" action="/submit-new-poll">
@@ -149,85 +148,81 @@ function CreatePoll(props) {
                                 id={'option_' + index}
                                 index={index}
                                 key={index}
-                                onChange={verifyEntries}
+                                onChange={verify}
                             />
                         </li>
                     );
                 })}
                 <li className="create_poll_input">
                     <p className="create_poll_header">
-                        Poll colors (choose 1-{num_options})
+                        Choose 1-{num_options} colors
                     </p>
-                    <br />
-                    {/* <textarea
-                        className="colors_input"
-                        name="colors_input"
-                        id="colors_input"
-                        onChange={colorChange}
-                        placeholder="#8b0000
-                                    rgb(255, 215, 0)
-                                    hsl(120, 100%, 20%)
-                                    #4169E1"
-                    ></textarea> */}
-                    <ColorPicker
-                        size="lg"
-                        value={picker_color}
-                        onChange={setPickerColor}
-                    />
-                    <div
-                        class="color_picker_sample"
-                        style={{ backgroundColor: picker_color }}
-                    ></div>
-                    {colors.length < num_options ? (
-                        <button
-                            className="add_color_button"
-                            type="button"
-                            onClick={addColor}
-                            style={{
-                                backgroundColor: picker_color,
-                                color: blackOrWhite(picker_color),
-                            }}
-                        >
-                            Add color
-                        </button>
-                    ) : (
-                        <button
-                            className="add_color_button"
-                            type="button"
-                            disabled
-                        >
-                            Add color
-                        </button>
-                    )}
+                    <div className="color_picker_wrapper">
+                        <ColorPicker
+                            size="xl"
+                            value={picker_color}
+                            onChange={setPickerColor}
+                        />
+                        {colors.length < num_options ? (
+                            <button
+                                className="add_color_button"
+                                type="button"
+                                onClick={addColor}
+                                style={{
+                                    backgroundColor: picker_color,
+                                    color: blackOrWhite(picker_color),
+                                }}
+                            >
+                                Add color
+                            </button>
+                        ) : (
+                            <button
+                                className="add_color_button"
+                                type="button"
+                                disabled
+                            >
+                                Add color
+                            </button>
+                        )}
+                    </div>
                 </li>
                 <h3 className="your_colors">Your colors</h3>
-                <div className="color_samples_grid">
-                    {colors.length > 0 ? (
-                        colors.map((color, index) => {
+                {colors.length > 0 ? (
+                    <div className="color_samples_grid">
+                        {colors.map((color, index) => {
                             return (
                                 <div
                                     className="color_sample"
                                     style={{ backgroundColor: color }}
                                 >
                                     <svg
-                                        class="x-button"
+                                        className="x-button"
                                         width={25}
                                         height={25}
-                                        xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 91.61 91.61"
                                         key={index}
                                         index={index}
                                         onClick={deleteColor}
                                     >
                                         <line
-                                            class="cls-1"
+                                            className="cls-1"
+                                            style={{
+                                                fill: blackOrWhite(color),
+                                                stroke: blackOrWhite(color),
+                                            }}
+                                            index={index}
                                             x1="5.3"
                                             y1="5.3"
                                             x2="86.3"
                                             y2="86.3"
                                         />
                                         <line
-                                            class="cls-1"
+                                            className="cls-1"
+                                            style={{
+                                                fill: blackOrWhite(color),
+                                                stroke: blackOrWhite(color),
+                                            }}
+                                            index={index}
                                             x1="86.3"
                                             y1="5.3"
                                             x2="5.3"
@@ -236,11 +231,11 @@ function CreatePoll(props) {
                                     </svg>
                                 </div>
                             );
-                        })
-                    ) : (
-                        <p className="no_colors">None so far... :(</p>
-                    )}
-                </div>
+                        })}
+                    </div>
+                ) : (
+                    <p className="no_colors">None so far... :(</p>
+                )}
                 <input
                     type="hidden"
                     name="colors"

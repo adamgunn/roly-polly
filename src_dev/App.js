@@ -157,11 +157,6 @@ function App(props) {
 
     return (
         <div className="app_wrapper">
-            {connected ? (
-                <p className="connected">Connected</p>
-            ) : (
-                <p className="not_connected">Not connected</p>
-            )}
             <Poll
                 key={0}
                 onVote={voteChange}

@@ -47,14 +47,16 @@ function CreatePoll(props) {
         var new_colors = [].concat(_toConsumableArray(colors));
         if (delta > 0) {
             new_options.length = new_num_options;
-            new_colors.length = new_num_options;
+            if (new_colors.length > new_num_options) new_colors.length = new_num_options;
         } else {
             while (delta++ < 0) {
                 new_options.push('');
             }
-            setValid(false);
-            setOptions(new_options);
-            return;
+            if (new_num_options != DEFAULT_NUM_OPTIONS) {
+                setValid(false);
+                setOptions(new_options);
+                return;
+            }
         }
         setOptions(new_options);
         setColors(new_colors);
@@ -70,16 +72,6 @@ function CreatePoll(props) {
         setColors(colors_state);
     };
 
-    // const colorChange = (e) => {
-    //     var new_colors = e.target.value.match(
-    //         /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^\)]*\)/gi
-    //     );
-    //     if (!new_colors || new_colors.length === 0) {
-    //         new_colors = DEFAULT_COLORS;
-    //     }
-    //     setColors(new_colors);
-    // };
-
     var verifyEntries = function verifyEntries() {
         if (options.length < 2 || options.length > MAX_OPTIONS || !num_options) {
             setValid(false);
@@ -93,7 +85,7 @@ function CreatePoll(props) {
                 return;
             }
         }
-        verifyColors();
+        setValid(true);
     };
 
     var verifyColors = function verifyColors() {
@@ -101,7 +93,7 @@ function CreatePoll(props) {
             setValid(false);
             return;
         }
-        setValid(true);
+        verifyEntries();
     };
 
     useEffect(function () {
@@ -112,6 +104,12 @@ function CreatePoll(props) {
         var new_colors = [].concat(_toConsumableArray(colors));
         new_colors.splice(e.target.getAttribute('index'), 1);
         setColors(new_colors);
+        verifyColors();
+    };
+
+    var verify = function verify() {
+        verifyEntries();
+        verifyColors();
     };
 
     return React.createElement(
@@ -183,7 +181,7 @@ function CreatePoll(props) {
                         id: 'option_' + index,
                         index: index,
                         key: index,
-                        onChange: verifyEntries
+                        onChange: verify
                     })
                 );
             }),
@@ -193,40 +191,39 @@ function CreatePoll(props) {
                 React.createElement(
                     'p',
                     { className: 'create_poll_header' },
-                    'Poll colors (choose 1-',
+                    'Choose 1-',
                     num_options,
-                    ')'
+                    ' colors'
                 ),
-                React.createElement('br', null),
-                React.createElement(ColorPicker, {
-                    size: 'lg',
-                    value: picker_color,
-                    onChange: setPickerColor
-                }),
-                React.createElement('div', {
-                    'class': 'color_picker_sample',
-                    style: { backgroundColor: picker_color }
-                }),
-                colors.length < num_options ? React.createElement(
-                    'button',
-                    {
-                        className: 'add_color_button',
-                        type: 'button',
-                        onClick: addColor,
-                        style: {
-                            backgroundColor: picker_color,
-                            color: blackOrWhite(picker_color)
-                        }
-                    },
-                    'Add color'
-                ) : React.createElement(
-                    'button',
-                    {
-                        className: 'add_color_button',
-                        type: 'button',
-                        disabled: true
-                    },
-                    'Add color'
+                React.createElement(
+                    'div',
+                    { className: 'color_picker_wrapper' },
+                    React.createElement(ColorPicker, {
+                        size: 'xl',
+                        value: picker_color,
+                        onChange: setPickerColor
+                    }),
+                    colors.length < num_options ? React.createElement(
+                        'button',
+                        {
+                            className: 'add_color_button',
+                            type: 'button',
+                            onClick: addColor,
+                            style: {
+                                backgroundColor: picker_color,
+                                color: blackOrWhite(picker_color)
+                            }
+                        },
+                        'Add color'
+                    ) : React.createElement(
+                        'button',
+                        {
+                            className: 'add_color_button',
+                            type: 'button',
+                            disabled: true
+                        },
+                        'Add color'
+                    )
                 )
             ),
             React.createElement(
@@ -234,10 +231,10 @@ function CreatePoll(props) {
                 { className: 'your_colors' },
                 'Your colors'
             ),
-            React.createElement(
+            colors.length > 0 ? React.createElement(
                 'div',
                 { className: 'color_samples_grid' },
-                colors.length > 0 ? colors.map(function (color, index) {
+                colors.map(function (color, index) {
                     return React.createElement(
                         'div',
                         {
@@ -247,24 +244,33 @@ function CreatePoll(props) {
                         React.createElement(
                             'svg',
                             {
-                                'class': 'x-button',
+                                className: 'x-button',
                                 width: 25,
                                 height: 25,
-                                xmlns: 'http://www.w3.org/2000/svg',
                                 viewBox: '0 0 91.61 91.61',
                                 key: index,
                                 index: index,
                                 onClick: deleteColor
                             },
                             React.createElement('line', {
-                                'class': 'cls-1',
+                                className: 'cls-1',
+                                style: {
+                                    fill: blackOrWhite(color),
+                                    stroke: blackOrWhite(color)
+                                },
+                                index: index,
                                 x1: '5.3',
                                 y1: '5.3',
                                 x2: '86.3',
                                 y2: '86.3'
                             }),
                             React.createElement('line', {
-                                'class': 'cls-1',
+                                className: 'cls-1',
+                                style: {
+                                    fill: blackOrWhite(color),
+                                    stroke: blackOrWhite(color)
+                                },
+                                index: index,
                                 x1: '86.3',
                                 y1: '5.3',
                                 x2: '5.3',
@@ -272,11 +278,11 @@ function CreatePoll(props) {
                             })
                         )
                     );
-                }) : React.createElement(
-                    'p',
-                    { className: 'no_colors' },
-                    'None so far... :('
-                )
+                })
+            ) : React.createElement(
+                'p',
+                { className: 'no_colors' },
+                'None so far... :('
             ),
             React.createElement('input', {
                 type: 'hidden',

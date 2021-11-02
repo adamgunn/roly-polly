@@ -1,9 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 :root {
     margin: 0px;
     background-color: #bbb;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue,
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', Segoe UI, Helvetica Neue,
         Arial, sans-serif;
 }
+
+/* *,
+*:before,
+*:after {
+  box-sizing: border-box;
+} */
 
 @keyframes unblur {
     from {
@@ -44,7 +52,8 @@ body {
     margin-bottom: 0px;
 }
 
-.add_comment_button, .add_color_button {
+.add_comment_button,
+.add_color_button {
     background-color: rgb(0, 68, 9);
 }
 
@@ -55,18 +64,19 @@ body {
 }
 
 .comments_header {
-  margin: 0px;
+    margin: 0px;
 }
 
 .add_comment_button,
 .clear_comments_button,
 ul li input.create_poll_button,
-.create_poll_button, .add_color_button {
+.create_poll_button,
+.add_color_button {
     color: white;
     border: none;
     font-size: 18px;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue,
-        Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', Segoe UI, Helvetica Neue,
+    Arial, sans-serif;
     padding: 17px;
     border-radius: 12px;
     /* text-transform: uppercase; */
@@ -76,6 +86,11 @@ ul li input.create_poll_button,
     line-height: 0px;
     min-height: 36px;
     transition: all 0.5s;
+}
+
+.add_color_button {
+    transition: box-shadow 0.5s;
+    margin: 10px 0px 20px;
 }
 
 .add_comment_button,
@@ -89,7 +104,7 @@ ul li input.create_poll_button,
 .poll_button,
 .content_input,
 .colors_input,
-.title_input, 
+.title_input,
 .add_color_button,
 ul.create_poll_wrapper li input:not(.create_poll_button) {
     /* box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
@@ -139,8 +154,8 @@ ul li input.create_poll_button,
     margin: 5px;
     height: 200px;
     font-size: 16px;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue,
-        Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', Segoe UI, Helvetica Neue,
+    Arial, sans-serif;
     resize: none;
     padding: 5px;
     border: none;
@@ -156,8 +171,8 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     height: 30px;
     font-size: 24px;
     font-weight: 600;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue,
-        Arial, sans-serif;
+    font-family:  -apple-system, BlinkMacSystemFont, 'Inter', Segoe UI, Helvetica Neue,
+    Arial, sans-serif;
     padding: 5px;
     margin: 5px;
     border: none;
@@ -165,28 +180,28 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
 }
 
 .title_input {
-  margin: 10px auto 0px;
-  padding: 10px;
-  border-radius: 7px 7px 0px 0px;
-  max-width: none;
-  min-width: none;
-  width: 90%;
-  border-bottom: 1px solid #bbb;
+    margin: 10px auto 0px;
+    padding: 10px;
+    border-radius: 7px 7px 0px 0px;
+    max-width: none;
+    min-width: none;
+    width: 90%;
 }
 
 .content_input {
-  margin: 0px auto 10px;
-  padding: 10px;
-  border-radius: 0px 0px 7px 7px;
-  max-width: none;
-  min-width: none;
-  width: 90%;
-  height: 30px;
-  overflow: hidden;
+    margin: 0px auto 10px;
+    padding: 10px;
+    border-radius: 0px 0px 7px 7px;
+    max-width: none;
+    min-width: none;
+    width: 90%;
+    height: 30px;
+    overflow: hidden;
 }
 
-.title_input:focus, .content_input:focus {
-  outline: none;
+.title_input:focus,
+.content_input:focus {
+    outline: none;
 }
 
 .comments_container {
@@ -198,24 +213,23 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
 
 .bar_graph_bar {
     height: 15px;
-    margin: 5px;
+    margin: 25px 5px 5px;
     transition: width 0.7s;
     border-radius: 5px;
     box-shadow: 6px 6px 8px 0 rgba(0, 0, 0, 0.25);
 }
 
 .bar_graph_text {
-    margin-left: 5px;
+    margin: 0px -5px 0px 5px;
     font-weight: bold;
-    margin-right: -5px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
 .bar_graph_wrapper {
-    width: 50%;
-    margin: 0px auto 15px;
+    width: 70%;
+    margin: 15px auto 15px;
     padding: 10px;
     padding-right: 20px;
     background-color: #ddd;
@@ -236,6 +250,7 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
 .poll_buttons_wrapper {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .poll_button {
@@ -243,8 +258,7 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     transition: all 0.1s;
 }
 
-.poll_button,
-.poll_button_disabled {
+.poll_button {
     border: none;
     font-size: 25px;
     padding: 10px;
@@ -263,8 +277,8 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
 .add_comment_button[disabled],
 .clear_comments_button[disabled],
 .create_poll_button:disabled,
-.create_poll_button[disabled], 
-.add_color_button:disabled, 
+.create_poll_button[disabled],
+.add_color_button:disabled,
 .add_color_button[disabled] {
     box-shadow: none;
     color: darkslategray;
@@ -278,10 +292,10 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
 .add_comment_button[disabled]:hover,
 .clear_comments_button[disabled]:hover,
 .create_poll_button:disabled:hover,
-.create_poll_button[disabled]:hover, 
-.add_color_button:disabled:hover, 
+.create_poll_button[disabled]:hover,
+.add_color_button:disabled:hover,
 .add_color_button[disabled]:hover {
-    cursor: default;
+    cursor: default; 
     transform: none;
 }
 
@@ -297,14 +311,15 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
 
 .no_colors {
     color: #777;
+    margin-left: 5px;
 }
 
 .connected,
 .not_connected {
     position: absolute;
     font-size: 20px;
-    right: 10px;
-    top: 325px;
+    left: 10px;
+    bottom: 10px;
     margin: 0px;
 }
 
@@ -320,17 +335,16 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     width: auto;
     height: 50px;
     border-radius: 5px;
-    transition: all 0.5s;
     overflow: hidden;
     display: flex;
-    justify-content: right;
+    justify-content: center;
     align-items: center;
     padding: 0px 10px 0px;
 }
 
 .color_samples_grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, 50px);
     grid-auto-rows: 50px;
     gap: 0.6rem;
     margin-bottom: 20px;
@@ -353,7 +367,7 @@ ul.create_poll_wrapper li {
 .your_colors {
     font-weight: 500;
     font-size: 16px;
-    margin: 20px 10px 20px 0px;
+    margin: 10px 10px 0px 0px;
 }
 
 .your_colors {
@@ -424,6 +438,7 @@ li.navbar_link,
 }
 
 .poll_wrapper {
+    position: relative;
     padding-top: 100px;
 }
 
@@ -438,7 +453,7 @@ li.navbar_link,
 
 .cls-1 {
     fill: #fff;
-    stroke:#fff;
+    stroke: #fff;
     stroke-miterlimit: 10;
     stroke-width: 15px;
 }
@@ -453,6 +468,10 @@ li.navbar_link,
 
 .color_sample:hover .x-button:hover {
     cursor: pointer;
+}
+
+.color_picker_wrapper {
+    margin: 5px;
 }
 
 @media screen and (max-width: 540px) {

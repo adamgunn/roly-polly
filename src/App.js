@@ -201,15 +201,6 @@ function App(props) {
     return React.createElement(
         'div',
         { className: 'app_wrapper' },
-        connected ? React.createElement(
-            'p',
-            { className: 'connected' },
-            'Connected'
-        ) : React.createElement(
-            'p',
-            { className: 'not_connected' },
-            'Not connected'
-        ),
         React.createElement(Poll, {
             key: 0,
             onVote: voteChange,

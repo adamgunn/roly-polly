@@ -14,7 +14,7 @@ function Home(props) {
         ),
         React.createElement(
             "a",
-            { className: "create_poll_button create_poll_link", href: "/new-poll" },
+            { className: "create_poll_link create_poll_button", href: "/new-poll" },
             "Create a new Poll"
         )
     );

@@ -73,6 +73,11 @@ function Poll(props) {
     }
     return (
         <div className="poll_wrapper">
+            {props.connected_to_server ? (
+                <p className="connected">Connected</p>
+            ) : (
+                <p className="not_connected">Not connected</p>
+            )}
             <div className="bar_graph_wrapper">
                 <h1 className="poll_title">{props.title}</h1>
                 {bars}

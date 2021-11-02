@@ -67,6 +67,15 @@ function Poll(props) {
     return React.createElement(
         'div',
         { className: 'poll_wrapper' },
+        props.connected_to_server ? React.createElement(
+            'p',
+            { className: 'connected' },
+            'Connected'
+        ) : React.createElement(
+            'p',
+            { className: 'not_connected' },
+            'Not connected'
+        ),
         React.createElement(
             'div',
             { className: 'bar_graph_wrapper' },
