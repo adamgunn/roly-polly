@@ -53,7 +53,7 @@ function App(props) {
         connected = _useState14[0],
         setConnected = _useState14[1];
 
-    var _useState15 = useState(''),
+    var _useState15 = useState('Loading...'),
         _useState16 = _slicedToArray(_useState15, 2),
         poll_title = _useState16[0],
         setPollTitle = _useState16[1];

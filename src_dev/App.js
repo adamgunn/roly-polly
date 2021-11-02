@@ -22,7 +22,7 @@ function App(props) {
     const [last_title, setLastTitle] = useState('');
     const [last_comment, setLastComment] = useState('');
     const [connected, setConnected] = useState(false);
-    const [poll_title, setPollTitle] = useState('');
+    const [poll_title, setPollTitle] = useState('Loading...');
     const [colors, setColors] = useState([]);
     const [options, setOptions] = useState(new Array(DEFAULT_NUM_OPTIONS).fill('Loading...'));
     const [voted, setVoted] = useState(false);
