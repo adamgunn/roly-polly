@@ -5,6 +5,8 @@ import Form from './Form.js';
 import Poll from './Poll.js';
 
 function App(props) {
+    const DEFAULT_NUM_OPTIONS = 2;
+
     useEffect(() => {
         setSocket(io(window.location.host));
         return () => {
@@ -22,14 +24,10 @@ function App(props) {
     const [connected, setConnected] = useState(false);
     const [poll_title, setPollTitle] = useState('');
     const [colors, setColors] = useState([]);
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState(new Array(DEFAULT_NUM_OPTIONS).fill('Loading...'));
     const [voted, setVoted] = useState(false);
 
-    var counts_empty = [];
-    for (var i = 0; i < 4; ++i) {
-        counts_empty.push(0);
-    }
-    const [counts, setCounts] = useState(counts_empty);
+    const [counts, setCounts] = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0));
     const [num_votes, setNumVotes] = useState(0);
 
     const handleButtonClick = (e) => {

@@ -7,6 +7,8 @@ import Form from './Form.js';
 import Poll from './Poll.js';
 
 function App(props) {
+    var DEFAULT_NUM_OPTIONS = 2;
+
     useEffect(function () {
         setSocket(io(window.location.host));
         return function () {
@@ -61,7 +63,7 @@ function App(props) {
         colors = _useState18[0],
         setColors = _useState18[1];
 
-    var _useState19 = useState([]),
+    var _useState19 = useState(new Array(DEFAULT_NUM_OPTIONS).fill('Loading...')),
         _useState20 = _slicedToArray(_useState19, 2),
         options = _useState20[0],
         setOptions = _useState20[1];
@@ -71,12 +73,7 @@ function App(props) {
         voted = _useState22[0],
         setVoted = _useState22[1];
 
-    var counts_empty = [];
-    for (var i = 0; i < 4; ++i) {
-        counts_empty.push(0);
-    }
-
-    var _useState23 = useState(counts_empty),
+    var _useState23 = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0)),
         _useState24 = _slicedToArray(_useState23, 2),
         counts = _useState24[0],
         setCounts = _useState24[1];
