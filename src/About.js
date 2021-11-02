@@ -27,7 +27,7 @@ function About(props) {
         React.createElement(
             "p",
             { className: "body_text" },
-            "The app was made during the fall of 2021 using the MERN stack \u2014 MongoDB, Express, React, and Node.JS \u2014 and deployed on Heroku."
+            "The app was made in 2021 using the MERN stack \u2014 MongoDB, Express, React, and Node.JS \u2014 and deployed on Heroku."
         ),
         React.createElement(
             "p",
