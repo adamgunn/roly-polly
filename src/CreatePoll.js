@@ -38,9 +38,23 @@ function CreatePoll(props) {
         picker_color = _useState10[0],
         setPickerColor = _useState10[1];
 
+    var _useState11 = useState(false),
+        _useState12 = _slicedToArray(_useState11, 2),
+        bad_size = _useState12[0],
+        setBadSize = _useState12[1];
+
     var numOptionsChange = function numOptionsChange(e) {
         var old_num_options = num_options;
-        var new_num_options = e.target.value > MAX_OPTIONS ? MAX_OPTIONS : e.target.value;
+        var new_num_options = e.target.value;
+        if (e.target.value > MAX_OPTIONS) {
+            setBadSize(true);
+            new_num_options = MAX_OPTIONS;
+        } else if (e.target.value < DEFAULT_NUM_OPTIONS) {
+            setBadSize(true);
+            new_num_options = DEFAULT_NUM_OPTIONS;
+        } else {
+            setBadSize(false);
+        }
         setNumOptions(new_num_options);
         var delta = old_num_options - new_num_options;
         var new_options = [].concat(_toConsumableArray(options));
@@ -159,7 +173,12 @@ function CreatePoll(props) {
                     min: DEFAULT_NUM_OPTIONS,
                     max: MAX_OPTIONS,
                     onChange: numOptionsChange
-                })
+                }),
+                bad_size ? React.createElement(
+                    'p',
+                    { className: 'body_text error_text' },
+                    'Number of options must be between 2 and 26'
+                ) : React.createElement('div', null)
             ),
             options.map(function (option, index) {
                 return React.createElement(
@@ -290,7 +309,7 @@ function CreatePoll(props) {
                 id: 'colors',
                 value: JSON.stringify(colors)
             }),
-            valid ? React.createElement(
+            valid && !bad_size ? React.createElement(
                 'li',
                 null,
                 React.createElement('input', {

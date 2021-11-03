@@ -674,5 +674,9 @@ input[type='radio']:checked.vote_radio ~ .radio_inner {
     color: black;
 }
 
+.error_text {
+    color: red;
+}
+
 @media screen and (max-width: 540px) {
 }

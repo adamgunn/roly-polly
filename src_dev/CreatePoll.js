@@ -14,11 +14,22 @@ function CreatePoll(props) {
     const [colors, setColors] = useState([]);
     const [valid, setValid] = useState(false);
     const [picker_color, setPickerColor] = useState(DEFAULT_COLORS[0]);
+    const [bad_size, setBadSize] = useState(false);
 
     const numOptionsChange = (e) => {
         const old_num_options = num_options;
-        const new_num_options =
-            e.target.value > MAX_OPTIONS ? MAX_OPTIONS : e.target.value;
+        var new_num_options = e.target.value;
+        if (e.target.value > MAX_OPTIONS) {
+            setBadSize(true);
+            new_num_options = MAX_OPTIONS;
+        }
+        else if (e.target.value < DEFAULT_NUM_OPTIONS) {
+            setBadSize(true);
+            new_num_options = DEFAULT_NUM_OPTIONS;
+        }
+        else {
+            setBadSize(false);
+        }
         setNumOptions(new_num_options);
         var delta = old_num_options - new_num_options;
         var new_options = [...options];
@@ -126,6 +137,7 @@ function CreatePoll(props) {
                         max={MAX_OPTIONS}
                         onChange={numOptionsChange}
                     />
+                    {bad_size ? <p className="body_text error_text">Number of options must be between 2 and 26</p> : <div></div>}
                 </li>
                 {options.map((option, index) => {
                     return (
@@ -242,7 +254,7 @@ function CreatePoll(props) {
                     id="colors"
                     value={JSON.stringify(colors)}
                 />
-                {valid ? (
+                {valid && !bad_size ? (
                     <li>
                         <input
                             value="Create!"
