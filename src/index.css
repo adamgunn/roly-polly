@@ -678,5 +678,9 @@ input[type='radio']:checked.vote_radio ~ .radio_inner {
     color: red;
 }
 
+.spotify_search {
+    margin-top: 100px;
+}
+
 @media screen and (max-width: 540px) {
 }

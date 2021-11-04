@@ -4,6 +4,7 @@ import Home from './Home.js';
 import About from './About.js';
 import Navbar from './Navbar.js';
 import CreatePoll from './CreatePoll';
+import SpotifyAPI from './SpotifyAPI';
 import NotFound from './NotFound';
 
 const uuidRegex = new RegExp(
@@ -22,6 +23,8 @@ ReactDOM.render(
             <CreatePoll />
         ) : uuidRegex.test(path) ? (
             <App />
+        ) :  path == '/spotify' || path == '/spotify/'? (
+            <SpotifyAPI />
         ) : (
             <NotFound />
         )}
