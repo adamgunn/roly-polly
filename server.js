@@ -10,8 +10,50 @@ const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 const PollData = require('./PollData');
 const uuid = require('uuid');
-const uri = process.env.MONGODB_URI || 'mongodb://localhost/roly-polly';
-mongoose.connect(uri, {
+const dotenv = require('dotenv');
+dotenv.config();
+
+const SpotifyWebApi = require('spotify-web-api-node');
+const scopes = [
+    'ugc-image-upload',
+    'user-read-playback-state',
+    'user-modify-playback-state',
+    'user-read-currently-playing',
+    'streaming',
+    'app-remote-control',
+    'user-read-email',
+    'user-read-private',
+    'playlist-read-collaborative',
+    'playlist-modify-public',
+    'playlist-read-private',
+    'playlist-modify-private',
+    'user-library-modify',
+    'user-library-read',
+    'user-top-read',
+    'user-read-playback-position',
+    'user-read-recently-played',
+    'user-follow-read',
+    'user-follow-modify',
+];
+
+var spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
+});
+spotifyApi.clientCredentialsGrant().then(
+    (data) => {
+        console.log('Access token expires in: ' + data.body['expires_in']);
+        console.log('Access token:' + data.body['access_token']);
+        spotifyApi.setAccessToken(data.body['access_token']);
+    },
+    (err) => {
+        console.log('Failed to retrieve access token\n', err);
+    }
+);
+
+const mongouri = process.env.MONGODB_URI || 'mongodb://localhost/roly-polly';
+mongoose.connect(mongouri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -20,21 +62,18 @@ app.use('/static', express.static(path.join(__dirname, 'dist')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.post('/search-album', async (req, res) => {
+});
+
 app.post('/submit-new-poll', async (req, res) => {
     const new_uuid = uuid.v4();
     var form_data = req.body;
-    if (
-        !form_data.title ||
-        form_data.title == '' ||
-        form_data.title == null
-    ) {
+    if (!form_data.title || form_data.title == '' || form_data.title == null) {
         form_data.title = 'My awesome poll';
     }
     var title = form_data.title;
     form_data.colors = JSON.parse(form_data.colors);
-    if (
-        form_data.colors.empty
-    ) {
+    if (form_data.colors.empty) {
         form_data.colors = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
     }
     var options = [];
@@ -111,5 +150,21 @@ io.on('connection', (socket) => {
                 comments: data.comments_data,
             });
         });
+    });
+    socket.on('search-albums', async (query) => {
+        var artist_query = query.artist;
+        var album_query = query.album;
+        spotifyApi.searchAlbums(`album:${album_query} artist:${artist_query}`).then(
+            function (data) {
+                if (data.body.albums.items[0]) {
+                    socket.emit('album-found', data.body.albums.items[0].images[1].url);
+                } else {
+                    socket.emit('album-not-found');
+                }
+            },
+            function (err) {
+                socket.emit('error', err);
+            }
+        );
     });
 });

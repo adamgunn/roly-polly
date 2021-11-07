@@ -7,7 +7,7 @@ import Form from './Form.js';
 import Poll from './Poll.js';
 
 function App(props) {
-    var DEFAULT_NUM_OPTIONS = 2;
+    var DEFAULT_NUM_OPTIONS = 0;
 
     useEffect(function () {
         setSocket(io(window.location.host));
