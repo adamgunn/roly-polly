@@ -60,7 +60,7 @@ function SpotifyAPI(props) {
         });
         socket.once('error', function (err) {
             setImageUrl('');
-            setError('The server encountered an arror with the Spotify API.');
+            setError('The server encountered an arror with the Spotify API. Try refreshing?');
             console.log(err);
         });
         var query = {

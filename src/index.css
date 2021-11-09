@@ -298,21 +298,24 @@ input[type='radio']:checked.vote_radio + .radio_label {
     margin-left: 5px;
 }
 
-.connected,
 .not_connected {
     position: absolute;
-    font-size: 20px;
     left: 10px;
     bottom: 10px;
     margin: 0px;
+    fill: red;
+    animation-name: blink;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
 }
 
-.connected {
-    color: limegreen;
-}
-
-.not_connected {
-    color: red;
+@keyframes blink {
+    0% {
+        fill: red;
+    }
+    50% {
+        fill: rgba(0,0,0,0);
+    }
 }
 
 .color_sample {
@@ -400,7 +403,7 @@ ul.create_poll_wrapper li {
     padding: 20px 0px 20px;
     margin: 0px;
     top: 0px;
-    z-index: 2;
+    z-index: 4;
     /* backdrop-filter: blur(6px); */
 }
 
@@ -660,6 +663,14 @@ input[type='radio']:checked.vote_radio ~ .radio_inner {
     transition: color 0.2s;
 }
 
+.home_section_wrapper1 {
+    z-index: 3;
+}
+
+.home_section_wrapper2 {
+    z-index: 2;
+}
+
 .home_section_wrapper2,
 .home_section_wrapper4 {
     position: relative;
@@ -668,10 +679,16 @@ input[type='radio']:checked.vote_radio ~ .radio_inner {
     color: white;
 }
 .home_section_wrapper3 {
+    z-index: 1;
     position: relative;
     text-align: right;
     background-color: white;
     color: black;
+}
+
+
+.home_section_wrapper4 {
+    z-index: 0;
 }
 
 .error_text {

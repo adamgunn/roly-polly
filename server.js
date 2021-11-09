@@ -41,10 +41,12 @@ var spotifyApi = new SpotifyWebApi({
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     redirectUri: process.env.SPOTIFY_REDIRECT_URI,
 });
+var last_refresh_time = new Date();
 spotifyApi.clientCredentialsGrant().then(
     (data) => {
+        last_refresh_time = new Date();
         console.log('Access token expires in: ' + data.body['expires_in']);
-        console.log('Access token:' + data.body['access_token']);
+        console.log('Access token: ' + data.body['access_token']);
         spotifyApi.setAccessToken(data.body['access_token']);
     },
     (err) => {
@@ -62,8 +64,7 @@ app.use('/static', express.static(path.join(__dirname, 'dist')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.post('/search-album', async (req, res) => {
-});
+app.post('/search-album', async (req, res) => {});
 
 app.post('/submit-new-poll', async (req, res) => {
     const new_uuid = uuid.v4();
@@ -152,19 +153,43 @@ io.on('connection', (socket) => {
         });
     });
     socket.on('search-albums', async (query) => {
+        var current_date = new Date();
+        if (
+            current_date.getTime() - last_refresh_time.getTime() >=
+            1000 * 60 * 60
+        ) {
+            spotifyApi.clientCredentialsGrant().then(
+                (data) => {
+                    last_refresh_time = new Date();
+                    console.log(
+                        'Access token expires in: ' + data.body['expires_in']
+                    );
+                    console.log('Access token: ' + data.body['access_token']);
+                    spotifyApi.setAccessToken(data.body['access_token']);
+                },
+                (err) => {
+                    console.log('Failed to retrieve access token\n', err);
+                }
+            );
+        }
         var artist_query = query.artist;
         var album_query = query.album;
-        spotifyApi.searchAlbums(`album:${album_query} artist:${artist_query}`).then(
-            function (data) {
-                if (data.body.albums.items[0]) {
-                    socket.emit('album-found', data.body.albums.items[0].images[1].url);
-                } else {
-                    socket.emit('album-not-found');
+        spotifyApi
+            .searchAlbums(`album:${album_query} artist:${artist_query}`)
+            .then(
+                function (data) {
+                    if (data.body.albums.items[0]) {
+                        socket.emit(
+                            'album-found',
+                            data.body.albums.items[0].images[1].url
+                        );
+                    } else {
+                        socket.emit('album-not-found');
+                    }
+                },
+                function (err) {
+                    socket.emit('error', err);
                 }
-            },
-            function (err) {
-                socket.emit('error', err);
-            }
-        );
+            );
     });
 });
