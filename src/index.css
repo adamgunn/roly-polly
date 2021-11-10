@@ -26,6 +26,19 @@
 body {
     margin: 0px;
     background-color: #260f26;
+    scrollbar-color: #86cb92;
+    min-height: 100vh;
+    display: flex;
+    flex-flow: column;
+}
+
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #86cb92;
+    border-radius: 999px;
 }
 
 .comment_wrapper {
@@ -34,12 +47,9 @@ body {
     background-color: white;
     border-radius: 7px;
     width: 90%;
+    max-width: 750px;
     transition: all 0.23s;
-}
-
-.comment_wrapper:hover {
-    /* transform: scale(1.01); */
-    background-color: #251f47;
+    color: black;
 }
 
 .comment_title {
@@ -67,6 +77,10 @@ body {
 
 .comments_header {
     margin: 0px;
+}
+
+.button_and_form_wrapper {
+    margin-bottom: 20px;
 }
 
 .add_comment_button,
@@ -187,7 +201,7 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     margin: 10px auto 0px;
     padding: 10px;
     border-radius: 7px 7px 0px 0px;
-    max-width: none;
+    max-width: 750px;
     min-width: none;
     width: 90%;
 }
@@ -196,7 +210,7 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     margin: 0px auto 10px;
     padding: 10px;
     border-radius: 0px 0px 7px 7px;
-    max-width: none;
+    max-width: 750px;
     min-width: none;
     width: 90%;
     height: 30px;
@@ -213,6 +227,9 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     background-color: #251f47;
     padding: 30px;
     margin-bottom: 0px;
+    display:flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .bar_graph_bar {
@@ -526,7 +543,8 @@ input[type='radio'].vote_radio {
     align-items: center;
 }
 
-.no_vote_option:hover, .radio_label:hover {
+.no_vote_option:hover,
+.radio_label:hover {
     cursor: pointer;
 }
 
