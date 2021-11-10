@@ -10,7 +10,7 @@ function CreatePoll(props) {
     var DEFAULT_POLL_TITLE = 'My awesome poll';
     var DEFAULT_NUM_OPTIONS = 2;
     var DEFAULT_COLORS = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
-    var MAX_OPTIONS = 26;
+    var MAX_OPTIONS = 50;
     var EMPTY_OPTIONS = Array(DEFAULT_NUM_OPTIONS).fill('');
 
     var _useState = useState(DEFAULT_NUM_OPTIONS),
@@ -177,7 +177,7 @@ function CreatePoll(props) {
                 bad_size ? React.createElement(
                     'p',
                     { className: 'body_text error_text' },
-                    'Number of options must be between 2 and 26'
+                    'Number of options must be between ' + DEFAULT_NUM_OPTIONS + ' and ' + MAX_OPTIONS
                 ) : React.createElement('div', null)
             ),
             options.map(function (option, index) {
@@ -191,7 +191,7 @@ function CreatePoll(props) {
                             htmlFor: 'option_' + index,
                             key: 'label_' + index
                         },
-                        'Option ' + String.fromCharCode(97 + index).toUpperCase() + ' - required'
+                        'Option ' + (index + 1) + ' - required'
                     ),
                     React.createElement('br', null),
                     React.createElement('input', {

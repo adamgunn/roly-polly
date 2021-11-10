@@ -75,10 +75,10 @@ function App(props) {
             } else {
                 console.log('reconnecting');
                 socket.once('load-poll', (poll) => {
+                    setColors(poll.colors_data);
                     setPollTitle(poll.title_data);
                     setOptions(poll.options_data);
                     setCounts(poll.counts_data);
-                    setColors(poll.colors_data);
                     setNumVotes(poll.counts_data.reduce(reducer));
                     setComments(poll.comments_data);
                 });
@@ -145,10 +145,10 @@ function App(props) {
     useEffect(() => {
         if (socket == null) return;
         socket.once('load-poll', (poll) => {
+            setColors(poll.colors_data);
             setPollTitle(poll.title_data);
             setOptions(poll.options_data);
             setCounts(poll.counts_data);
-            setColors(poll.colors_data);
             setNumVotes(poll.counts_data.reduce(reducer));
             setComments(poll.comments_data);
         });

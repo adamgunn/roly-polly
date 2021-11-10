@@ -6,7 +6,7 @@ function CreatePoll(props) {
     const DEFAULT_POLL_TITLE = 'My awesome poll';
     const DEFAULT_NUM_OPTIONS = 2;
     const DEFAULT_COLORS = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
-    const MAX_OPTIONS = 26;
+    const MAX_OPTIONS = 50;
     const EMPTY_OPTIONS = Array(DEFAULT_NUM_OPTIONS).fill('');
 
     const [num_options, setNumOptions] = useState(DEFAULT_NUM_OPTIONS);
@@ -22,12 +22,10 @@ function CreatePoll(props) {
         if (e.target.value > MAX_OPTIONS) {
             setBadSize(true);
             new_num_options = MAX_OPTIONS;
-        }
-        else if (e.target.value < DEFAULT_NUM_OPTIONS) {
+        } else if (e.target.value < DEFAULT_NUM_OPTIONS) {
             setBadSize(true);
             new_num_options = DEFAULT_NUM_OPTIONS;
-        }
-        else {
+        } else {
             setBadSize(false);
         }
         setNumOptions(new_num_options);
@@ -137,7 +135,16 @@ function CreatePoll(props) {
                         max={MAX_OPTIONS}
                         onChange={numOptionsChange}
                     />
-                    {bad_size ? <p className="body_text error_text">Number of options must be between 2 and 26</p> : <div></div>}
+                    {bad_size ? (
+                        <p className="body_text error_text">
+                            {'Number of options must be between ' +
+                                DEFAULT_NUM_OPTIONS +
+                                ' and ' +
+                                MAX_OPTIONS}
+                        </p>
+                    ) : (
+                        <div></div>
+                    )}
                 </li>
                 {options.map((option, index) => {
                     return (
@@ -147,11 +154,7 @@ function CreatePoll(props) {
                                 htmlFor={'option_' + index}
                                 key={'label_' + index}
                             >
-                                {'Option ' +
-                                    String.fromCharCode(
-                                        97 + index
-                                    ).toUpperCase() +
-                                    ' - required'}
+                                {'Option ' + (index + 1) + ' - required'}
                             </label>
                             <br />
                             <input

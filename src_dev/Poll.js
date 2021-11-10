@@ -7,29 +7,114 @@ function Poll(props) {
 
     const handleClick = function (e) {
         if (selection != null) props.onVote(selection);
+        var outers = document.getElementsByClassName('radio_outer');
+        for (var i = 0; i < outers.length; i++) {
+            outers[i].style.border = 'none';
+        }
     };
 
     const handleChoice = function (e) {
-        setSelection(e.target.getAttribute('index'));
+        const index = e.target.getAttribute('index');
+        setSelection(index);
+        var selected_option = document.getElementById('radio_label_' + index);
+        selected_option.style.backgroundColor = colors[index % colors.length];
+        selected_option.style.color = blackOrWhite(
+            colors[index % colors.length]
+        );
+        var selected_radio_outline = document.getElementById(
+            'radio_outer_' + index
+        );
+        selected_radio_outline.style.border =
+            '3px solid ' + blackOrWhite(colors[index % colors.length]);
+        var selected_radio_inner = document.getElementById(
+            'radio_inner_' + index
+        );
+        selected_radio_inner.style.display = 'block';
+        selected_radio_inner.style.backgroundColor = blackOrWhite(
+            colors[index % colors.length]
+        );
+        var unselected_labels = document.getElementsByClassName('radio_label');
+        var unselected_inners = document.getElementsByClassName('radio_inner');
+        var unselected_outers = document.getElementsByClassName('radio_outer');
+        for (var i = 0; i < props.options.length; i++) {
+            if (i != index) {
+                unselected_labels[i].style.backgroundColor = 'transparent';
+                unselected_labels[i].style.color = 'white';
+                unselected_inners[i].style.display = 'none';
+                unselected_outers[i].style.border = '3px solid white';
+            }
+        }
     };
 
     var bars = [];
     for (var i = 0; i < props.counts.length; i++) {
         bars.push(
             !props.already_voted ? (
-                <div className="no_vote_option">
+                <div
+                    className="no_vote_option"
+                    index={i}
+                    onClick={handleChoice}
+                >
                     <input
                         type="radio"
                         name="option"
                         id={'option_' + i}
                         index={i}
-                        onClick={handleChoice}
                         className="vote_radio"
                     />
-                    <label className="radio_label" htmlFor={'option_' + i}>
+                    <div
+                        className="radio_outer"
+                        id={'radio_outer_' + i}
+                        index={i}
+                    ></div>
+                    <label
+                        className="radio_label"
+                        htmlFor={'option_' + i}
+                        id={'radio_label_' + i}
+                        index={i}
+                    >
                         {props.options[i]}
                     </label>
-                    <div className="radio_inner"></div>
+                    <div
+                        className="radio_inner"
+                        id={'radio_inner_' + i}
+                        index={i}
+                        style={{
+                            backgroundColor: blackOrWhite(
+                                props.colors[i % props.colors.length]
+                            ),
+                        }}
+                    ></div>
+                    <div className="bar_graph_bar_wrapper " style={{display: "none"}}>
+                        <div
+                            style={{
+                                backgroundColor: colors[i % colors.length],
+                                width: 0.5,
+                            }}
+                            className="bar_graph_bar"
+                            key={i}
+                        ></div>
+                        <div className="bar_graph_text">
+                            <div className="choice_text">
+                                {props.options[i]}
+                            </div>
+                            <div className="vote_count">
+                                {(props.num_votes === 0
+                                    ? '0.0'
+                                    : (
+                                          (props.counts[i] / props.num_votes) *
+                                          100
+                                      )
+                                          .toFixed(1)
+                                          .toString()) +
+                                    '% (' +
+                                    props.counts[i].toString() +
+                                    (props.counts[i] === 1
+                                        ? ' vote)'
+                                        : ' votes)')}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             ) : (
                 <div className="bar_graph_bar_wrapper ">
