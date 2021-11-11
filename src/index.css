@@ -227,7 +227,7 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     background-color: #251f47;
     padding: 30px;
     margin-bottom: 0px;
-    display:flex;
+    display: flex;
     flex-direction: column;
     flex: 1;
 }
@@ -745,6 +745,19 @@ input[type='radio'].vote_radio {
     opacity: 0;
 }
 
+.create_poll_dropdown_links {
+    display: none;
+}
+
+.create_poll_dropdown:hover ~ .create_poll_dropdown_links {
+    display: block;
+}
+
+.create_poll_dropdown_links .navbar_link {
+    position: relative;
+
+}
+
 @media screen and (max-width: 540px) {
     .create_poll_link {
         width: 70vw;
@@ -785,7 +798,7 @@ input[type='radio'].vote_radio {
     }
     li.navbar_link,
     .navbar_link a {
-        font-size: 5vw;
+        font-size: 4vw;
     }
     .navbar_wrapper {
         height: 9vw;
@@ -806,5 +819,8 @@ input[type='radio'].vote_radio {
         min-width: 100px;
         max-width: 75vw;
         width: 100%;
+    }
+    .music_note {
+        display: none;
     }
 }
