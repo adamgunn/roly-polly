@@ -64,8 +64,6 @@ app.use('/static', express.static(path.join(__dirname, 'dist')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.post('/search-album', async (req, res) => {});
-
 app.post('/submit-new-poll', async (req, res) => {
     const new_uuid = uuid.v4();
     var form_data = req.body;
@@ -152,7 +150,7 @@ io.on('connection', (socket) => {
             });
         });
     });
-    socket.on('search-albums', async (query) => {
+    socket.on('search-tracks', async (query) => {
         var current_date = new Date();
         if (
             current_date.getTime() - last_refresh_time.getTime() >=
@@ -173,18 +171,23 @@ io.on('connection', (socket) => {
             );
         }
         var artist_query = query.artist;
-        var album_query = query.album;
+        var track_query = query.track;
         spotifyApi
-            .searchAlbums(`album:${album_query} artist:${artist_query}`)
+            .searchTracks(`track:${track_query} artist:${artist_query}`)
             .then(
                 function (data) {
-                    if (data.body.albums.items[0]) {
+                    if (data.body.tracks.items[0]) {
+                        var track_data = {
+                            url: data.body.tracks.items[0].album.images[1].url,
+                            artist: data.body.tracks.items[0].artists[0].name,
+                            title: data.body.tracks.items[0].name
+                        }
                         socket.emit(
-                            'album-found',
-                            data.body.albums.items[0].images[1].url
+                            'track-found',
+                            track_data
                         );
                     } else {
-                        socket.emit('album-not-found');
+                        socket.emit('track-not-found');
                     }
                 },
                 function (err) {

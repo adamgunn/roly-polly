@@ -22,10 +22,10 @@ function Navbar(props) {
         ),
         React.createElement(
             "li",
-            { className: "navbar_link" },
+            { className: "navbar_link create_poll_dropdown" },
             React.createElement(
                 "a",
-                { className: "create_poll_dropdown" },
+                null,
                 "Create Poll"
             ),
             React.createElement(
@@ -33,20 +33,20 @@ function Navbar(props) {
                 { className: "create_poll_dropdown_links" },
                 React.createElement(
                     "li",
-                    { className: "navbar_link" },
+                    { className: "dropdown_link" },
                     React.createElement(
                         "a",
-                        null,
+                        { href: "../new-poll" },
                         "Regular Poll"
                     )
                 ),
                 React.createElement(
                     "li",
-                    { className: "navbar_link" },
+                    { className: "dropdown_link" },
                     React.createElement(
                         "a",
-                        { href: "../new-album-poll" },
-                        "Album Poll"
+                        { href: "../new-song-poll" },
+                        "Song Poll"
                     ),
                     React.createElement(
                         "svg",

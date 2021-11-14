@@ -23,7 +23,7 @@ ReactDOM.render(
             <CreatePoll />
         ) : uuidRegex.test(path) ? (
             <App />
-        ) :  path == '/spotify' || path == '/spotify/'? (
+        ) :  path == '/new-song-poll' || path == '/new-song-poll/'? (
             <SpotifyAPI />
         ) : (
             <NotFound />

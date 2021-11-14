@@ -7,14 +7,14 @@ function Navbar(props) {
             <li className="navbar_link">
                 <a href="../about">About</a>
             </li>
-            <li className="navbar_link">
-                <a className="create_poll_dropdown">Create Poll</a>
+            <li className="navbar_link create_poll_dropdown">
+                <a>Create Poll</a>
                 <ul className="create_poll_dropdown_links">
-                    <li className="navbar_link">
-                        <a>Regular Poll</a>
+                    <li className="dropdown_link">
+                        <a href="../new-poll">Regular Poll</a>
                     </li>
-                    <li className="navbar_link">
-                        <a href="../new-album-poll">Album Poll</a>
+                    <li className="dropdown_link">
+                        <a href="../new-song-poll">Song Poll</a>
                         <svg
                             width="16"
                             height="16"

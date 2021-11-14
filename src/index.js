@@ -13,5 +13,5 @@ ReactDOM.render(React.createElement(
     React.StrictMode,
     null,
     React.createElement(Navbar, null),
-    path == '/' || path == '/home' || path == '/home/' ? React.createElement(Home, null) : path == '/about' || path == '/about/' ? React.createElement(About, null) : path == '/new-poll' || path == '/new-poll/' ? React.createElement(CreatePoll, null) : uuidRegex.test(path) ? React.createElement(App, null) : path == '/spotify' || path == '/spotify/' ? React.createElement(SpotifyAPI, null) : React.createElement(NotFound, null)
+    path == '/' || path == '/home' || path == '/home/' ? React.createElement(Home, null) : path == '/about' || path == '/about/' ? React.createElement(About, null) : path == '/new-poll' || path == '/new-poll/' ? React.createElement(CreatePoll, null) : uuidRegex.test(path) ? React.createElement(App, null) : path == '/new-song-poll' || path == '/new-song-poll/' ? React.createElement(SpotifyAPI, null) : React.createElement(NotFound, null)
 ), document.getElementById('root'));

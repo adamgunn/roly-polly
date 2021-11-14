@@ -34,6 +34,7 @@ body {
 
 body::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
 }
 
 body::-webkit-scrollbar-thumb {
@@ -121,7 +122,9 @@ ul li input.create_poll_button,
 .colors_input,
 .title_input,
 .add_color_button,
-ul.create_poll_wrapper li input:not(.create_poll_button) {
+ul.create_poll_wrapper li input:not(.create_poll_button),
+.create_poll_dropdown_links,
+.track_card {
     /* box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
         -4px -4px 6px 0 rgba(255, 255, 255, 0.3); */
     box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25);
@@ -183,7 +186,7 @@ ul li input.create_poll_button,
 
 .title_input,
 ul.create_poll_wrapper li input:not(.create_poll_button) {
-    width: 45%;
+    width: 60%;
     min-width: 350px;
     max-width: 600px;
     height: 30px;
@@ -205,7 +208,7 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     min-width: none;
     width: 90%;
 }
-
+n
 .content_input {
     margin: 0px auto 10px;
     padding: 10px;
@@ -451,7 +454,7 @@ li.navbar_link,
 .create_poll_wrapper,
 .about_wrapper,
 .not_found_wrapper {
-    position: absolute;
+    position: relative;
     top: 40px;
     z-index: 0;
 }
@@ -711,8 +714,9 @@ input[type='radio'].vote_radio {
     color: red;
 }
 
-.spotify_search {
-    margin-top: 100px;
+.spotify_wrapper {
+    list-style-type: none;
+    width: 100%;
 }
 
 .pencil_icon {
@@ -747,15 +751,86 @@ input[type='radio'].vote_radio {
 
 .create_poll_dropdown_links {
     display: none;
+    position: absolute;
+    flex: none;
+    list-style: none;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    background-color: #251f47;
+    margin: 15px 0px 0px;
+    padding: 0px;
+    width: max-content;
+    border-radius: 7px;
 }
 
-.create_poll_dropdown:hover ~ .create_poll_dropdown_links {
-    display: block;
+.dropdown_link {
+    line-height: normal;
+    padding: 15px;
+}
+
+.dropdown_link:visited {
+    color: white;
+}
+
+.dropdown_link:hover {
+    text-decoration: underline;
+}
+
+.create_poll_dropdown {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.create_poll_dropdown:hover {
+    text-decoration: none;
+}
+
+.create_poll_dropdown:hover .create_poll_dropdown_links {
+    display: flex;
+    flex-direction: column;
 }
 
 .create_poll_dropdown_links .navbar_link {
     position: relative;
+}
 
+.track_cards_wrapper {
+    background-color: #251f47;
+    min-height: 200px;
+    padding: 20px;
+}
+
+.track_cards_wrapper .rolypolly_subtitle {
+    margin-top: 0px;
+}
+
+.track_cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 330px);
+    grid-template-rows: max-content;
+    gap: 0.6rem;
+}
+
+.track_card {
+    width: 300px;
+    height: auto;
+    background-color: #404e7c;
+    padding: 15px;
+    border-radius: 7px;
+    margin: 10px;
+}
+
+.track_card_cover {
+    border-radius: 7px;
+    width: 300px;
+}
+
+.track_card_title {
+    font-weight: 600;
+    font-size: 20px;
 }
 
 @media screen and (max-width: 540px) {
@@ -798,7 +873,7 @@ input[type='radio'].vote_radio {
     }
     li.navbar_link,
     .navbar_link a {
-        font-size: 4vw;
+        font-size: 6vw;
     }
     .navbar_wrapper {
         height: 9vw;
@@ -822,5 +897,8 @@ input[type='radio'].vote_radio {
     }
     .music_note {
         display: none;
+    }
+    .mantine-ColorPicker-root {
+        max-width: 80vw;
     }
 }
