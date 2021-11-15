@@ -25,7 +25,7 @@ function App(props) {
     const [poll_title, setPollTitle] = useState('Loading...');
     const [colors, setColors] = useState([]);
     const [options, setOptions] = useState(new Array(DEFAULT_NUM_OPTIONS).fill('Loading...'));
-    const [voted, setVoted] = useState(false);
+    const [voted, setVoted] = useState(window.localStorage.getItem(pollId));
     const [images, setImages] = useState([]);
     const [counts, setCounts] = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0));
     const [num_votes, setNumVotes] = useState(0);
@@ -114,6 +114,7 @@ function App(props) {
 
     const voteChange = (index) => {
         setVoted(true);
+        window.localStorage.setItem(pollId, true);
         var counts_state = counts;
         counts_state[index]++;
         setCounts(counts_state);

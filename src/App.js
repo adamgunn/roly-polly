@@ -70,7 +70,7 @@ function App(props) {
         options = _useState20[0],
         setOptions = _useState20[1];
 
-    var _useState21 = useState(false),
+    var _useState21 = useState(window.localStorage.getItem(pollId)),
         _useState22 = _slicedToArray(_useState21, 2),
         voted = _useState22[0],
         setVoted = _useState22[1];
@@ -166,6 +166,7 @@ function App(props) {
 
     var voteChange = function voteChange(index) {
         setVoted(true);
+        window.localStorage.setItem(pollId, true);
         var counts_state = counts;
         counts_state[index]++;
         setCounts(counts_state);

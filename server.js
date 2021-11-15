@@ -196,7 +196,7 @@ app.get('/:page', (req, res) => {
     res.sendFile(path.join(__dirname, INDEX));
 });
 
-io.on('connection', (socket) => {
+io.on('connection', (socket) => { 
     console.log('connected');
     socket.on('get-poll', async (pollId) => {
         const poll = await PollData.findById(pollId);
