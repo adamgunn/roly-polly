@@ -812,6 +812,8 @@ input[type='radio'].vote_radio {
     background-color: #251f47;
     min-height: 200px;
     padding: 20px;
+    top: 30px;
+    position: relative;
 }
 
 .track_cards_wrapper .rolypolly_subtitle {
@@ -869,6 +871,12 @@ input[type='radio'].vote_radio {
 .poll_image {
     margin: 5px;
     border-radius: 3px;
+}
+
+.create_song_poll_button {
+    margin: 20px;
+    top: 30px;
+    position: relative;
 }
 
 @media screen and (max-width: 540px) {

@@ -10,60 +10,51 @@ function SpotifyAPI(props) {
 
     var _useState = useState(''),
         _useState2 = _slicedToArray(_useState, 2),
-        artist = _useState2[0],
-        setArtist = _useState2[1];
+        query = _useState2[0],
+        setQuery = _useState2[1];
 
-    var _useState3 = useState(''),
+    var _useState3 = useState(),
         _useState4 = _slicedToArray(_useState3, 2),
-        track = _useState4[0],
-        setTrack = _useState4[1];
+        socket = _useState4[0],
+        setSocket = _useState4[1];
 
-    var _useState5 = useState(),
+    var _useState5 = useState(''),
         _useState6 = _slicedToArray(_useState5, 2),
-        socket = _useState6[0],
-        setSocket = _useState6[1];
+        imageUrl = _useState6[0],
+        setImageUrl = _useState6[1];
 
     var _useState7 = useState(''),
         _useState8 = _slicedToArray(_useState7, 2),
-        imageUrl = _useState8[0],
-        setImageUrl = _useState8[1];
+        error = _useState8[0],
+        setError = _useState8[1];
 
     var _useState9 = useState(''),
         _useState10 = _slicedToArray(_useState9, 2),
-        error = _useState10[0],
-        setError = _useState10[1];
+        artist_result = _useState10[0],
+        setArtistResult = _useState10[1];
 
     var _useState11 = useState(''),
         _useState12 = _slicedToArray(_useState11, 2),
-        artist_result = _useState12[0],
-        setArtistResult = _useState12[1];
+        title_result = _useState12[0],
+        setTitleResult = _useState12[1];
 
-    var _useState13 = useState(''),
+    var _useState13 = useState([]),
         _useState14 = _slicedToArray(_useState13, 2),
-        title_result = _useState14[0],
-        setTitleResult = _useState14[1];
+        tracks = _useState14[0],
+        setTracks = _useState14[1];
 
-    var _useState15 = useState([]),
+    var _useState15 = useState(''),
         _useState16 = _slicedToArray(_useState15, 2),
-        tracks = _useState16[0],
-        setTracks = _useState16[1];
+        poll_title = _useState16[0],
+        setPollTitle = _useState16[1];
 
-    var _useState17 = useState(''),
+    var _useState17 = useState(title_placeholders[Math.floor(Math.random() * title_placeholders.length)]),
         _useState18 = _slicedToArray(_useState17, 2),
-        poll_title = _useState18[0],
-        setPollTitle = _useState18[1];
+        title_placeholder = _useState18[0],
+        setTitlePlaceholder = _useState18[1];
 
-    var _useState19 = useState(title_placeholders[Math.floor(Math.random() * title_placeholders.length)]),
-        _useState20 = _slicedToArray(_useState19, 2),
-        title_placeholder = _useState20[0],
-        setTitlePlaceholder = _useState20[1];
-
-    var artistChange = function artistChange(e) {
-        setArtist(e.target.value);
-    };
-
-    var trackChange = function trackChange(e) {
-        setTrack(e.target.value);
+    var queryChange = function queryChange(e) {
+        setQuery(e.target.value);
     };
 
     var pollTitleChange = function pollTitleChange(e) {
@@ -102,10 +93,6 @@ function SpotifyAPI(props) {
             setError('The server encountered an arror with the Spotify API. Try refreshing?');
             console.log(err);
         });
-        var query = {
-            track: track,
-            artist: artist
-        };
         socket.emit('search-tracks', query);
     };
 
@@ -119,8 +106,7 @@ function SpotifyAPI(props) {
         };
         tracks_state.push(track_data);
         setTracks(tracks_state);
-        setTrack('');
-        setArtist('');
+        setQuery('');
         setTitleResult('');
         setArtistResult('');
         setImageUrl('');
@@ -174,33 +160,15 @@ function SpotifyAPI(props) {
                 null,
                 React.createElement(
                     'label',
-                    { 'for': 'artist_input', className: 'create_poll_header' },
-                    'Enter an artist'
+                    { 'for': 'query_input', className: 'create_poll_header' },
+                    'Enter a Spotify search query, e.g. "michael jackson billie jean"'
                 ),
                 React.createElement('br', null),
                 React.createElement('input', {
-                    name: 'artist_input',
-                    id: 'artist_input',
-                    value: artist,
-                    onChange: artistChange,
-                    className: 'create_poll_input',
-                    type: 'text'
-                })
-            ),
-            React.createElement(
-                'li',
-                null,
-                React.createElement(
-                    'label',
-                    { 'for': 'track_input', className: 'create_poll_header' },
-                    artist != '' ? 'Enter a track by ' + artist : 'Enter a track'
-                ),
-                React.createElement('br', null),
-                React.createElement('input', {
-                    name: 'track_input',
-                    id: 'track_input',
-                    value: track,
-                    onChange: trackChange,
+                    name: 'query_input',
+                    id: 'query_input',
+                    value: query,
+                    onChange: queryChange,
                     className: 'create_poll_input',
                     type: 'text'
                 })
@@ -218,14 +186,14 @@ function SpotifyAPI(props) {
             React.createElement(
                 'li',
                 null,
-                track != '' && artist != '' ? React.createElement(
+                query != '' ? React.createElement(
                     'button',
                     {
                         onClick: trackSearch,
                         className: 'create_poll_button',
                         type: 'button'
                     },
-                    'Search for ' + track + ' by ' + artist
+                    'Search'
                 ) : React.createElement(
                     'button',
                     {
@@ -254,7 +222,8 @@ function SpotifyAPI(props) {
                     'button',
                     {
                         onClick: addTrack,
-                        className: 'create_poll_button'
+                        className: 'create_poll_button',
+                        type: 'button'
                     },
                     'Add this track to the poll'
                 )
@@ -336,7 +305,16 @@ function SpotifyAPI(props) {
                 )
             )
         ),
-        tracks.length >= 2 && tracks.length <= 50 ? React.createElement('input', { type: 'submit', className: 'create_poll_button', value: 'Create!' }) : React.createElement('input', { type: 'submit', className: 'create_poll_button', value: 'Create!', disabled: true })
+        tracks.length >= 2 && tracks.length <= 50 ? React.createElement('input', {
+            type: 'submit',
+            className: 'create_poll_button create_song_poll_button',
+            value: 'Create!'
+        }) : React.createElement('input', {
+            type: 'submit',
+            className: 'create_poll_button create_song_poll_button',
+            value: 'Create!',
+            disabled: true
+        })
     );
 }
 

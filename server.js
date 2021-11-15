@@ -243,10 +243,8 @@ io.on('connection', (socket) => {
                 }
             );
         }
-        var artist_query = query.artist;
-        var track_query = query.track;
         spotifyApi
-            .searchTracks(`track:${track_query} artist:${artist_query}`)
+            .searchTracks(query)
             .then(
                 function (data) {
                     if (data.body.tracks.items[0]) {

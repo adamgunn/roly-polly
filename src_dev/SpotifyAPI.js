@@ -12,8 +12,7 @@ function SpotifyAPI(props) {
         'Which song was the most influential?',
     ];
 
-    const [artist, setArtist] = useState('');
-    const [track, setTrack] = useState('');
+    const [query, setQuery] = useState('');
     const [socket, setSocket] = useState();
     const [imageUrl, setImageUrl] = useState('');
     const [error, setError] = useState('');
@@ -27,12 +26,8 @@ function SpotifyAPI(props) {
         ]
     );
 
-    const artistChange = (e) => {
-        setArtist(e.target.value);
-    };
-
-    const trackChange = (e) => {
-        setTrack(e.target.value);
+    const queryChange = (e) => {
+        setQuery(e.target.value);
     };
 
     const pollTitleChange = (e) => {
@@ -73,10 +68,6 @@ function SpotifyAPI(props) {
             );
             console.log(err);
         });
-        const query = {
-            track: track,
-            artist: artist,
-        };
         socket.emit('search-tracks', query);
     };
 
@@ -86,12 +77,11 @@ function SpotifyAPI(props) {
             artist: artist_result,
             title: title_result,
             url: imageUrl,
-            index: tracks_state.length
+            index: tracks_state.length,
         };
         tracks_state.push(track_data);
         setTracks(tracks_state);
-        setTrack('');
-        setArtist('');
+        setQuery('');
         setTitleResult('');
         setArtistResult('');
         setImageUrl('');
@@ -130,31 +120,16 @@ function SpotifyAPI(props) {
                     />
                 </li>
                 <li>
-                    <label for="artist_input" className="create_poll_header">
-                        Enter an artist
+                    <label for="query_input" className="create_poll_header">
+                        Enter a Spotify search query, e.g. "michael jackson
+                        billie jean"
                     </label>
                     <br />
                     <input
-                        name="artist_input"
-                        id="artist_input"
-                        value={artist}
-                        onChange={artistChange}
-                        className="create_poll_input"
-                        type="text"
-                    />
-                </li>
-                <li>
-                    <label for="track_input" className="create_poll_header">
-                        {artist != ''
-                            ? 'Enter a track by ' + artist
-                            : 'Enter a track'}
-                    </label>
-                    <br />
-                    <input
-                        name="track_input"
-                        id="track_input"
-                        value={track}
-                        onChange={trackChange}
+                        name="query_input"
+                        id="query_input"
+                        value={query}
+                        onChange={queryChange}
                         className="create_poll_input"
                         type="text"
                     />
@@ -168,13 +143,13 @@ function SpotifyAPI(props) {
                     ></input>
                 </li>
                 <li>
-                    {track != '' && artist != '' ? (
+                    {query != '' ? (
                         <button
                             onClick={trackSearch}
                             className="create_poll_button"
                             type="button"
                         >
-                            {'Search for ' + track + ' by ' + artist}
+                            Search
                         </button>
                     ) : (
                         <button
@@ -200,6 +175,7 @@ function SpotifyAPI(props) {
                         <button
                             onClick={addTrack}
                             className="create_poll_button"
+                            type="button"
                         >
                             Add this track to the poll
                         </button>
@@ -269,9 +245,18 @@ function SpotifyAPI(props) {
                 </div>
             </div>
             {tracks.length >= 2 && tracks.length <= 50 ? (
-                <input type="submit" className="create_poll_button" value="Create!"></input>
+                <input
+                    type="submit"
+                    className="create_poll_button create_song_poll_button"
+                    value="Create!"
+                ></input>
             ) : (
-                <input type="submit" className="create_poll_button" value="Create!" disabled></input>
+                <input
+                    type="submit"
+                    className="create_poll_button create_song_poll_button"
+                    value="Create!"
+                    disabled
+                ></input>
             )}
         </form>
     );
