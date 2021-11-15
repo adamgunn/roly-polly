@@ -3,6 +3,7 @@ import blackOrWhite from './blackOrWhite.js';
 
 function Poll(props) {
     const colors = props.colors;
+    const images = props.images;
     const [selection, setSelection] = useState(null);
 
     const handleClick = function (e) {
@@ -68,12 +69,27 @@ function Poll(props) {
                         index={i}
                     ></div>
                     <label
-                        className="radio_label"
+                        className={
+                            images.length == 0
+                                ? 'radio_label'
+                                : 'radio_label radio_label_with_image'
+                        }
                         htmlFor={'option_' + i}
                         id={'radio_label_' + i}
                         index={i}
                     >
                         {props.options[i]}
+                        {images.length > 0 ? (
+                            <img
+                                src={images[i]}
+                                className="poll_image"
+                                width={80}
+                                height={80}
+                                index={i}
+                            />
+                        ) : (
+                            <div></div>
+                        )}
                     </label>
                     <div
                         className="radio_inner"
@@ -85,11 +101,30 @@ function Poll(props) {
                             ),
                         }}
                     ></div>
-                    <div className="bar_graph_bar_wrapper " style={{display: "none"}}>
+                </div>
+            ) : (
+                <div className="bar_graph_bar_wrapper ">
+                    {images.length > 0 ? (
+                        <img
+                            src={images[i]}
+                            className="poll_image"
+                            width={80}
+                            height={80}
+                            index={i}
+                        />
+                    ) : (
+                        <div></div>
+                    )}
+                    <div className="bar_and_text_wrapper">
                         <div
                             style={{
                                 backgroundColor: colors[i % colors.length],
-                                width: 0.5,
+                                width:
+                                    (props.counts[i] === 0
+                                        ? 0.5
+                                        : (props.counts[i] / props.num_votes) *
+                                          100
+                                    ).toString() + '%',
                             }}
                             className="bar_graph_bar"
                             key={i}
@@ -113,34 +148,6 @@ function Poll(props) {
                                         ? ' vote)'
                                         : ' votes)')}
                             </div>
-                        </div>
-                    </div>
-                </div>
-            ) : (
-                <div className="bar_graph_bar_wrapper ">
-                    <div
-                        style={{
-                            backgroundColor: colors[i % colors.length],
-                            width:
-                                (props.counts[i] === 0
-                                    ? 0.5
-                                    : (props.counts[i] / props.num_votes) * 100
-                                ).toString() + '%',
-                        }}
-                        className="bar_graph_bar"
-                        key={i}
-                    ></div>
-                    <div className="bar_graph_text">
-                        <div className="choice_text">{props.options[i]}</div>
-                        <div className="vote_count">
-                            {(props.num_votes === 0
-                                ? '0.0'
-                                : ((props.counts[i] / props.num_votes) * 100)
-                                      .toFixed(1)
-                                      .toString()) +
-                                '% (' +
-                                props.counts[i].toString() +
-                                (props.counts[i] === 1 ? ' vote)' : ' votes)')}
                         </div>
                     </div>
                 </div>

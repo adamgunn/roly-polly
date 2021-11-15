@@ -21,13 +21,15 @@ function SpotifyAPI(props) {
     const [title_result, setTitleResult] = useState('');
     const [tracks, setTracks] = useState([]);
     const [poll_title, setPollTitle] = useState('');
-    const [title_placeholder, setTitlePlaceholder] = useState(title_placeholders[Math.floor(Math.random() * title_placeholders.length)]);
+    const [title_placeholder, setTitlePlaceholder] = useState(
+        title_placeholders[
+            Math.floor(Math.random() * title_placeholders.length)
+        ]
+    );
 
     const artistChange = (e) => {
         setArtist(e.target.value);
     };
-
-    
 
     const trackChange = (e) => {
         setTrack(e.target.value);
@@ -84,6 +86,7 @@ function SpotifyAPI(props) {
             artist: artist_result,
             title: title_result,
             url: imageUrl,
+            index: tracks_state.length
         };
         tracks_state.push(track_data);
         setTracks(tracks_state);
@@ -92,6 +95,16 @@ function SpotifyAPI(props) {
         setTitleResult('');
         setArtistResult('');
         setImageUrl('');
+    };
+
+    const deleteTrack = (e) => {
+        const index = e.target.getAttribute('index');
+        var tracks_state = [...tracks];
+        tracks_state.splice(index, 1);
+        for (var i = 0; i < tracks_state.length; i++) {
+            tracks_state[i].index = i;
+        }
+        setTracks(tracks_state);
     };
 
     return (
@@ -147,6 +160,14 @@ function SpotifyAPI(props) {
                     />
                 </li>
                 <li>
+                    <input
+                        type="hidden"
+                        id="tracks_data"
+                        name="tracks_data"
+                        value={JSON.stringify(tracks)}
+                    ></input>
+                </li>
+                <li>
                     {track != '' && artist != '' ? (
                         <button
                             onClick={trackSearch}
@@ -156,7 +177,11 @@ function SpotifyAPI(props) {
                             {'Search for ' + track + ' by ' + artist}
                         </button>
                     ) : (
-                        <button className="create_poll_button" type="button" disabled>
+                        <button
+                            className="create_poll_button"
+                            type="button"
+                            disabled
+                        >
                             Search
                         </button>
                     )}
@@ -190,7 +215,11 @@ function SpotifyAPI(props) {
                     {tracks.length > 0 ? (
                         tracks.map((track_option, index) => {
                             return (
-                                <div className="track_card" index={index}>
+                                <div
+                                    className="track_card"
+                                    index={index}
+                                    key={index}
+                                >
                                     <img
                                         src={track_option.url}
                                         className="track_card_cover"
@@ -201,6 +230,36 @@ function SpotifyAPI(props) {
                                     <p className="track_card_artist body_text">
                                         {track_option.artist}
                                     </p>
+                                    <div
+                                        className="x_button_wrapper"
+                                        onClick={deleteTrack}
+                                    >
+                                        <svg
+                                            className="x-button"
+                                            width={20}
+                                            height={20}
+                                            viewBox="0 0 91.61 91.61"
+                                            key={index}
+                                            index={index}
+                                        >
+                                            <line
+                                                className="cls-1"
+                                                index={index}
+                                                x1="5.3"
+                                                y1="5.3"
+                                                x2="86.3"
+                                                y2="86.3"
+                                            />
+                                            <line
+                                                className="cls-1"
+                                                index={index}
+                                                x1="86.3"
+                                                y1="5.3"
+                                                x2="5.3"
+                                                y2="86.3"
+                                            />
+                                        </svg>
+                                    </div>
                                 </div>
                             );
                         })
@@ -209,8 +268,11 @@ function SpotifyAPI(props) {
                     )}
                 </div>
             </div>
-            <input type="hidden" value={tracks}></input>
-            <input type="submit" value="Submit" disabled></input>
+            {tracks.length >= 2 && tracks.length <= 50 ? (
+                <input type="submit" className="create_poll_button" value="Create!"></input>
+            ) : (
+                <input type="submit" className="create_poll_button" value="Create!" disabled></input>
+            )}
         </form>
     );
 }

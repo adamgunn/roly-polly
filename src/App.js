@@ -1,5 +1,7 @@
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Comment from './Comment.js';
@@ -73,15 +75,20 @@ function App(props) {
         voted = _useState22[0],
         setVoted = _useState22[1];
 
-    var _useState23 = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0)),
+    var _useState23 = useState([]),
         _useState24 = _slicedToArray(_useState23, 2),
-        counts = _useState24[0],
-        setCounts = _useState24[1];
+        images = _useState24[0],
+        setImages = _useState24[1];
 
-    var _useState25 = useState(0),
+    var _useState25 = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0)),
         _useState26 = _slicedToArray(_useState25, 2),
-        num_votes = _useState26[0],
-        setNumVotes = _useState26[1];
+        counts = _useState26[0],
+        setCounts = _useState26[1];
+
+    var _useState27 = useState(0),
+        _useState28 = _slicedToArray(_useState27, 2),
+        num_votes = _useState28[0],
+        setNumVotes = _useState28[1];
 
     var handleButtonClick = function handleButtonClick(e) {
         e.preventDefault();
@@ -119,7 +126,18 @@ function App(props) {
                 socket.once('load-poll', function (poll) {
                     setColors(poll.colors_data);
                     setPollTitle(poll.title_data);
-                    setOptions(poll.options_data);
+                    if (poll.options_data[0].artist) {
+                        var options_state = [].concat(_toConsumableArray(options));
+                        var images_state = [].concat(_toConsumableArray(images));
+                        poll.options_data.map(function (option) {
+                            options_state.push(option.artist + " - " + option.title);
+                            images_state.push(option.url);
+                        });
+                        setImages(images_state);
+                        setOptions(options_state);
+                    } else {
+                        setOptions(poll.options_data);
+                    }
                     setCounts(poll.counts_data);
                     setNumVotes(poll.counts_data.reduce(reducer));
                     setComments(poll.comments_data);
@@ -193,7 +211,18 @@ function App(props) {
         socket.once('load-poll', function (poll) {
             setColors(poll.colors_data);
             setPollTitle(poll.title_data);
-            setOptions(poll.options_data);
+            if (poll.options_data[0].artist) {
+                var options_state = [].concat(_toConsumableArray(options));
+                var images_state = [].concat(_toConsumableArray(images));
+                poll.options_data.map(function (option) {
+                    options_state.push(option.artist + " - " + option.title);
+                    images_state.push(option.url);
+                });
+                setImages(images_state);
+                setOptions(options_state);
+            } else {
+                setOptions(poll.options_data);
+            }
             setCounts(poll.counts_data);
             setNumVotes(poll.counts_data.reduce(reducer));
             setComments(poll.comments_data);
@@ -212,6 +241,7 @@ function App(props) {
             num_votes: num_votes,
             options: options,
             colors: colors,
+            images: images,
             connected_to_server: connected,
             already_voted: voted
         }),

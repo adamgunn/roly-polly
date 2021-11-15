@@ -208,7 +208,7 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     min-width: none;
     width: 90%;
 }
-n
+
 .content_input {
     margin: 0px auto 10px;
     padding: 10px;
@@ -240,6 +240,12 @@ n
     margin: 25px 5px 5px;
     transition: width 0.7s;
     border-radius: 5px;
+}
+
+.bar_graph_bar_wrapper {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 1rem;
 }
 
 .bar_graph_bar,
@@ -540,6 +546,11 @@ input[type='radio'].vote_radio {
     user-select: none;
 }
 
+.radio_label_with_image {
+    min-height: 80px;
+    justify-content: space-between;
+}
+
 .no_vote_option {
     display: flex;
     position: relative;
@@ -818,6 +829,7 @@ input[type='radio'].vote_radio {
     width: 300px;
     height: auto;
     background-color: #404e7c;
+    position: relative;
     padding: 15px;
     border-radius: 7px;
     margin: 10px;
@@ -831,6 +843,32 @@ input[type='radio'].vote_radio {
 .track_card_title {
     font-weight: 600;
     font-size: 20px;
+}
+
+.track_card .x_button_wrapper {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #251f47;
+    align-items: center;
+    justify-content: center;
+}
+
+.track_card:hover .x_button_wrapper {
+    display: flex;
+}
+
+.x_button_wrapper:hover {
+    cursor: pointer;
+}
+
+.poll_image {
+    margin: 5px;
+    border-radius: 3px;
 }
 
 @media screen and (max-width: 540px) {

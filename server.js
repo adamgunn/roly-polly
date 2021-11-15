@@ -11,6 +11,7 @@ const mongoose = require('mongoose');
 const PollData = require('./PollData');
 const uuid = require('uuid');
 const dotenv = require('dotenv');
+const Vibrant = require('node-vibrant');
 dotenv.config();
 
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -103,6 +104,78 @@ app.post('/submit-new-poll', async (req, res) => {
     res.redirect(`/polls/${new_uuid}`);
 });
 
+const swatchToHex = (swatch) => {
+    return (
+        '#' +
+        (
+            (1 << 24) +
+            (Math.floor(swatch._rgb[0]) << 16) +
+            (Math.floor(swatch._rgb[1]) << 8) +
+            Math.floor(swatch._rgb[2])
+        )
+            .toString(16)
+            .slice(1)
+    );
+};
+
+const getPaletteMax = (palette) => {
+    var max = palette.Vibrant;
+    if (palette.DarkVibrant.population > max.population) {
+        max = palette.DarkVibrant;
+    }
+    if (palette.LightVibrant.population > max.population) {
+        max = palette.LightVibrant;
+    }
+    if (palette.Muted.population > max.population) {
+        max = palette.Muted;
+    }
+    if (palette.DarkMuted.population > max.population) {
+        max = palette.DarkMuted;
+    }
+    if (palette.LightMuted.population > max.population) {
+        max = palette.LightMuted;
+    }
+    return swatchToHex(max);
+};
+
+app.post('/submit-new-song-poll', async (req, res) => {
+    const new_uuid = uuid.v4();
+    var form_data = req.body;
+    console.log(form_data);
+    if (
+        !form_data.title_input ||
+        form_data.title_input == '' ||
+        form_data.title_input == null
+    ) {
+        form_data.title_input = "What's your favorite song?";
+    }
+    var tracks = JSON.parse(form_data.tracks_data);
+    const getColors = async () => {
+        var colors = new Array(tracks.length);
+        await Promise.all(tracks.map(async (track) => {
+            var palette = await Vibrant.from(track.url).getPalette();                
+            colors[track.index] = getPaletteMax(palette);
+        })); 
+        return colors;
+    };
+    var colors = await getColors();
+    var counts_empty = [];
+    for (var i = 0; i < tracks.length; i++) {
+        counts_empty.push(0);
+    }
+    const new_poll = {
+        _id: new_uuid,
+        counts: counts_empty,
+        comments: [],
+        options: tracks,
+        colors: colors,
+        title: form_data.title_input,
+    };
+    console.log(new_poll);
+    await PollData.create(new_poll);
+    res.redirect(`/polls/${new_uuid}`);
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, INDEX));
 });
@@ -180,12 +253,9 @@ io.on('connection', (socket) => {
                         var track_data = {
                             url: data.body.tracks.items[0].album.images[1].url,
                             artist: data.body.tracks.items[0].artists[0].name,
-                            title: data.body.tracks.items[0].name
-                        }
-                        socket.emit(
-                            'track-found',
-                            track_data
-                        );
+                            title: data.body.tracks.items[0].name,
+                        };
+                        socket.emit('track-found', track_data);
                     } else {
                         socket.emit('track-not-found');
                     }

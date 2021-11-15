@@ -26,7 +26,7 @@ function App(props) {
     const [colors, setColors] = useState([]);
     const [options, setOptions] = useState(new Array(DEFAULT_NUM_OPTIONS).fill('Loading...'));
     const [voted, setVoted] = useState(false);
-
+    const [images, setImages] = useState([]);
     const [counts, setCounts] = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0));
     const [num_votes, setNumVotes] = useState(0);
 
@@ -77,7 +77,19 @@ function App(props) {
                 socket.once('load-poll', (poll) => {
                     setColors(poll.colors_data);
                     setPollTitle(poll.title_data);
-                    setOptions(poll.options_data);
+                    if (poll.options_data[0].artist) {
+                        var options_state = [...options];
+                        var images_state = [...images];
+                        poll.options_data.map((option) => {
+                            options_state.push(option.artist + " - " + option.title);
+                            images_state.push(option.url);
+                        });
+                        setImages(images_state);
+                        setOptions(options_state);
+                    }
+                    else {
+                        setOptions(poll.options_data);
+                    }
                     setCounts(poll.counts_data);
                     setNumVotes(poll.counts_data.reduce(reducer));
                     setComments(poll.comments_data);
@@ -147,7 +159,19 @@ function App(props) {
         socket.once('load-poll', (poll) => {
             setColors(poll.colors_data);
             setPollTitle(poll.title_data);
-            setOptions(poll.options_data);
+            if (poll.options_data[0].artist) {
+                var options_state = [...options];
+                var images_state = [...images];
+                poll.options_data.map((option) => {
+                    options_state.push(option.artist + " - " + option.title);
+                    images_state.push(option.url);
+                });
+                setImages(images_state);
+                setOptions(options_state);
+            }
+            else {
+                setOptions(poll.options_data);
+            }
             setCounts(poll.counts_data);
             setNumVotes(poll.counts_data.reduce(reducer));
             setComments(poll.comments_data);
@@ -165,6 +189,7 @@ function App(props) {
                 num_votes={num_votes}
                 options={options}
                 colors={colors}
+                images={images}
                 connected_to_server={connected}
                 already_voted={voted}
             />

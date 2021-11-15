@@ -5,6 +5,7 @@ import blackOrWhite from './blackOrWhite.js';
 
 function Poll(props) {
     var colors = props.colors;
+    var images = props.images;
 
     var _useState = useState(null),
         _useState2 = _slicedToArray(_useState, 2),
@@ -67,12 +68,19 @@ function Poll(props) {
             React.createElement(
                 'label',
                 {
-                    className: 'radio_label',
+                    className: images.length == 0 ? 'radio_label' : 'radio_label radio_label_with_image',
                     htmlFor: 'option_' + i,
                     id: 'radio_label_' + i,
                     index: i
                 },
-                props.options[i]
+                props.options[i],
+                images.length > 0 ? React.createElement('img', {
+                    src: images[i],
+                    className: 'poll_image',
+                    width: 80,
+                    height: 80,
+                    index: i
+                }) : React.createElement('div', null)
             ),
             React.createElement('div', {
                 className: 'radio_inner',
@@ -81,14 +89,24 @@ function Poll(props) {
                 style: {
                     backgroundColor: blackOrWhite(props.colors[i % props.colors.length])
                 }
-            }),
+            })
+        ) : React.createElement(
+            'div',
+            { className: 'bar_graph_bar_wrapper ' },
+            images.length > 0 ? React.createElement('img', {
+                src: images[i],
+                className: 'poll_image',
+                width: 80,
+                height: 80,
+                index: i
+            }) : React.createElement('div', null),
             React.createElement(
                 'div',
-                { className: 'bar_graph_bar_wrapper ', style: { display: "none" } },
+                { className: 'bar_and_text_wrapper' },
                 React.createElement('div', {
                     style: {
                         backgroundColor: colors[i % colors.length],
-                        width: 0.5
+                        width: (props.counts[i] === 0 ? 0.5 : props.counts[i] / props.num_votes * 100).toString() + '%'
                     },
                     className: 'bar_graph_bar',
                     key: i
@@ -106,31 +124,6 @@ function Poll(props) {
                         { className: 'vote_count' },
                         (props.num_votes === 0 ? '0.0' : (props.counts[i] / props.num_votes * 100).toFixed(1).toString()) + '% (' + props.counts[i].toString() + (props.counts[i] === 1 ? ' vote)' : ' votes)')
                     )
-                )
-            )
-        ) : React.createElement(
-            'div',
-            { className: 'bar_graph_bar_wrapper ' },
-            React.createElement('div', {
-                style: {
-                    backgroundColor: colors[i % colors.length],
-                    width: (props.counts[i] === 0 ? 0.5 : props.counts[i] / props.num_votes * 100).toString() + '%'
-                },
-                className: 'bar_graph_bar',
-                key: i
-            }),
-            React.createElement(
-                'div',
-                { className: 'bar_graph_text' },
-                React.createElement(
-                    'div',
-                    { className: 'choice_text' },
-                    props.options[i]
-                ),
-                React.createElement(
-                    'div',
-                    { className: 'vote_count' },
-                    (props.num_votes === 0 ? '0.0' : (props.counts[i] / props.num_votes * 100).toFixed(1).toString()) + '% (' + props.counts[i].toString() + (props.counts[i] === 1 ? ' vote)' : ' votes)')
                 )
             )
         ));
