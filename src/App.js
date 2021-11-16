@@ -234,17 +234,21 @@ function App(props) {
     return React.createElement(
         'div',
         { className: 'app_wrapper' },
+        React.createElement(
+            'h1',
+            { className: 'poll_title' },
+            poll_title
+        ),
         React.createElement(Poll, {
             key: 0,
             onVote: voteChange,
-            title: poll_title,
             counts: counts,
             num_votes: num_votes,
-            options: options,
             colors: colors,
             images: images,
             connected_to_server: connected,
-            already_voted: voted
+            already_voted: voted,
+            options: options
         }),
         React.createElement(
             'div',

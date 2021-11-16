@@ -54,6 +54,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .comment_title {
+    overflow-wrap: break-word;
     font-size: 30px;
     margin-top: 0px;
     font-weight: 600;
@@ -273,15 +274,9 @@ input[type='radio']:checked.vote_radio + .radio_label {
     border-radius: 7px;
 }
 
-.poll_wrapper {
-    background-color: #260f26;
-    padding: 15px;
-    z-index: 1;
-}
-
 .poll_title {
-    margin-left: 5px;
-    margin-top: 0px;
+    margin: 5px;
+    text-align: center;
 }
 
 .poll_buttons_wrapper {
@@ -466,12 +461,14 @@ li.navbar_link,
 }
 
 .app_wrapper {
-    background-color: #251f47;
+    padding-top: 100px;
 }
 
 .poll_wrapper {
     position: relative;
-    padding-top: 100px;
+    background-color: #260f26;
+    padding: 15px;
+    z-index: 1;
 }
 
 .color_picker_sample {
@@ -712,7 +709,8 @@ input[type='radio'].vote_radio {
     position: relative;
     text-align: left;
 }
-.home_section_wrapper3 {
+.home_section_wrapper3,
+.home_section_wrapper5 {
     position: relative;
     text-align: right;
 }
@@ -879,6 +877,32 @@ input[type='radio'].vote_radio {
     position: relative;
 }
 
+.spotify_icon {
+    height: 22px;
+    width: 22px;
+    margin-left: 7px;
+    fill: black;
+}
+
+.search_spotify_button {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.search_spotify_button:disabled .spotify_icon,
+.search_spotify_button[disabled] .spotify_icon {
+    fill: darkslategray;
+}
+
+.add_track_button {
+    padding: 10px;
+}
+
+.track_card .x-button {
+    fill: white;
+}
+
 @media screen and (max-width: 540px) {
     .create_poll_link {
         width: 70vw;
@@ -946,5 +970,26 @@ input[type='radio'].vote_radio {
     }
     .mantine-ColorPicker-root {
         max-width: 80vw;
+    }
+    .track_card_cover {
+        width: 65vw;
+        height: 65vw;
+    }
+    .track_card {
+        width: 65vw;
+        padding: 5vw;
+    }
+    .track_card .x_button_wrapper {
+        display: flex;
+    }
+    .radio_label {
+        border-radius: 20px;
+    }
+    .bar_graph_wrapper {
+        width: 100%;
+        margin-left: -15px;
+        max-width: 540px;
+        box-shadow: 0px 12px 16px 0 rgba(0, 0, 0, 0.25);
+        border-radius: 0px;
     }
 }

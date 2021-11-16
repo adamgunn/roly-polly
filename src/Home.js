@@ -102,7 +102,7 @@ function Home(props) {
                 React.createElement(
                     'h3',
                     { className: 'rolypolly_subtitle fadein_scroll' },
-                    'See results instantly as the votes roll in'
+                    'Create a song poll to set your favorite tracks on Spotify against each other'
                 )
             )
         ),
@@ -112,6 +112,19 @@ function Home(props) {
             React.createElement(
                 'section',
                 { className: 'home_section home_section4' },
+                React.createElement(
+                    'h3',
+                    { className: 'rolypolly_subtitle fadein_scroll' },
+                    'See results instantly as the votes roll in'
+                )
+            )
+        ),
+        React.createElement(
+            'div',
+            { className: 'home_section_wrapper home_section_wrapper5' },
+            React.createElement(
+                'section',
+                { className: 'home_section home_section5' },
                 React.createElement(
                     'h3',
                     { className: 'rolypolly_subtitle fadein_scroll' },

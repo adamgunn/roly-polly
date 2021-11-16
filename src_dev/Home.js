@@ -10,7 +10,7 @@ function Home(props) {
     };
     window.onresize = () => {
         showVisible();
-    }
+    };
     window.addEventListener('DOMContentLoaded', () => {
         showVisible();
     });
@@ -65,12 +65,20 @@ function Home(props) {
             <div className="home_section_wrapper home_section_wrapper3">
                 <section className="home_section home_section3">
                     <h3 className="rolypolly_subtitle fadein_scroll">
-                        See results instantly as the votes roll in
+                        Create a song poll to set your favorite tracks on
+                        Spotify against each other
                     </h3>
                 </section>
             </div>
             <div className="home_section_wrapper home_section_wrapper4">
                 <section className="home_section home_section4">
+                    <h3 className="rolypolly_subtitle fadein_scroll">
+                        See results instantly as the votes roll in
+                    </h3>
+                </section>
+            </div>
+            <div className="home_section_wrapper home_section_wrapper5">
+                <section className="home_section home_section5">
                     <h3 className="rolypolly_subtitle fadein_scroll">
                         Debate your choices in the comments section
                     </h3>

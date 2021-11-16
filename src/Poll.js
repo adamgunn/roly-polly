@@ -145,11 +145,6 @@ function Poll(props) {
         React.createElement(
             'div',
             { className: 'bar_graph_wrapper' },
-            React.createElement(
-                'h1',
-                { className: 'poll_title' },
-                props.title
-            ),
             bars
         ),
         React.createElement(

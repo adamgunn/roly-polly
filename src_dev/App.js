@@ -182,17 +182,17 @@ function App(props) {
 
     return (
         <div className="app_wrapper">
+            <h1 className="poll_title">{poll_title}</h1>
             <Poll
                 key={0}
                 onVote={voteChange}
-                title={poll_title}
                 counts={counts}
                 num_votes={num_votes}
-                options={options}
                 colors={colors}
                 images={images}
                 connected_to_server={connected}
                 already_voted={voted}
+                options={options}
             />
             <div className="comments_container">
                 <h1 className="rolypolly_subtitle comments_header">Comments</h1>
