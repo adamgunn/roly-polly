@@ -20,6 +20,7 @@ function SpotifyAPI(props) {
     const [title_result, setTitleResult] = useState('');
     const [tracks, setTracks] = useState([]);
     const [poll_title, setPollTitle] = useState('');
+    const [query_valid, setQueryValid] = useState(false);
     const [title_placeholder, setTitlePlaceholder] = useState(
         title_placeholders[
             Math.floor(Math.random() * title_placeholders.length)
@@ -28,6 +29,7 @@ function SpotifyAPI(props) {
 
     const queryChange = (e) => {
         setQuery(e.target.value);
+        setQueryValid(e.target.value != '' && /\S/.test(e.target.value));
     };
 
     const pollTitleChange = (e) => {
@@ -43,23 +45,29 @@ function SpotifyAPI(props) {
 
     useEffect(() => {
         if (socket == null) return;
-    }, [socket]);
-
-    const trackSearch = () => {
-        if (socket == null) return;
+        if (!query_valid) {
+            setImageUrl('');
+            setArtistResult('');
+            setTitleResult('');
+            return;
+        }
+        var loaded = false; 
         socket.once('track-found', (data) => {
+            loaded = true;
             setImageUrl(data.url);
             setArtistResult(data.artist);
             setTitleResult(data.title);
             setError('');
         });
         socket.once('track-not-found', () => {
+            loaded = true;
             setImageUrl('');
             setArtistResult('');
             setTitleResult('');
             setError('Nothing found on spotify with those search terms.');
         });
         socket.once('error', (err) => {
+            loaded = true;
             setImageUrl('');
             setArtistResult('');
             setTitleResult('');
@@ -69,7 +77,14 @@ function SpotifyAPI(props) {
             console.log(err);
         });
         socket.emit('search-tracks', query);
-    };
+        setTimeout(() => {
+            if (!loaded) {
+                setImageUrl('');
+                setArtistResult('');
+                setTitleResult('Loading...');
+            }
+        }, 3000);
+    }, [socket, query]);
 
     const addTrack = () => {
         var tracks_state = [...tracks];
@@ -82,6 +97,7 @@ function SpotifyAPI(props) {
         tracks_state.push(track_data);
         setTracks(tracks_state);
         setQuery('');
+        setQueryValid(false);
         setTitleResult('');
         setArtistResult('');
         setImageUrl('');
@@ -121,7 +137,7 @@ function SpotifyAPI(props) {
                 </li>
                 <li>
                     <label for="query_input" className="create_poll_header">
-                        Enter a Spotify search query, e.g. "michael jackson
+                        Start typing a Spotify search query, e.g. "michael jackson
                         billie jean"
                     </label>
                     <br />
@@ -142,38 +158,8 @@ function SpotifyAPI(props) {
                         value={JSON.stringify(tracks)}
                     ></input>
                 </li>
-                <li>
-                    {query != '' ? (
-                        <button
-                            onClick={trackSearch}
-                            className="create_poll_button search_spotify_button"
-                            type="button"
-                        >
-                            {'Search Spotify '}
-                            <svg
-                                width={16}
-                                height={16}
-                                className="spotify_icon"
-                                viewBox="0 0 16 16"
-                            >
-                                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z" />
-                            </svg>
-                        </button>
-                    ) : (
-                        <button
-                            className="create_poll_button search_spotify_button"
-                            type="button"
-                            disabled
-                        >
-                            {'Search Spotify '}
-                            <svg className="spotify_icon" viewBox="0 0 16 16">
-                                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z" />
-                            </svg>
-                        </button>
-                    )}
-                </li>
                 <p className="body_text error_text">{error}</p>
-                {artist_result != '' && title_result != '' ? (
+                {title_result != '' ? (
                     <div className="track_result_card_wrapper">
                         Result:
                         <div className="track_card">

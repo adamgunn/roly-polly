@@ -19,31 +19,27 @@ function App(props) {
     const [comments, setComments] = useState([]);
     const [title_input, setTitleInput] = useState('');
     const [comment_input, setCommentInput] = useState('');
-    const [last_title, setLastTitle] = useState('');
-    const [last_comment, setLastComment] = useState('');
     const [connected, setConnected] = useState(false);
     const [poll_title, setPollTitle] = useState('Loading...');
     const [colors, setColors] = useState([]);
-    const [options, setOptions] = useState(new Array(DEFAULT_NUM_OPTIONS).fill('Loading...'));
+    const [options, setOptions] = useState(
+        new Array(DEFAULT_NUM_OPTIONS).fill('Loading...')
+    );
     const [voted, setVoted] = useState(window.localStorage.getItem(pollId));
     const [images, setImages] = useState([]);
-    const [counts, setCounts] = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0));
+    const [counts, setCounts] = useState(
+        new Array(DEFAULT_NUM_OPTIONS).fill(0)
+    );
     const [num_votes, setNumVotes] = useState(0);
 
     const handleButtonClick = (e) => {
         e.preventDefault();
-        if (
-            title_input &&
-            comment_input &&
-            (title_input !== last_title || comment_input !== last_comment)
-        ) {
+        if (title_input && comment_input) {
             var joined = comments.concat({
                 title: title_input,
                 content: comment_input,
             });
             setComments(joined);
-            setLastTitle(title_input);
-            setLastComment(comment_input);
             if (socket == null) return;
             socket.emit('send-comment', joined);
             const data = {
@@ -51,19 +47,6 @@ function App(props) {
                 comments_data: joined,
             };
             socket.emit('save-poll', data);
-        } else if (!title_input && comment_input) {
-            alert(
-                'Please include a title. Otherwise, what are we going to call your comment?'
-            );
-        } else if (title_input && !comment_input) {
-            alert('What comment? You only included a title.');
-        } else if (
-            title_input === last_title &&
-            comment_input === last_comment &&
-            title_input &&
-            comment_input
-        ) {
-            alert("Okay, now you're getting a little repetitive...");
         }
     };
 
@@ -81,13 +64,14 @@ function App(props) {
                         var options_state = [...options];
                         var images_state = [...images];
                         poll.options_data.map((option) => {
-                            options_state.push(option.artist + " - " + option.title);
+                            options_state.push(
+                                option.artist + ' - ' + option.title
+                            );
                             images_state.push(option.url);
                         });
                         setImages(images_state);
                         setOptions(options_state);
-                    }
-                    else {
+                    } else {
                         setOptions(poll.options_data);
                     }
                     setCounts(poll.counts_data);
@@ -164,13 +148,12 @@ function App(props) {
                 var options_state = [...options];
                 var images_state = [...images];
                 poll.options_data.map((option) => {
-                    options_state.push(option.artist + " - " + option.title);
+                    options_state.push(option.artist + ' - ' + option.title);
                     images_state.push(option.url);
                 });
                 setImages(images_state);
                 setOptions(options_state);
-            }
-            else {
+            } else {
                 setOptions(poll.options_data);
             }
             setCounts(poll.counts_data);

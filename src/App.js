@@ -40,66 +40,54 @@ function App(props) {
         comment_input = _useState8[0],
         setCommentInput = _useState8[1];
 
-    var _useState9 = useState(''),
+    var _useState9 = useState(false),
         _useState10 = _slicedToArray(_useState9, 2),
-        last_title = _useState10[0],
-        setLastTitle = _useState10[1];
+        connected = _useState10[0],
+        setConnected = _useState10[1];
 
-    var _useState11 = useState(''),
+    var _useState11 = useState('Loading...'),
         _useState12 = _slicedToArray(_useState11, 2),
-        last_comment = _useState12[0],
-        setLastComment = _useState12[1];
+        poll_title = _useState12[0],
+        setPollTitle = _useState12[1];
 
-    var _useState13 = useState(false),
+    var _useState13 = useState([]),
         _useState14 = _slicedToArray(_useState13, 2),
-        connected = _useState14[0],
-        setConnected = _useState14[1];
+        colors = _useState14[0],
+        setColors = _useState14[1];
 
-    var _useState15 = useState('Loading...'),
+    var _useState15 = useState(new Array(DEFAULT_NUM_OPTIONS).fill('Loading...')),
         _useState16 = _slicedToArray(_useState15, 2),
-        poll_title = _useState16[0],
-        setPollTitle = _useState16[1];
+        options = _useState16[0],
+        setOptions = _useState16[1];
 
-    var _useState17 = useState([]),
+    var _useState17 = useState(window.localStorage.getItem(pollId)),
         _useState18 = _slicedToArray(_useState17, 2),
-        colors = _useState18[0],
-        setColors = _useState18[1];
+        voted = _useState18[0],
+        setVoted = _useState18[1];
 
-    var _useState19 = useState(new Array(DEFAULT_NUM_OPTIONS).fill('Loading...')),
+    var _useState19 = useState([]),
         _useState20 = _slicedToArray(_useState19, 2),
-        options = _useState20[0],
-        setOptions = _useState20[1];
+        images = _useState20[0],
+        setImages = _useState20[1];
 
-    var _useState21 = useState(window.localStorage.getItem(pollId)),
+    var _useState21 = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0)),
         _useState22 = _slicedToArray(_useState21, 2),
-        voted = _useState22[0],
-        setVoted = _useState22[1];
+        counts = _useState22[0],
+        setCounts = _useState22[1];
 
-    var _useState23 = useState([]),
+    var _useState23 = useState(0),
         _useState24 = _slicedToArray(_useState23, 2),
-        images = _useState24[0],
-        setImages = _useState24[1];
-
-    var _useState25 = useState(new Array(DEFAULT_NUM_OPTIONS).fill(0)),
-        _useState26 = _slicedToArray(_useState25, 2),
-        counts = _useState26[0],
-        setCounts = _useState26[1];
-
-    var _useState27 = useState(0),
-        _useState28 = _slicedToArray(_useState27, 2),
-        num_votes = _useState28[0],
-        setNumVotes = _useState28[1];
+        num_votes = _useState24[0],
+        setNumVotes = _useState24[1];
 
     var handleButtonClick = function handleButtonClick(e) {
         e.preventDefault();
-        if (title_input && comment_input && (title_input !== last_title || comment_input !== last_comment)) {
+        if (title_input && comment_input) {
             var joined = comments.concat({
                 title: title_input,
                 content: comment_input
             });
             setComments(joined);
-            setLastTitle(title_input);
-            setLastComment(comment_input);
             if (socket == null) return;
             socket.emit('send-comment', joined);
             var data = {
@@ -107,12 +95,6 @@ function App(props) {
                 comments_data: joined
             };
             socket.emit('save-poll', data);
-        } else if (!title_input && comment_input) {
-            alert('Please include a title. Otherwise, what are we going to call your comment?');
-        } else if (title_input && !comment_input) {
-            alert('What comment? You only included a title.');
-        } else if (title_input === last_title && comment_input === last_comment && title_input && comment_input) {
-            alert("Okay, now you're getting a little repetitive...");
         }
     };
 
@@ -130,7 +112,7 @@ function App(props) {
                         var options_state = [].concat(_toConsumableArray(options));
                         var images_state = [].concat(_toConsumableArray(images));
                         poll.options_data.map(function (option) {
-                            options_state.push(option.artist + " - " + option.title);
+                            options_state.push(option.artist + ' - ' + option.title);
                             images_state.push(option.url);
                         });
                         setImages(images_state);
@@ -216,7 +198,7 @@ function App(props) {
                 var options_state = [].concat(_toConsumableArray(options));
                 var images_state = [].concat(_toConsumableArray(images));
                 poll.options_data.map(function (option) {
-                    options_state.push(option.artist + " - " + option.title);
+                    options_state.push(option.artist + ' - ' + option.title);
                     images_state.push(option.url);
                 });
                 setImages(images_state);

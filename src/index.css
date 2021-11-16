@@ -833,6 +833,7 @@ input[type='radio'].vote_radio {
     padding: 15px;
     border-radius: 7px;
     margin: 10px;
+    overflow-wrap: break-word;
 }
 
 .track_card_cover {
