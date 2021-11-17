@@ -7,9 +7,6 @@ import CreatePoll from './CreatePoll';
 import SpotifyAPI from './SpotifyAPI';
 import NotFound from './NotFound';
 
-if (location.protocol !== 'https:') {
-    location.replace('https:' + location.href.substring(location.protocol.length));
-}
 var uuidRegex = new RegExp(/^\/polls\/[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\/?$/, 'i');
 var path = window.location.pathname;
 ReactDOM.render(React.createElement(

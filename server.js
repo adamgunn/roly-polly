@@ -14,6 +14,20 @@ const dotenv = require('dotenv');
 const Vibrant = require('node-vibrant');
 dotenv.config();
 
+function requireHTTPS(req, res, next) {
+    // The 'x-forwarded-proto' check is for Heroku
+    if (
+        !req.secure &&
+        req.get('x-forwarded-proto') !== 'https' &&
+        process.env.NODE_ENV !== 'local'
+    ) {
+        return res.redirect('https://' + req.get('host') + req.url);
+    }
+    next();
+}
+
+app.use(requireHTTPS);
+
 const SpotifyWebApi = require('spotify-web-api-node');
 const scopes = [
     'ugc-image-upload',
@@ -152,10 +166,12 @@ app.post('/submit-new-song-poll', async (req, res) => {
     var tracks = JSON.parse(form_data.tracks_data);
     const getColors = async () => {
         var colors = new Array(tracks.length);
-        await Promise.all(tracks.map(async (track) => {
-            var palette = await Vibrant.from(track.url).getPalette();                
-            colors[track.index] = getPaletteMax(palette);
-        })); 
+        await Promise.all(
+            tracks.map(async (track) => {
+                var palette = await Vibrant.from(track.url).getPalette();
+                colors[track.index] = getPaletteMax(palette);
+            })
+        );
         return colors;
     };
     var colors = await getColors();
@@ -196,7 +212,7 @@ app.get('/:page', (req, res) => {
     res.sendFile(path.join(__dirname, INDEX));
 });
 
-io.on('connection', (socket) => { 
+io.on('connection', (socket) => {
     console.log('connected');
     socket.on('get-poll', async (pollId) => {
         const poll = await PollData.findById(pollId);
@@ -246,24 +262,22 @@ io.on('connection', (socket) => {
                 }
             );
         }
-        spotifyApi
-            .searchTracks(query)
-            .then(
-                function (data) {
-                    if (data.body.tracks.items[0]) {
-                        var track_data = {
-                            url: data.body.tracks.items[0].album.images[1].url,
-                            artist: data.body.tracks.items[0].artists[0].name,
-                            title: data.body.tracks.items[0].name,
-                        };
-                        socket.emit('track-found', track_data);
-                    } else {
-                        socket.emit('track-not-found');
-                    }
-                },
-                function (err) {
-                    socket.emit('error', err);
+        spotifyApi.searchTracks(query).then(
+            function (data) {
+                if (data.body.tracks.items[0]) {
+                    var track_data = {
+                        url: data.body.tracks.items[0].album.images[1].url,
+                        artist: data.body.tracks.items[0].artists[0].name,
+                        title: data.body.tracks.items[0].name,
+                    };
+                    socket.emit('track-found', track_data);
+                } else {
+                    socket.emit('track-not-found');
                 }
-            );
+            },
+            function (err) {
+                socket.emit('error', err);
+            }
+        );
     });
 });
