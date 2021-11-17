@@ -16,8 +16,8 @@ function About(props) {
                 science.
             </p>
             <p className="body_text">
-                The app was made in 2021 using the MERN stack &mdash; MongoDB,
-                Express, React, and Node.JS &mdash; and deployed on Heroku.
+                The app was made primarily using MongoDB, Express, React, and
+                Node.JS, and deployed on Heroku.
             </p>
             <p className="body_text">
                 Feel free to email{' '}
