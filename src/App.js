@@ -7,6 +7,8 @@ import { io } from 'socket.io-client';
 import Comment from './Comment.js';
 import Form from './Form.js';
 import Poll from './Poll.js';
+import ShareButtons from './ShareButtons.js';
+import NotFound from './NotFound.js';
 
 function App(props) {
     var DEFAULT_NUM_OPTIONS = 0;
@@ -80,6 +82,11 @@ function App(props) {
         num_votes = _useState24[0],
         setNumVotes = _useState24[1];
 
+    var _useState25 = useState(true),
+        _useState26 = _slicedToArray(_useState25, 2),
+        valid = _useState26[0],
+        setValid = _useState26[1];
+
     var handleButtonClick = function handleButtonClick(e) {
         e.preventDefault();
         if (title_input && comment_input) {
@@ -106,6 +113,7 @@ function App(props) {
             } else {
                 console.log('reconnecting');
                 socket.once('load-poll', function (poll) {
+                    setValid(true);
                     setColors(poll.colors_data);
                     setPollTitle(poll.title_data);
                     if (poll.options_data[0].artist) {
@@ -123,6 +131,9 @@ function App(props) {
                     setCounts(poll.counts_data);
                     setNumVotes(poll.counts_data.reduce(reducer));
                     setComments(poll.comments_data);
+                });
+                socket.on('not-found', function () {
+                    setValid(false);
                 });
                 socket.emit('get-poll', pollId);
                 setConnected(true);
@@ -192,6 +203,12 @@ function App(props) {
     useEffect(function () {
         if (socket == null) return;
         socket.once('load-poll', function (poll) {
+            var params = new URLSearchParams(document.location.search.substring(1));
+            if (params.get('created') === 'true') {
+                setVoted(true);
+                window.localStorage.setItem(pollId, true);
+            }
+            setValid(true);
             setColors(poll.colors_data);
             setPollTitle(poll.title_data);
             if (poll.options_data[0].artist) {
@@ -210,54 +227,62 @@ function App(props) {
             setNumVotes(poll.counts_data.reduce(reducer));
             setComments(poll.comments_data);
         });
+        socket.on('not-found', function () {
+            setValid(false);
+        });
         socket.emit('get-poll', pollId);
     }, [socket, pollId]);
 
     return React.createElement(
         'div',
-        { className: 'app_wrapper' },
-        React.createElement(
-            'h1',
-            { className: 'poll_title' },
-            poll_title
-        ),
-        React.createElement(Poll, {
-            key: 0,
-            onVote: voteChange,
-            counts: counts,
-            num_votes: num_votes,
-            colors: colors,
-            images: images,
-            connected_to_server: connected,
-            already_voted: voted,
-            options: options
-        }),
-        React.createElement(
+        { className: 'valid_checker_wrapper' },
+        valid ? React.createElement(
             'div',
-            { className: 'comments_container' },
+            { className: 'app_wrapper' },
             React.createElement(
                 'h1',
-                { className: 'rolypolly_subtitle comments_header' },
-                'Comments'
+                { className: 'poll_title' },
+                poll_title
             ),
-            React.createElement(Form, {
-                onTitleChange: handleTitleChange,
-                onCommentChange: handleCommentChange,
-                onButtonClick: handleButtonClick,
-                connected_to_server: connected
+            React.createElement(Poll, {
+                key: 0,
+                onVote: voteChange,
+                counts: counts,
+                num_votes: num_votes,
+                colors: colors,
+                images: images,
+                connected_to_server: connected,
+                already_voted: voted,
+                options: options
             }),
-            comments.length === 0 ? React.createElement(
-                'p',
-                { className: 'no_comments' },
-                'No comments? Be the change you want to see in the world...'
-            ) : comments.slice(0).reverse().map(function (comment, index) {
-                return React.createElement(Comment, {
-                    key: index,
-                    title: comment.title,
-                    content: comment.content
-                });
-            })
-        )
+            React.createElement(ShareButtons, { title: poll_title, pollId: pollId }),
+            React.createElement(
+                'div',
+                { className: 'comments_container' },
+                React.createElement(
+                    'h1',
+                    { className: 'rolypolly_subtitle comments_header' },
+                    'Comments'
+                ),
+                React.createElement(Form, {
+                    onTitleChange: handleTitleChange,
+                    onCommentChange: handleCommentChange,
+                    onButtonClick: handleButtonClick,
+                    connected_to_server: connected
+                }),
+                comments.length === 0 ? React.createElement(
+                    'p',
+                    { className: 'no_comments' },
+                    'No comments? Be the change you want to see in the world...'
+                ) : comments.slice(0).reverse().map(function (comment, index) {
+                    return React.createElement(Comment, {
+                        key: index,
+                        title: comment.title,
+                        content: comment.content
+                    });
+                })
+            )
+        ) : React.createElement(NotFound, null)
     );
 }
 

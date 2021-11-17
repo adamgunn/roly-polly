@@ -3,6 +3,8 @@ import { io } from 'socket.io-client';
 import Comment from './Comment.js';
 import Form from './Form.js';
 import Poll from './Poll.js';
+import ShareButtons from './ShareButtons.js';
+import NotFound from './NotFound.js';
 
 function App(props) {
     const DEFAULT_NUM_OPTIONS = 0;
@@ -31,6 +33,7 @@ function App(props) {
         new Array(DEFAULT_NUM_OPTIONS).fill(0)
     );
     const [num_votes, setNumVotes] = useState(0);
+    const [valid, setValid] = useState(true);
 
     const handleButtonClick = (e) => {
         e.preventDefault();
@@ -58,6 +61,7 @@ function App(props) {
             } else {
                 console.log('reconnecting');
                 socket.once('load-poll', (poll) => {
+                    setValid(true);
                     setColors(poll.colors_data);
                     setPollTitle(poll.title_data);
                     if (poll.options_data[0].artist) {
@@ -77,6 +81,9 @@ function App(props) {
                     setCounts(poll.counts_data);
                     setNumVotes(poll.counts_data.reduce(reducer));
                     setComments(poll.comments_data);
+                });
+                socket.on('not-found', () => {
+                    setValid(false);
                 });
                 socket.emit('get-poll', pollId);
                 setConnected(true);
@@ -142,6 +149,14 @@ function App(props) {
     useEffect(() => {
         if (socket == null) return;
         socket.once('load-poll', (poll) => {
+            let params = new URLSearchParams(
+                document.location.search.substring(1)
+            );
+            if (params.get('created') === 'true') {
+                setVoted(true);
+                window.localStorage.setItem(pollId, true);
+            }
+            setValid(true);
             setColors(poll.colors_data);
             setPollTitle(poll.title_data);
             if (poll.options_data[0].artist) {
@@ -160,51 +175,63 @@ function App(props) {
             setNumVotes(poll.counts_data.reduce(reducer));
             setComments(poll.comments_data);
         });
+        socket.on('not-found', () => {
+            setValid(false);
+        });
         socket.emit('get-poll', pollId);
     }, [socket, pollId]);
 
     return (
-        <div className="app_wrapper">
-            <h1 className="poll_title">{poll_title}</h1>
-            <Poll
-                key={0}
-                onVote={voteChange}
-                counts={counts}
-                num_votes={num_votes}
-                colors={colors}
-                images={images}
-                connected_to_server={connected}
-                already_voted={voted}
-                options={options}
-            />
-            <div className="comments_container">
-                <h1 className="rolypolly_subtitle comments_header">Comments</h1>
-                <Form
-                    onTitleChange={handleTitleChange}
-                    onCommentChange={handleCommentChange}
-                    onButtonClick={handleButtonClick}
-                    connected_to_server={connected}
-                />
-                {comments.length === 0 ? (
-                    <p className="no_comments">
-                        No comments? Be the change you want to see in the
-                        world...
-                    </p>
-                ) : (
-                    comments
-                        .slice(0)
-                        .reverse()
-                        .map((comment, index) => {
-                            return (
-                                <Comment
-                                    key={index}
-                                    title={comment.title}
-                                    content={comment.content}
-                                />
-                            );
-                        })
-                )}
-            </div>
+        <div className="valid_checker_wrapper">
+            {valid ? (
+                <div className="app_wrapper">
+                    <h1 className="poll_title">{poll_title}</h1>
+                    <Poll
+                        key={0}
+                        onVote={voteChange}
+                        counts={counts}
+                        num_votes={num_votes}
+                        colors={colors}
+                        images={images}
+                        connected_to_server={connected}
+                        already_voted={voted}
+                        options={options}
+                    />
+                    <ShareButtons title={poll_title} pollId={pollId} />
+                    <div className="comments_container">
+                        <h1 className="rolypolly_subtitle comments_header">
+                            Comments
+                        </h1>
+                        <Form
+                            onTitleChange={handleTitleChange}
+                            onCommentChange={handleCommentChange}
+                            onButtonClick={handleButtonClick}
+                            connected_to_server={connected}
+                        />
+                        {comments.length === 0 ? (
+                            <p className="no_comments">
+                                No comments? Be the change you want to see in
+                                the world...
+                            </p>
+                        ) : (
+                            comments
+                                .slice(0)
+                                .reverse()
+                                .map((comment, index) => {
+                                    return (
+                                        <Comment
+                                            key={index}
+                                            title={comment.title}
+                                            content={comment.content}
+                                        />
+                                    );
+                                })
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <NotFound />
+            )}
         </div>
     );
 }

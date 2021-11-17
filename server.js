@@ -101,7 +101,7 @@ app.post('/submit-new-poll', async (req, res) => {
     };
     console.log(new_poll);
     await PollData.create(new_poll);
-    res.redirect(`/polls/${new_uuid}`);
+    res.redirect(`/polls/${new_uuid}?created=true`);
 });
 
 const swatchToHex = (swatch) => {
@@ -173,7 +173,7 @@ app.post('/submit-new-song-poll', async (req, res) => {
     };
     console.log(new_poll);
     await PollData.create(new_poll);
-    res.redirect(`/polls/${new_uuid}`);
+    res.redirect(`/polls/${new_uuid}?created=true`);
 });
 
 app.get('/', (req, res) => {
@@ -200,8 +200,11 @@ io.on('connection', (socket) => {
     console.log('connected');
     socket.on('get-poll', async (pollId) => {
         const poll = await PollData.findById(pollId);
+        if (!poll) {
+            socket.emit('not-found');
+            return;
+        }
         socket.join(pollId);
-        if (!poll) socket.broadcast.to(pollId).emit('not-found');
         const data = {
             counts_data: poll.counts,
             comments_data: poll.comments,

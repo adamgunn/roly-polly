@@ -102,7 +102,7 @@ function SpotifyAPI(props) {
             setImageUrl('');
             setArtistResult('');
             setTitleResult('');
-            setError('The server encountered an arror with the Spotify API. Try refreshing?');
+            setError('The server encountered an error with the Spotify API. Try refreshing?');
             console.log(err);
         });
         socket.emit('search-tracks', query);

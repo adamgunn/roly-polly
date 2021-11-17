@@ -5,7 +5,7 @@ function NotFound(props) {
         React.createElement(
             "h1",
             { className: "rolypolly_subtitle" },
-            "Error 404"
+            "Error"
         ),
         React.createElement(
             "p",

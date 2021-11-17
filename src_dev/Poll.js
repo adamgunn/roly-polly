@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import blackOrWhite from './blackOrWhite.js';
 
 function Poll(props) {
     const colors = props.colors;
     const images = props.images;
     const [selection, setSelection] = useState(null);
+    const [delay_done, setDelayDone] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setDelayDone(true);
+        }, 3000);
+    }, []);
 
     const handleClick = function (e) {
         if (selection != null) props.onVote(selection);
@@ -157,7 +164,7 @@ function Poll(props) {
 
     return (
         <div className="poll_wrapper">
-            {props.connected_to_server ? (
+            {props.connected_to_server || !delay_done ? (
                 <div></div>
             ) : (
                 <svg

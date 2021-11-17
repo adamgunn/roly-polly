@@ -1,6 +1,6 @@
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import blackOrWhite from './blackOrWhite.js';
 
 function Poll(props) {
@@ -11,6 +11,17 @@ function Poll(props) {
         _useState2 = _slicedToArray(_useState, 2),
         selection = _useState2[0],
         setSelection = _useState2[1];
+
+    var _useState3 = useState(false),
+        _useState4 = _slicedToArray(_useState3, 2),
+        delay_done = _useState4[0],
+        setDelayDone = _useState4[1];
+
+    useEffect(function () {
+        setTimeout(function () {
+            setDelayDone(true);
+        }, 3000);
+    }, []);
 
     var handleClick = function handleClick(e) {
         if (selection != null) props.onVote(selection);
@@ -132,7 +143,7 @@ function Poll(props) {
     return React.createElement(
         'div',
         { className: 'poll_wrapper' },
-        props.connected_to_server ? React.createElement('div', null) : React.createElement(
+        props.connected_to_server || !delay_done ? React.createElement('div', null) : React.createElement(
             'svg',
             {
                 width: 32,

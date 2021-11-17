@@ -72,7 +72,7 @@ function SpotifyAPI(props) {
             setArtistResult('');
             setTitleResult('');
             setError(
-                'The server encountered an arror with the Spotify API. Try refreshing?'
+                'The server encountered an error with the Spotify API. Try refreshing?'
             );
             console.log(err);
         });
