@@ -155,6 +155,7 @@ function App(props) {
             if (params.get('created') === 'true') {
                 setVoted(true);
                 window.localStorage.setItem(pollId, true);
+                window.location.replace(window.location.origin + window.location.pathname);
             }
             setValid(true);
             setColors(poll.colors_data);

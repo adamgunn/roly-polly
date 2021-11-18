@@ -6,19 +6,19 @@ class Form extends React.Component {
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
         this.state = {
-            title: "",
-            comment: ""
-        }
+            title: '',
+            comment: '',
+        };
     }
 
     title_change(e) {
         this.props.onTitleChange(e);
-        this.setState({title: e.target.value});
+        this.setState({ title: e.target.value });
     }
 
     comment_change(e) {
         this.props.onCommentChange(e);
-        this.setState({comment: e.target.value});
+        this.setState({ comment: e.target.value });
     }
 
     handleKeyDown(e) {
@@ -28,11 +28,11 @@ class Form extends React.Component {
 
     handleButtonClick(e) {
         this.props.onButtonClick(e);
-        if (this.state.title != "" && this.state.comment != "") {
-            this.setState({title: ""});
-            this.setState({comment: ""});
+        if (this.state.title != '' && this.state.comment != '') {
+            this.setState({ title: '' });
+            this.setState({ comment: '' });
         }
-        const textarea = document.getElementById("content_input");
+        const textarea = document.getElementById('content_input');
         textarea.style.height = 'inherit';
         textarea.style.height = `${e.target.scrollHeight}px`;
     }
@@ -58,7 +58,9 @@ class Form extends React.Component {
                     ></textarea>
                 </div>
                 <div className="buttons_wrapper">
-                    {this.props.connected_to_server ? (
+                    {this.props.connected_to_server &&
+                    this.state.title != '' &&
+                    this.state.comment != '' ? (
                         <button
                             className="add_comment_button"
                             onClick={this.handleButtonClick}

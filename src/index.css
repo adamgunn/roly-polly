@@ -31,9 +31,6 @@ body {
     margin: 0px;
     background-color: var(--rp-purple);
     scrollbar-color: var(--rp-green);
-    min-height: 100vh;
-    display: flex;
-    flex-flow: column;
 }
 
 body::-webkit-scrollbar {
@@ -83,7 +80,10 @@ body::-webkit-scrollbar-thumb {
 }
 
 .comments_header {
-    margin: 0px;
+    margin: 0px auto;
+    max-width: 770px;
+    width: calc(90% + 20px);
+    padding: 0px;
 }
 
 .button_and_form_wrapper {
@@ -212,7 +212,7 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     padding: 10px;
     border-radius: 7px 7px 0px 0px;
     max-width: 750px;
-    min-width: none;
+    min-width: 0px;
     width: 90%;
 }
 
@@ -239,14 +239,16 @@ ul.create_poll_wrapper li input:not(.create_poll_button) {
     margin-bottom: 0px;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex-grow: 1;
 }
 
 .bar_graph_bar {
     height: 15px;
     margin: 25px 5px 5px;
+    margin-left: 0px;
     transition: width 0.7s;
-    border-radius: 5px;
+    border-radius: 999px;
+    min-width: 15px;
 }
 
 .bar_graph_bar_wrapper {
@@ -262,7 +264,7 @@ input[type='radio']:checked.vote_radio + .radio_label {
 }
 
 .bar_graph_text {
-    margin: 0px 5px 0px 5px;
+    margin: 0px;
     font-weight: 400;
     display: flex;
     flex-direction: row;
@@ -281,7 +283,7 @@ input[type='radio']:checked.vote_radio + .radio_label {
 }
 
 .poll_title {
-    margin: 5px;
+    margin: 5px 10vw;
     text-align: center;
     font-size: 70px;
 }
@@ -316,7 +318,7 @@ input[type='radio']:checked.vote_radio + .radio_label {
 .add_color_button:disabled:hover,
 .add_color_button[disabled]:hover .vote_button:disabled:hover,
 .vote_button[disabled]:hover {
-    cursor: default;
+    cursor: not-allowed;
     transform: none;
 }
 
@@ -469,6 +471,13 @@ li.navbar_link,
 
 .app_wrapper {
     padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+}
+
+.app_wrapper > * {
+    flex-shrink: 0;
 }
 
 .poll_wrapper {
@@ -911,6 +920,11 @@ input[type='radio'].vote_radio {
     fill: white;
 }
 
+.bar_graph_bar_wrapper:first-of-type .bar_graph_bar {
+    margin: 5px;
+    margin-left: 0px;
+}
+
 .share_buttons_wrapper {
     display: flex;
     flex-direction: column;
@@ -939,12 +953,13 @@ input[type='radio'].vote_radio {
     box-shadow: none;
 }
 
-.facebook_button {
-    background-color: #1778F2;
-}
 
 .twitter_button {
-    background-color: #1DA1F2;
+    background-color: #1da1f2;
+}
+
+.reddit_button, .facebook_button {
+    background-color: white;
 }
 
 .copy_button {
@@ -961,6 +976,14 @@ input[type='radio'].vote_radio {
     fill: white;
 }
 
+.reddit_icon {
+    fill: #ff4500;
+}
+
+.facebook_icon {
+    fill: #1778f2;
+}
+
 .copy_icon {
     fill: black;
 }
@@ -971,6 +994,16 @@ input[type='radio'].vote_radio {
 
 .vote_count {
     text-align: right;
+}
+
+.bar_and_text_wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.poll_image ~ .bar_and_text_wrapper .bar_graph_bar {
+    margin-top: 0px;
 }
 
 @media screen and (max-width: 540px) {
@@ -993,7 +1026,8 @@ input[type='radio'].vote_radio {
     .rolypolly_subtitle:not(.comments_header) {
         margin-top: 4vh;
     }
-    .rolypolly_subtitle, .comments_header {
+    .rolypolly_subtitle,
+    .comments_header {
         font-size: 10vw;
     }
     .body_text {
@@ -1030,9 +1064,7 @@ input[type='radio'].vote_radio {
     .color_sample .x-button {
         display: block;
     }
-    .title_input,
-    ul.create_poll_wrapper li input:not(.create_poll_button),
-    .content_input {
+    ul.create_poll_wrapper li input:not(.create_poll_button) {
         min-width: 100px;
         max-width: 75vw;
         width: 100%;
@@ -1077,10 +1109,15 @@ input[type='radio'].vote_radio {
     }
     .poll_title {
         font-size: 13vw;
-        margin: 5px 10vw;
     }
     .comment_form {
         margin-top: 0px;
+    }
+    .share_button {
+        width: 8vw;
+        height: 8vw;
+        padding: 2vw;
+        margin: 2vw;
     }
 }
 

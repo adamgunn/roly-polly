@@ -19,85 +19,85 @@ var Form = function (_React$Component) {
         _this.handleKeyDown = _this.handleKeyDown.bind(_this);
         _this.handleButtonClick = _this.handleButtonClick.bind(_this);
         _this.state = {
-            title: "",
-            comment: ""
+            title: '',
+            comment: ''
         };
         return _this;
     }
 
     _createClass(Form, [{
-        key: "title_change",
+        key: 'title_change',
         value: function title_change(e) {
             this.props.onTitleChange(e);
             this.setState({ title: e.target.value });
         }
     }, {
-        key: "comment_change",
+        key: 'comment_change',
         value: function comment_change(e) {
             this.props.onCommentChange(e);
             this.setState({ comment: e.target.value });
         }
     }, {
-        key: "handleKeyDown",
+        key: 'handleKeyDown',
         value: function handleKeyDown(e) {
             e.target.style.height = 'inherit';
-            e.target.style.height = e.target.scrollHeight + "px";
+            e.target.style.height = e.target.scrollHeight + 'px';
         }
     }, {
-        key: "handleButtonClick",
+        key: 'handleButtonClick',
         value: function handleButtonClick(e) {
             this.props.onButtonClick(e);
-            if (this.state.title != "" && this.state.comment != "") {
-                this.setState({ title: "" });
-                this.setState({ comment: "" });
+            if (this.state.title != '' && this.state.comment != '') {
+                this.setState({ title: '' });
+                this.setState({ comment: '' });
             }
-            var textarea = document.getElementById("content_input");
+            var textarea = document.getElementById('content_input');
             textarea.style.height = 'inherit';
-            textarea.style.height = e.target.scrollHeight + "px";
+            textarea.style.height = e.target.scrollHeight + 'px';
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "div",
-                { className: "button_and_form_wrapper" },
+                'div',
+                { className: 'button_and_form_wrapper' },
                 React.createElement(
-                    "div",
-                    { className: "comment_form" },
-                    React.createElement("input", {
-                        className: "title_input",
-                        type: "text",
-                        placeholder: "Put your title here",
+                    'div',
+                    { className: 'comment_form' },
+                    React.createElement('input', {
+                        className: 'title_input',
+                        type: 'text',
+                        placeholder: 'Put your title here',
                         onChange: this.title_change,
                         value: this.state.title
                     }),
-                    React.createElement("textarea", {
-                        className: "content_input",
-                        id: "content_input",
-                        placeholder: "Put your comment here",
+                    React.createElement('textarea', {
+                        className: 'content_input',
+                        id: 'content_input',
+                        placeholder: 'Put your comment here',
                         onChange: this.comment_change,
                         onKeyDown: this.handleKeyDown,
                         value: this.state.comment
                     })
                 ),
                 React.createElement(
-                    "div",
-                    { className: "buttons_wrapper" },
-                    this.props.connected_to_server ? React.createElement(
-                        "button",
+                    'div',
+                    { className: 'buttons_wrapper' },
+                    this.props.connected_to_server && this.state.title != '' && this.state.comment != '' ? React.createElement(
+                        'button',
                         {
-                            className: "add_comment_button",
+                            className: 'add_comment_button',
                             onClick: this.handleButtonClick
                         },
-                        "Submit comment"
+                        'Submit comment'
                     ) : React.createElement(
-                        "button",
+                        'button',
                         {
-                            className: "add_comment_button",
+                            className: 'add_comment_button',
                             onClick: this.handleButtonClick,
                             disabled: true
                         },
-                        "Submit comment"
+                        'Submit comment'
                     )
                 )
             );
