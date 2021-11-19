@@ -2,7 +2,12 @@ function Navbar(props) {
     return (
         <ul className="navbar_wrapper">
             <li className="navbar_link">
-                <a href="../">Home</a>
+                <a href="../">
+                    <img
+                        src="../static/favicon.svg"
+                        className="rolypolly_logo"
+                    />
+                </a>
             </li>
             <li className="navbar_link">
                 <a href="../about">About</a>

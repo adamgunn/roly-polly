@@ -35,6 +35,8 @@ function App(props) {
     const [num_votes, setNumVotes] = useState(0);
     const [valid, setValid] = useState(true);
 
+    if (valid) document.title = poll_title + ' | RolyPolly';
+
     const handleButtonClick = (e) => {
         e.preventDefault();
         if (title_input && comment_input) {
@@ -152,10 +154,12 @@ function App(props) {
             let params = new URLSearchParams(
                 document.location.search.substring(1)
             );
-            if (params.get('created') === 'true') {
+            if (params.get('novote') === 'true') {
                 setVoted(true);
                 window.localStorage.setItem(pollId, true);
-                window.location.replace(window.location.origin + window.location.pathname);
+                window.location.replace(
+                    window.location.origin + window.location.pathname
+                );
             }
             setValid(true);
             setColors(poll.colors_data);

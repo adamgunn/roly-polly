@@ -1,4 +1,6 @@
 function About(props) {
+    document.title = 'About | RolyPolly';
+
     return (
         <div className="about_wrapper">
             <h3 className="rolypolly_subtitle">About</h3>

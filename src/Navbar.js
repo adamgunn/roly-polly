@@ -8,7 +8,10 @@ function Navbar(props) {
             React.createElement(
                 "a",
                 { href: "../" },
-                "Home"
+                React.createElement("img", {
+                    src: "../static/favicon.svg",
+                    className: "rolypolly_logo"
+                })
             )
         ),
         React.createElement(

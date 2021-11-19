@@ -1,4 +1,6 @@
 function NotFound(props) {
+    document.title = 'Error | RolyPolly';
+
     return React.createElement(
         "div",
         { className: "not_found_wrapper" },

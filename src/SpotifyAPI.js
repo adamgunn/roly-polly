@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 function SpotifyAPI(props) {
-    var title_placeholders = ['Which song has the best hook?', 'Which song is the worst?', 'Which song is the most underrated?', 'Which song has the best lyrics?', 'Which song has the best cover?', 'Which song has the best feature?', 'Which song was the most influential?'];
+    var title_placeholders = ['Which song has the best hook?', 'Which song is the worst?', 'Which song is the most underrated?', 'Which song has the best lyrics?', 'Which song has the best cover art?', 'Which song has the best feature?', 'Which song was the most influential?', 'Which is the best road trip song?', 'Which is the best song to sing in the shower?', 'Which song is the catchiest?'];
 
     var _useState = useState(''),
         _useState2 = _slicedToArray(_useState, 2),
@@ -53,10 +53,17 @@ function SpotifyAPI(props) {
         query_valid = _useState18[0],
         setQueryValid = _useState18[1];
 
-    var _useState19 = useState(title_placeholders[Math.floor(Math.random() * title_placeholders.length)]),
+    var _useState19 = useState(false),
         _useState20 = _slicedToArray(_useState19, 2),
-        title_placeholder = _useState20[0],
-        setTitlePlaceholder = _useState20[1];
+        creator_vote = _useState20[0],
+        setCreatorVote = _useState20[1];
+
+    var _useState21 = useState(title_placeholders[Math.floor(Math.random() * title_placeholders.length)]),
+        _useState22 = _slicedToArray(_useState21, 2),
+        title_placeholder = _useState22[0],
+        setTitlePlaceholder = _useState22[1];
+
+    document.title = 'Create Song Poll | RolyPolly';
 
     var queryChange = function queryChange(e) {
         setQuery(e.target.value);
@@ -142,6 +149,11 @@ function SpotifyAPI(props) {
         setTracks(tracks_state);
     };
 
+    var toggleCreatorVote = function toggleCreatorVote(e) {
+        e.preventDefault();
+        setCreatorVote(!creator_vote);
+    };
+
     return React.createElement(
         'form',
         {
@@ -177,6 +189,52 @@ function SpotifyAPI(props) {
             ),
             React.createElement(
                 'li',
+                { className: 'checkbox_wrapper', onClick: toggleCreatorVote },
+                React.createElement('input', {
+                    name: 'creator_vote',
+                    id: 'creator_vote',
+                    className: 'checkbox',
+                    type: 'checkbox',
+                    onClick: toggleCreatorVote
+                }),
+                React.createElement(
+                    'span',
+                    {
+                        className: 'visible_checkbox',
+                        onclick: toggleCreatorVote
+                    },
+                    creator_vote ? React.createElement(
+                        'svg',
+                        {
+                            width: '16',
+                            height: '16',
+                            'class': 'checkbox_icon',
+                            viewBox: '0 0 16 16'
+                        },
+                        React.createElement('path', { d: 'M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z' })
+                    ) : React.createElement(
+                        'svg',
+                        {
+                            width: '16',
+                            height: '16',
+                            'class': 'checkbox_icon',
+                            viewBox: '0 0 16 16'
+                        },
+                        React.createElement('path', { d: 'M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2z' })
+                    )
+                ),
+                React.createElement(
+                    'label',
+                    {
+                        'for': 'creator_vote',
+                        className: 'create_poll_header',
+                        onClick: toggleCreatorVote
+                    },
+                    'Let me vote in this poll'
+                )
+            ),
+            React.createElement(
+                'li',
                 null,
                 React.createElement(
                     'label',
@@ -201,6 +259,16 @@ function SpotifyAPI(props) {
                     id: 'tracks_data',
                     name: 'tracks_data',
                     value: JSON.stringify(tracks)
+                })
+            ),
+            React.createElement(
+                'li',
+                null,
+                React.createElement('input', {
+                    type: 'hidden',
+                    id: 'creator_vote',
+                    name: 'creator_vote',
+                    value: creator_vote
                 })
             ),
             React.createElement(

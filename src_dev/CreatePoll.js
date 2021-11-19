@@ -15,6 +15,9 @@ function CreatePoll(props) {
     const [valid, setValid] = useState(false);
     const [picker_color, setPickerColor] = useState(DEFAULT_COLORS[0]);
     const [bad_size, setBadSize] = useState(false);
+    const [creator_vote, setCreatorVote] = useState(false);
+
+    document.title = 'Create Poll | RolyPolly';
 
     const numOptionsChange = (e) => {
         const old_num_options = num_options;
@@ -52,7 +55,6 @@ function CreatePoll(props) {
     };
 
     const addColor = () => {
-        console.log('adding color');
         var colors_state = [...colors];
         if (colors.length < num_options) {
             colors_state.push(picker_color);
@@ -69,7 +71,6 @@ function CreatePoll(props) {
             setValid(false);
             return;
         }
-        console.log(options.length);
         for (var i = 0; i < options.length; i++) {
             var option = document.getElementById('option_' + i).value;
             if (!option || option == '' || option == null) {
@@ -102,6 +103,11 @@ function CreatePoll(props) {
     const verify = () => {
         verifyEntries();
         verifyColors();
+    };
+
+    const toggleCreatorVote = (e) => {
+        e.preventDefault();
+        setCreatorVote(!creator_vote);
     };
 
     return (
@@ -168,6 +174,46 @@ function CreatePoll(props) {
                         </li>
                     );
                 })}
+                <li className="checkbox_wrapper" onClick={toggleCreatorVote}>
+                    <input
+                        name="creator_vote"
+                        id="creator_vote"
+                        className="checkbox"
+                        type="checkbox"
+                        onClick={toggleCreatorVote}
+                    />
+                    <span
+                        className="visible_checkbox"
+                        onclick={toggleCreatorVote}
+                    >
+                        {creator_vote ? (
+                            <svg
+                                width="16"
+                                height="16"
+                                class="checkbox_icon"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z" />
+                            </svg>
+                        ) : (
+                            <svg
+                                width="16"
+                                height="16"
+                                class="checkbox_icon"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2z" />
+                            </svg>
+                        )}
+                    </span>
+                    <label
+                        for="creator_vote"
+                        className="create_poll_header"
+                        onClick={toggleCreatorVote}
+                    >
+                        Let me vote in this poll
+                    </label>
+                </li>
                 <li className="create_poll_input">
                     <p className="create_poll_header">
                         Choose 1-{num_options} colors
@@ -256,6 +302,12 @@ function CreatePoll(props) {
                     name="colors"
                     id="colors"
                     value={JSON.stringify(colors)}
+                /> 
+                <input
+                    type="hidden"
+                    id="creator_vote"
+                    name="creator_vote"
+                    value={creator_vote}
                 />
                 {valid && !bad_size ? (
                     <li>

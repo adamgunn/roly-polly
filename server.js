@@ -115,7 +115,12 @@ app.post('/submit-new-poll', async (req, res) => {
     };
     console.log(new_poll);
     await PollData.create(new_poll);
-    res.redirect(`/polls/${new_uuid}?created=true`);
+    if (form_data.creator_vote == 'true') {
+        res.redirect(`/polls/${new_uuid}`);
+    }
+    else {
+        res.redirect(`/polls/${new_uuid}?novote=true`);
+    }
 });
 
 const swatchToHex = (swatch) => {
@@ -189,7 +194,12 @@ app.post('/submit-new-song-poll', async (req, res) => {
     };
     console.log(new_poll);
     await PollData.create(new_poll);
-    res.redirect(`/polls/${new_uuid}?created=true`);
+    if (form_data.creator_vote == 'true') {
+        res.redirect(`/polls/${new_uuid}`);
+    }
+    else {
+        res.redirect(`/polls/${new_uuid}?novote=true`);
+    }
 });
 
 app.get('/', (req, res) => {

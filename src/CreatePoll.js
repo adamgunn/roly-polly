@@ -43,6 +43,13 @@ function CreatePoll(props) {
         bad_size = _useState12[0],
         setBadSize = _useState12[1];
 
+    var _useState13 = useState(false),
+        _useState14 = _slicedToArray(_useState13, 2),
+        creator_vote = _useState14[0],
+        setCreatorVote = _useState14[1];
+
+    document.title = 'Create Poll | RolyPolly';
+
     var numOptionsChange = function numOptionsChange(e) {
         var old_num_options = num_options;
         var new_num_options = e.target.value;
@@ -78,7 +85,6 @@ function CreatePoll(props) {
     };
 
     var addColor = function addColor() {
-        console.log('adding color');
         var colors_state = [].concat(_toConsumableArray(colors));
         if (colors.length < num_options) {
             colors_state.push(picker_color);
@@ -91,7 +97,6 @@ function CreatePoll(props) {
             setValid(false);
             return;
         }
-        console.log(options.length);
         for (var i = 0; i < options.length; i++) {
             var option = document.getElementById('option_' + i).value;
             if (!option || option == '' || option == null) {
@@ -124,6 +129,11 @@ function CreatePoll(props) {
     var verify = function verify() {
         verifyEntries();
         verifyColors();
+    };
+
+    var toggleCreatorVote = function toggleCreatorVote(e) {
+        e.preventDefault();
+        setCreatorVote(!creator_vote);
     };
 
     return React.createElement(
@@ -204,6 +214,52 @@ function CreatePoll(props) {
                     })
                 );
             }),
+            React.createElement(
+                'li',
+                { className: 'checkbox_wrapper', onClick: toggleCreatorVote },
+                React.createElement('input', {
+                    name: 'creator_vote',
+                    id: 'creator_vote',
+                    className: 'checkbox',
+                    type: 'checkbox',
+                    onClick: toggleCreatorVote
+                }),
+                React.createElement(
+                    'span',
+                    {
+                        className: 'visible_checkbox',
+                        onclick: toggleCreatorVote
+                    },
+                    creator_vote ? React.createElement(
+                        'svg',
+                        {
+                            width: '16',
+                            height: '16',
+                            'class': 'checkbox_icon',
+                            viewBox: '0 0 16 16'
+                        },
+                        React.createElement('path', { d: 'M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z' })
+                    ) : React.createElement(
+                        'svg',
+                        {
+                            width: '16',
+                            height: '16',
+                            'class': 'checkbox_icon',
+                            viewBox: '0 0 16 16'
+                        },
+                        React.createElement('path', { d: 'M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2z' })
+                    )
+                ),
+                React.createElement(
+                    'label',
+                    {
+                        'for': 'creator_vote',
+                        className: 'create_poll_header',
+                        onClick: toggleCreatorVote
+                    },
+                    'Let me vote in this poll'
+                )
+            ),
             React.createElement(
                 'li',
                 { className: 'create_poll_input' },
@@ -308,6 +364,12 @@ function CreatePoll(props) {
                 name: 'colors',
                 id: 'colors',
                 value: JSON.stringify(colors)
+            }),
+            React.createElement('input', {
+                type: 'hidden',
+                id: 'creator_vote',
+                name: 'creator_vote',
+                value: creator_vote
             }),
             valid && !bad_size ? React.createElement(
                 'li',

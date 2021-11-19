@@ -87,6 +87,8 @@ function App(props) {
         valid = _useState26[0],
         setValid = _useState26[1];
 
+    if (valid) document.title = poll_title + ' | RolyPolly';
+
     var handleButtonClick = function handleButtonClick(e) {
         e.preventDefault();
         if (title_input && comment_input) {
@@ -204,7 +206,7 @@ function App(props) {
         if (socket == null) return;
         socket.once('load-poll', function (poll) {
             var params = new URLSearchParams(document.location.search.substring(1));
-            if (params.get('created') === 'true') {
+            if (params.get('novote') === 'true') {
                 setVoted(true);
                 window.localStorage.setItem(pollId, true);
                 window.location.replace(window.location.origin + window.location.pathname);

@@ -1,4 +1,6 @@
 function About(props) {
+    document.title = 'About | RolyPolly';
+
     return React.createElement(
         "div",
         { className: "about_wrapper" },
