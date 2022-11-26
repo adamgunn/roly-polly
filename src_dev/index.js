@@ -6,6 +6,8 @@ import Navbar from './Navbar.js';
 import CreatePoll from './CreatePoll';
 import SpotifyAPI from './SpotifyAPI';
 import NotFound from './NotFound';
+import React from "react";
+import ReactDOM from "react-dom";
 
 const uuidRegex = new RegExp(
     /^\/polls\/[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\/?$/,

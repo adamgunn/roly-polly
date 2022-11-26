@@ -2,10 +2,10 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
-function SpotifyAPI(props) {
+function SpotifyAPI() {
     var title_placeholders = ['Which song has the best hook?', 'Which song is the worst?', 'Which song is the most underrated?', 'Which song has the best lyrics?', 'Which song has the best cover art?', 'Which song has the best feature?', 'Which song was the most influential?', 'Which is the best road trip song?', 'Which is the best song to sing in the shower?', 'Which song is the catchiest?'];
 
     var _useState = useState(''),
@@ -43,35 +43,25 @@ function SpotifyAPI(props) {
         tracks = _useState14[0],
         setTracks = _useState14[1];
 
-    var _useState15 = useState(''),
+    var _useState15 = useState(false),
         _useState16 = _slicedToArray(_useState15, 2),
-        poll_title = _useState16[0],
-        setPollTitle = _useState16[1];
+        query_valid = _useState16[0],
+        setQueryValid = _useState16[1];
 
     var _useState17 = useState(false),
         _useState18 = _slicedToArray(_useState17, 2),
-        query_valid = _useState18[0],
-        setQueryValid = _useState18[1];
+        creator_vote = _useState18[0],
+        setCreatorVote = _useState18[1];
 
-    var _useState19 = useState(false),
-        _useState20 = _slicedToArray(_useState19, 2),
-        creator_vote = _useState20[0],
-        setCreatorVote = _useState20[1];
-
-    var _useState21 = useState(title_placeholders[Math.floor(Math.random() * title_placeholders.length)]),
-        _useState22 = _slicedToArray(_useState21, 2),
-        title_placeholder = _useState22[0],
-        setTitlePlaceholder = _useState22[1];
+    var _useState19 = useState(title_placeholders[Math.floor(Math.random() * title_placeholders.length)]),
+        _useState20 = _slicedToArray(_useState19, 1),
+        title_placeholder = _useState20[0];
 
     document.title = 'Create Song Poll | RolyPolly';
 
     var queryChange = function queryChange(e) {
         setQuery(e.target.value);
         setQueryValid(e.target.value != '' && /\S/.test(e.target.value));
-    };
-
-    var pollTitleChange = function pollTitleChange(e) {
-        setPollTitle(e.target.value);
     };
 
     useEffect(function () {
@@ -174,14 +164,13 @@ function SpotifyAPI(props) {
                 null,
                 React.createElement(
                     'label',
-                    { 'for': 'title_input', className: 'create_poll_header' },
+                    { htmlFor: 'title_input', className: 'create_poll_header' },
                     'Enter a poll title'
                 ),
                 React.createElement('br', null),
                 React.createElement('input', {
                     name: 'title_input',
                     id: 'title_input',
-                    onChange: pollTitleChange,
                     placeholder: title_placeholder,
                     className: 'create_poll_input',
                     type: 'text'
@@ -201,14 +190,14 @@ function SpotifyAPI(props) {
                     'span',
                     {
                         className: 'visible_checkbox',
-                        onclick: toggleCreatorVote
+                        onClick: toggleCreatorVote
                     },
                     creator_vote ? React.createElement(
                         'svg',
                         {
                             width: '16',
                             height: '16',
-                            'class': 'checkbox_icon',
+                            className: 'checkbox_icon',
                             viewBox: '0 0 16 16'
                         },
                         React.createElement('path', { d: 'M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z' })
@@ -217,7 +206,7 @@ function SpotifyAPI(props) {
                         {
                             width: '16',
                             height: '16',
-                            'class': 'checkbox_icon',
+                            className: 'checkbox_icon',
                             viewBox: '0 0 16 16'
                         },
                         React.createElement('path', { d: 'M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2z' })
@@ -226,7 +215,7 @@ function SpotifyAPI(props) {
                 React.createElement(
                     'label',
                     {
-                        'for': 'creator_vote',
+                        htmlFor: 'creator_vote',
                         className: 'create_poll_header',
                         onClick: toggleCreatorVote
                     },
@@ -238,8 +227,8 @@ function SpotifyAPI(props) {
                 null,
                 React.createElement(
                     'label',
-                    { 'for': 'query_input', className: 'create_poll_header' },
-                    'Start typing a Spotify search query, e.g. "michael jackson billie jean"'
+                    { htmlFor: 'query_input', className: 'create_poll_header' },
+                    'Start typing a Spotify search query, e.g. \u201Cmichael jackson billie jean\u201D'
                 ),
                 React.createElement('br', null),
                 React.createElement('input', {
@@ -310,7 +299,7 @@ function SpotifyAPI(props) {
                                 viewBox: '0 0 16 16'
                             },
                             React.createElement('path', {
-                                'fill-rule': 'evenodd',
+                                fillRule: 'evenodd',
                                 d: 'M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z'
                             })
                         )
@@ -369,11 +358,11 @@ function SpotifyAPI(props) {
                                     index: index
                                 },
                                 React.createElement('path', {
-                                    'fill-rule': 'evenodd',
+                                    fillRule: 'evenodd',
                                     d: 'M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z'
                                 }),
                                 React.createElement('path', {
-                                    'fill-rule': 'evenodd',
+                                    fillRule: 'evenodd',
                                     d: 'M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z'
                                 })
                             )

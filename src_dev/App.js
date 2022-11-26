@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Comment from './Comment.js';
 import Form from './Form.js';
@@ -6,7 +6,7 @@ import Poll from './Poll.js';
 import ShareButtons from './ShareButtons.js';
 import NotFound from './NotFound.js';
 
-function App(props) {
+function App() {
     const DEFAULT_NUM_OPTIONS = 0;
 
     useEffect(() => {

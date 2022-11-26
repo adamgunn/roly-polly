@@ -1,4 +1,6 @@
-function About(props) {
+import React from "react";
+
+function About() {
     document.title = 'About | RolyPolly';
 
     return React.createElement(

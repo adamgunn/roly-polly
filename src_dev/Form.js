@@ -1,3 +1,6 @@
+import React from "react";
+import propTypes from "prop-types";
+
 class Form extends React.Component {
     constructor(props) {
         super(props);

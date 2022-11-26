@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import propTypes from "prop-types";
 
 function ShareButtons(props) {
     // 0 = no copying was attempted
@@ -8,7 +9,7 @@ function ShareButtons(props) {
 
     const copyLink = () => {
         navigator.clipboard
-            .writeText(`https://rolypolly.herokuapp.com/polls/${props.pollId}`)
+            .writeText(`https://roly-polly.onrender.com/polls/${props.pollId}`)
             .then(
                 () => {
                     setClipBoardStatus(1);
@@ -101,6 +102,11 @@ function ShareButtons(props) {
             )}
         </div>
     );
+}
+
+ShareButtons.propTypes = {
+    pollId: propTypes.string,
+    title: propTypes.string
 }
 
 export default ShareButtons;

@@ -1,4 +1,6 @@
-function Home(props) {
+import React from "react";
+
+function Home() {
     var isVisible = function isVisible(element) {
         var elementBox = element.getBoundingClientRect();
         var dist = -100;

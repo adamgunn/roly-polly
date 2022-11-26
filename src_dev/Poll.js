@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import propTypes from "prop-types";
 import blackOrWhite from './blackOrWhite.js';
 
 function Poll(props) {
@@ -13,7 +14,7 @@ function Poll(props) {
         }, 3000);
     }, []);
 
-    const handleClick = function (e) {
+    const handleClick = function () {
         if (selection != null) props.onVote(selection);
         var outers = document.getElementsByClassName('radio_outer');
         for (var i = 0; i < outers.length; i++) {
@@ -203,6 +204,17 @@ function Poll(props) {
             </div>
         </div>
     );
+}
+
+Poll.propTypes = {
+    colors: propTypes.array,
+    images: propTypes.array,
+    onVote: propTypes.func,
+    options: propTypes.array,
+    counts: propTypes.array,
+    already_voted: propTypes.bool,
+    num_votes: propTypes.number,
+    connected_to_server: propTypes.bool
 }
 
 export default Poll;

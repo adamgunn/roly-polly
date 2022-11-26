@@ -2,11 +2,11 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ColorPicker } from '@mantine/core';
 import blackOrWhite from './blackOrWhite.js';
 
-function CreatePoll(props) {
+function CreatePoll() {
     var DEFAULT_POLL_TITLE = 'My awesome poll';
     var DEFAULT_NUM_OPTIONS = 2;
     var DEFAULT_COLORS = ['#8b0000', '#ffd700', '#006400', '#4169e1'];
@@ -193,7 +193,7 @@ function CreatePoll(props) {
             options.map(function (option, index) {
                 return React.createElement(
                     'li',
-                    { className: 'option_input_wrapper' },
+                    { className: 'option_input_wrapper', key: index },
                     React.createElement(
                         'label',
                         {
@@ -228,14 +228,14 @@ function CreatePoll(props) {
                     'span',
                     {
                         className: 'visible_checkbox',
-                        onclick: toggleCreatorVote
+                        onClick: toggleCreatorVote
                     },
                     creator_vote ? React.createElement(
                         'svg',
                         {
                             width: '16',
                             height: '16',
-                            'class': 'checkbox_icon',
+                            className: 'checkbox_icon',
                             viewBox: '0 0 16 16'
                         },
                         React.createElement('path', { d: 'M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z' })
@@ -244,7 +244,7 @@ function CreatePoll(props) {
                         {
                             width: '16',
                             height: '16',
-                            'class': 'checkbox_icon',
+                            className: 'checkbox_icon',
                             viewBox: '0 0 16 16'
                         },
                         React.createElement('path', { d: 'M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2z' })
@@ -253,7 +253,7 @@ function CreatePoll(props) {
                 React.createElement(
                     'label',
                     {
-                        'for': 'creator_vote',
+                        htmlFor: 'creator_vote',
                         className: 'create_poll_header',
                         onClick: toggleCreatorVote
                     },
@@ -314,7 +314,8 @@ function CreatePoll(props) {
                         'div',
                         {
                             className: 'color_sample',
-                            style: { backgroundColor: color }
+                            style: { backgroundColor: color },
+                            key: index
                         },
                         React.createElement(
                             'svg',

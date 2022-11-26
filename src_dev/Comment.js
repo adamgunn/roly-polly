@@ -1,3 +1,6 @@
+import React from "react";
+import propTypes from "prop-types";
+
 class Comment extends React.Component {
     render() {
         return (

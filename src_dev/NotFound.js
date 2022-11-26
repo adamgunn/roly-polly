@@ -1,4 +1,6 @@
-function NotFound(props) {
+import React from "react";
+
+function NotFound() {
     document.title = 'Error | RolyPolly';
 
     return (
