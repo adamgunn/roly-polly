@@ -11,8 +11,9 @@ function ShareButtons(props) {
         clipboard_status = _useState2[0],
         setClipBoardStatus = _useState2[1];
 
+    var DOMAIN = window.location.hostname;
     var copyLink = function copyLink() {
-        navigator.clipboard.writeText("https://roly-polly.onrender.com/polls/" + props.pollId).then(function () {
+        navigator.clipboard.writeText("https://" + DOMAIN + "/polls/" + props.pollId).then(function () {
             setClipBoardStatus(1);
             setTimeout(function () {
                 setClipBoardStatus(0);
@@ -34,7 +35,7 @@ function ShareButtons(props) {
                 className: "share_button facebook_button",
                 rel: "noopener noreferrer",
                 target: "_blank",
-                href: "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frolypolly.herokuapp.com%2Fpolls%2F" + props.pollId + "&amp;src=sdkpreparse"
+                href: "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F" + DOMAIN + "%2Fpolls%2F" + props.pollId + "&amp;src=sdkpreparse"
             },
             React.createElement(
                 "svg",
@@ -48,7 +49,7 @@ function ShareButtons(props) {
                 className: "share_button twitter_button",
                 rel: "noopener noreferrer",
                 target: "_blank",
-                href: "https://twitter.com/intent/tweet?text=" + encodeURI(props.title) + "&url=https%3A%2F%2Frolypolly.herokuapp.com%2Fpolls%2F" + props.pollId
+                href: "https://twitter.com/intent/tweet?text=" + encodeURI(props.title) + "&url=https%3A%2F%2F" + DOMAIN + "%2Fpolls%2F" + props.pollId
             },
             React.createElement(
                 "svg",
@@ -62,7 +63,7 @@ function ShareButtons(props) {
                 className: "share_button reddit_button",
                 rel: "noopener noreferrer",
                 target: "_blank",
-                href: "http://reddit.com/submit?title=" + encodeURI(props.title) + "&url=https%3A%2F%2Frolypolly.herokuapp.com%2Fpolls%2F" + props.pollId
+                href: "http://reddit.com/submit?title=" + encodeURI(props.title) + "&url=https%3A%2F%2F" + DOMAIN + "%2Fpolls%2F" + props.pollId
             },
             React.createElement(
                 "svg",
