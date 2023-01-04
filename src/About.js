@@ -26,12 +26,12 @@ function About() {
                 },
                 "Adam Gunn"
             ),
-            ", a sophomore at the University of Michigan studing computer science."
+            ", a student at the University of Michigan studing computer science."
         ),
         React.createElement(
             "p",
             { className: "body_text" },
-            "The app was made primarily using MongoDB, Express, React, and Node.JS, and deployed on Heroku."
+            "The app was made primarily using MongoDB, Express, React, and Node.JS."
         ),
         React.createElement(
             "p",

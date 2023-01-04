@@ -16,12 +16,12 @@ function About() {
                 >
                     Adam Gunn
                 </a>
-                , a sophomore at the University of Michigan studing computer
+                , a student at the University of Michigan studing computer
                 science.
             </p>
             <p className="body_text">
                 The app was made primarily using MongoDB, Express, React, and
-                Node.JS, and deployed on Heroku.
+                Node.JS.
             </p>
             <p className="body_text">
                 Feel free to email{' '}
